@@ -2,6 +2,7 @@
 from enum import Enum, unique
 import subprocess
 import platform
+import sys
 import re
 from restic.snapshot import Snapshot
 
@@ -18,23 +19,31 @@ class RepoKind(Enum):
     Rclone = 8
 
 def run_restic(cmd):
-    with subprocess.Popen(
-        cmd,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        encoding='utf-8',
-        text=True) as proc:
-        out, err = proc.communicate()
-        if err is not None:
-            raise RuntimeError('Command runtime failure')
-        proc.wait()
-        if proc.returncode != 0:
-            raise RuntimeError(f'Return code {proc.returncode} is not zero')
+    out = ''
+    err = ''
+    try:
+        with subprocess.Popen(
+            cmd,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            encoding='utf-8',
+            text=True) as proc:
+            out, err = proc.communicate()
+            if err is not None:
+                raise RuntimeError('Command runtime failure')
+            proc.wait()
+            if proc.returncode != 0:
+                raise RuntimeError(f'Return code {proc.returncode} is not zero')
+    except FileNotFoundError:
+        raise RuntimeError('Cannot find restic installed')
+
     return out
 
 def version():
     cmd = ['restic', 'version']
     out = run_restic(cmd)
+    if out is None:
+        return None
     matchObj = re.match(r'restic ([0-9\.]+) compiled with go([0-9\.]+) on ([a-zA-Z0-9]+)/([a-zA-Z0-9]+)', out)
     return {
         'restic_version': matchObj.group(1),
@@ -48,6 +57,7 @@ class Repo(object):
     path = None
     password = None
     is_open = False
+    snapshots_list = []
     def __init__(self, path, password, kind = RepoKind.Local):
         self.path = path
         self.kind = kind
@@ -56,22 +66,28 @@ class Repo(object):
 
         try:
             version()
-        except Exception as e:
+        except Exception:
             print('restic is not in env or it has not been installed')
 
     def _run_command(self, cmd):
-        with subprocess.Popen(
-            cmd,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            encoding='utf-8',
-            text=True) as proc:
-            out, err = proc.communicate(self.password)
-            if err is not None:
-                raise RuntimeError('Command runtime failure')
-            proc.wait()
-            if proc.returncode != 0:
-                raise RuntimeError(f'Return code {proc.returncode} is not zero')
+        out = ''
+        err = ''
+        try:
+            with subprocess.Popen(
+                cmd,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                encoding='utf-8',
+                text=True) as proc:
+                out, err = proc.communicate(self.password)
+                if err is not None:
+                    raise RuntimeError('Command runtime failure')
+                proc.wait()
+                if proc.returncode != 0:
+                    raise RuntimeError(f'Return code {proc.returncode} is not zero')
+        except FileNotFoundError:
+            raise RuntimeError('Cannot find restic installed')
+
         return out
 
     @staticmethod
@@ -87,7 +103,24 @@ class Repo(object):
 
         return repo
 
-    def backup(self, file_path, exclude=None):
+    def remove_all_snapshots_list(self):
+        for each_snapshots in self.snapshots_list:
+            each_snapshots.repo = None
+
+        self.snapshots_list = None
+
+    def update_snapshots_list(self):
+        snapshots_list = self.get_snapshots()
+        for each_snapshot in self.snapshots_list:
+            if each_snapshot.snapshot_id not in [each.snapshot_id for each in snapshots_list]:
+                each_snapshot.repo = None
+                self.snapshots_list.remove(each_snapshot)
+
+        for each_snapshot in snapshots_list:
+            if each_snapshot.snapshot_id not in [each.snapshot_id for each in self.snapshots_list]:
+                self.snapshots_list.append(each_snapshot)
+
+    def backup(self, file_path, exclude=None, tags=None):
         # check url valid(TODO)
 
         # run cmd
@@ -102,10 +135,22 @@ class Repo(object):
             exclude_cmd = '--exclude="'
             for i, each_file in enumerate(exclude):
                 if i != 0:
-                    exclude_cmd.append(',')
-                exclude_cmd.append(each_file)
-            exclude_cmd.append('"')
+                    exclude_cmd += ','
+                exclude_cmd += each_file
+            exclude_cmd += '"'
             cmd.append(exclude_cmd)
+
+        if tags is not None:
+            if type(tags) == str:
+                cmd.append('--tag')
+                cmd.append(tags)
+            elif type(tags) == list:
+                for each_tag in tags:
+                    cmd.append('--tag')
+                    cmd.append(each_tag)
+            else:
+                raise ValueError('tags shall be type of str or list')
+
 
         self._run_command(cmd)
 
@@ -119,6 +164,9 @@ class Repo(object):
             cmd.append('--read-data')
 
         ret_text = self._run_command(cmd)
+
+        if ret_text is None:
+            return
 
         lines = ret_text.splitlines()
         has_errors = lines[-1].strip() != 'no errors were found'
@@ -157,6 +205,7 @@ class Repo(object):
         cmd = ['restic']
         cmd.append('-r')
         cmd.append(self.path)
+        cmd.append('restore')
         cmd.append(snapshot)
         cmd.append('--target')
         cmd.append(target)
@@ -164,6 +213,10 @@ class Repo(object):
         self._run_command(cmd)
 
     def snapshots(self):
+        self.update_snapshots_list()
+        return self.snapshots_list
+
+    def get_snapshots(self):
         cmd = ['restic']
         cmd.append('-r')
         cmd.append(self.path)
@@ -171,8 +224,55 @@ class Repo(object):
 
         ret = self._run_command(cmd)
 
+        if ret is None:
+            return
+
         return self._parse_snapshots(ret)
 
+    def tag(self, add_tags=None, remove_tags=None, set_tags=None, snapshot='latest'):
+        if type(snapshot) == Snapshot:
+            snapshot = snapshot.snapshot_id
+        elif type(snapshot) not in [str, Snapshot]:
+            raise ValueError('snapshot shall be type of str or Snapshot')
+
+        cmd = ['restic', '-r']
+        cmd.append(self.path)
+        cmd.append('tag')
+
+        if add_tags is not None:
+            if type(add_tags) == str:
+                cmd.append('--add')
+                cmd.append(add_tags)
+            elif type(add_tags) == list:
+                for each_tag in add_tags:
+                    cmd.append('--add')
+                    cmd.append(each_tag)
+            else:
+                raise ValueError('add_tags shall be type of str or list')
+
+        if remove_tags is not None:
+            if type(remove_tags) == str:
+                cmd.append('--remove')
+                cmd.append(remove_tags)
+            elif type(remove_tags) == list:
+                for each_tag in remove_tags:
+                    cmd.append('--remove')
+                    cmd.append(each_tag)
+            else:
+                raise ValueError('remove_tags shall be type of str or list')
+
+        if set_tags is not None:
+            if type(set_tags) == str:
+                cmd.append('--set')
+                cmd.append(set_tags)
+            elif type(set_tags) == list:
+                for each_tag in set_tags:
+                    cmd.append('--set')
+                    cmd.append(each_tag)
+            else:
+                raise ValueError('set_tags shall be type of str or list')
+        cmd.append(snapshot)
+        self._run_command(cmd)
        
     def _parse_snapshots(self, text):
         # to header
@@ -216,7 +316,7 @@ class Repo(object):
 
         snapshot_data = []
         while line_number < len(lines):
-            snapshot = Snapshot()
+            snapshot = Snapshot(self)
             line = lines[line_number]
             if line.startswith(horizontal_line):
                 break
