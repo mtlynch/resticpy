@@ -2,6 +2,7 @@
 from enum import Enum, unique
 import subprocess
 import platform
+import re
 from restic.snapshot import Snapshot
 
 @unique
@@ -16,6 +17,32 @@ class RepoKind(Enum):
     GoogleStorage = 7
     Rclone = 8
 
+def run_restic(cmd):
+    with subprocess.Popen(
+        cmd,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        encoding='utf-8',
+        text=True) as proc:
+        out, err = proc.communicate()
+        if err is not None:
+            raise RuntimeError('Command runtime failure')
+        proc.wait()
+        if proc.returncode != 0:
+            raise RuntimeError(f'Return code {proc.returncode} is not zero')
+    return out
+
+def version():
+    cmd = ['restic', 'version']
+    out = run_restic(cmd)
+    matchObj = re.match(r'restic ([0-9\.]+) compiled with go([0-9\.]+) on ([a-zA-Z0-9]+)/([a-zA-Z0-9]+)', out)
+    return {
+        'restic_version': matchObj.group(1),
+        'go_version': matchObj.group(2),
+        'platform_version': matchObj.group(3),
+        'Architecture': matchObj.group(4)
+    }
+
 class Repo(object):
     kind = None
     path = None
@@ -26,6 +53,11 @@ class Repo(object):
         self.kind = kind
         self.password = password
         self.is_open = False
+
+        try:
+            version()
+        except Exception as e:
+            print('restic is not in env or it has not been installed')
 
     def _run_command(self, cmd):
         with subprocess.Popen(
