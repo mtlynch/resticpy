@@ -2,7 +2,7 @@
 
 import setuptools
 
-setuptools.setup(name='PyRestic',
+setuptools.setup(name='pyrestic',
       version='0.1a1.dev001',
       description='Restic backup Python wrapper',
       author='JunWang',
