@@ -1,6 +1,8 @@
 
 from enum import Enum, unique
 import subprocess
+import platform
+from restic.snapshot import Snapshot
 
 @unique
 class RepoKind(Enum):
@@ -75,6 +77,60 @@ class Repo(object):
 
         self._run_command(cmd)
 
+    def check(self, read_data=False):
+        cmd = ['restic']
+        cmd.append('-r')
+        cmd.append(self.path)
+        cmd.append('check')
+
+        if read_data:
+            cmd.append('--read-data')
+
+        ret_text = self._run_command(cmd)
+
+        lines = ret_text.splitlines()
+        has_errors = lines[-1].strip() != 'no errors were found'
+
+        if has_errors:
+            for each_line in lines:
+                if each_line.startswith('error') or each_line.startswith('Fatal'):
+                    print(each_line)
+
+        return has_errors
+
+    def mount(self, target, snapshot='latest'):
+        if 'Linux' not in platform.system():
+            raise RuntimeError('Mounting repositories via FUSE is not possible on OpenBSD, Solaris/illumos and Windows.')
+        if type(snapshot) == Snapshot:
+            snapshot = snapshot.snapshot_id
+        elif type(snapshot) not in [str, Snapshot]:
+            raise ValueError('snapshot shall be type of str or Snapshot')
+
+        cmd = ['restic']
+        cmd.append('-r')
+        cmd.append(self.path)
+        cmd.append(snapshot)
+        cmd.append('mount')
+        cmd.append(target)
+
+        self._run_command(cmd)
+
+    def restore(self, target, snapshot='latest'):
+
+        if type(snapshot) == Snapshot:
+            snapshot = snapshot.snapshot_id
+        elif type(snapshot) not in [str, Snapshot]:
+            raise ValueError('snapshot shall be type of str or Snapshot')
+
+        cmd = ['restic']
+        cmd.append('-r')
+        cmd.append(self.path)
+        cmd.append(snapshot)
+        cmd.append('--target')
+        cmd.append(target)
+
+        self._run_command(cmd)
+
     def snapshots(self):
         cmd = ['restic']
         cmd.append('-r')
@@ -128,18 +184,18 @@ class Repo(object):
 
         snapshot_data = []
         while line_number < len(lines):
-            snapshot_line = []
+            snapshot = Snapshot()
             line = lines[line_number]
             if line.startswith(horizontal_line):
                 break
-            for i, each_header in enumerate(header_range):
+            for i, each_header in enumerate(header):
                 if i == 0:
-                    snapshot_line.append(line[:header_range[i+1]].strip())
+                    snapshot.set_attr(each_header, line[:header_range[i+1]].strip())
                 elif i == len(header_range) - 1:
-                    snapshot_line.append(line[header_range[i]:].strip())
+                    snapshot.set_attr(each_header, line[header_range[i]:].strip())
                 else:
-                    snapshot_line.append(line[header_range[i]:header_range[i+1]].strip())
-            snapshot_data.append(snapshot_line)
+                    snapshot.set_attr(each_header, line[header_range[i]:header_range[i+1]].strip())
+            snapshot_data.append(snapshot)
             line_number += 1
 
         # -----
