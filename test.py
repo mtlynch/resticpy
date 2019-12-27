@@ -1,6 +1,7 @@
 import restic
 
-if __name__ == "__main__":
+
+def simple_test():
     print(restic.version())
     # repo = restic.Repo.init('repos_test/test_repo', '12345678')
     repo = restic.Repo('repos_test/test_repo', '12345678')
@@ -20,4 +21,7 @@ if __name__ == "__main__":
     print(snapshots[0])
 
     # repo.mount('/mnt/restic')
+
+if __name__ == "__main__":
+    restic.test_all()
     

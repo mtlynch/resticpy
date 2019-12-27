@@ -10,7 +10,10 @@ setuptools.setup(name='pyrestic',
       license="MIT",
       keywords="backup",
       url='https://github.com/jstzwj/PyRestic.git',
-      packages=['restic'],
+      packages=[
+            'restic',
+            'restic.test'
+      ],
       install_requires=[
       ],
       python_requires='>=3.7',

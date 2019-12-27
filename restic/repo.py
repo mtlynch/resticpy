@@ -5,6 +5,7 @@ import platform
 import sys
 import re
 from restic.snapshot import Snapshot
+from restic import restic_bin
 
 @unique
 class RepoKind(Enum):
@@ -40,7 +41,7 @@ def run_restic(cmd):
     return out
 
 def version():
-    cmd = ['restic', 'version']
+    cmd = [restic_bin, 'version']
     out = run_restic(cmd)
     if out is None:
         return None
@@ -99,7 +100,7 @@ class Repo(object):
         repo = Repo(url, password, repo_kind)
 
         # create repo
-        repo._run_command(['restic', 'init', '--repo', url])
+        repo._run_command([restic_bin, 'init', '--repo', url])
 
         return repo
 
@@ -124,7 +125,7 @@ class Repo(object):
         # check url valid(TODO)
 
         # run cmd
-        cmd = ['restic']
+        cmd = [restic_bin]
         cmd.append('-r')
         cmd.append(self.path)
         cmd.append('--verbose')
@@ -155,7 +156,7 @@ class Repo(object):
         self._run_command(cmd)
 
     def check(self, read_data=False):
-        cmd = ['restic']
+        cmd = [restic_bin]
         cmd.append('-r')
         cmd.append(self.path)
         cmd.append('check')
@@ -186,7 +187,7 @@ class Repo(object):
         elif type(snapshot) not in [str, Snapshot]:
             raise ValueError('snapshot shall be type of str or Snapshot')
 
-        cmd = ['restic']
+        cmd = [restic_bin]
         cmd.append('-r')
         cmd.append(self.path)
         cmd.append(snapshot)
@@ -202,7 +203,7 @@ class Repo(object):
         elif type(snapshot) not in [str, Snapshot]:
             raise ValueError('snapshot shall be type of str or Snapshot')
 
-        cmd = ['restic']
+        cmd = [restic_bin]
         cmd.append('-r')
         cmd.append(self.path)
         cmd.append('restore')
@@ -217,7 +218,7 @@ class Repo(object):
         return self.snapshots_list
 
     def get_snapshots(self):
-        cmd = ['restic']
+        cmd = [restic_bin]
         cmd.append('-r')
         cmd.append(self.path)
         cmd.append('snapshots')
@@ -235,7 +236,7 @@ class Repo(object):
         elif type(snapshot) not in [str, Snapshot]:
             raise ValueError('snapshot shall be type of str or Snapshot')
 
-        cmd = ['restic', '-r']
+        cmd = [restic_bin, '-r']
         cmd.append(self.path)
         cmd.append('tag')
 
