@@ -3,9 +3,9 @@ from enum import Enum, unique
 import subprocess
 import platform
 import sys
-import re
 from restic.snapshot import Snapshot
-from restic import restic_bin
+from restic.core import version
+from restic.config import restic_bin
 
 @unique
 class RepoKind(Enum):
@@ -19,45 +19,22 @@ class RepoKind(Enum):
     GoogleStorage = 7
     Rclone = 8
 
-def run_restic(cmd):
-    out = ''
-    err = ''
-    try:
-        with subprocess.Popen(
-            cmd,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            encoding='utf-8',
-            text=True) as proc:
-            out, err = proc.communicate()
-            if err is not None:
-                raise RuntimeError('Command runtime failure')
-            proc.wait()
-            if proc.returncode != 0:
-                raise RuntimeError(f'Return code {proc.returncode} is not zero')
-    except FileNotFoundError:
-        raise RuntimeError('Cannot find restic installed')
-
-    return out
-
-def version():
-    cmd = [restic_bin, 'version']
-    out = run_restic(cmd)
-    if out is None:
-        return None
-    matchObj = re.match(r'restic ([0-9\.]+) compiled with go([0-9\.]+) on ([a-zA-Z0-9]+)/([a-zA-Z0-9]+)', out)
-    return {
-        'restic_version': matchObj.group(1),
-        'go_version': matchObj.group(2),
-        'platform_version': matchObj.group(3),
-        'Architecture': matchObj.group(4)
-    }
-
 class Repo(object):
     kind = None
     path = None
     password = None
     is_open = False
+
+    # global flags
+    cacert = None
+    cache_dir = None
+    no_lock = False
+    limit_download = None
+    limit_upload = None
+    options = {}
+    quiet = False
+    verbose = False
+
     snapshots_list = []
     def __init__(self, path, password, kind = RepoKind.Local):
         self.path = path
@@ -91,6 +68,48 @@ class Repo(object):
 
         return out
 
+    def _build_command_internal(self):
+        cmd = [restic_bin, '-r', self.path]
+        return cmd
+
+    def _build_command(self):
+        cmd = [restic_bin, '-r', self.path]
+
+        if self.cacert is not None:
+            if type(self.cacert) == str:
+                cmd.extend(['--cacert', self.cacert])
+            else:
+                raise ValueError('cacert shall be type of str or None')
+
+        if self.cache_dir is not None:
+            if type(self.cache_dir) == str:
+                cmd.extend(['--cache-dir', self.cache_dir])
+            else:
+                raise ValueError('cache_dir shall be type of str or None')
+
+        if self.no_lock:
+            cmd.append('--no-lock')
+
+        if self.limit_download is not None:
+            if type(self.limit_download) == int:
+                cmd.extend(['--limit-download', str(self.limit_download)])
+            else:
+                raise ValueError('limit_download shall be type of str or None')
+
+        if self.limit_upload is not None:
+            if type(self.limit_upload) == int:
+                cmd.extend(['--limit-upload', str(self.limit_upload)])
+            else:
+                raise ValueError('limit_upload shall be type of str or None')
+
+        if self.quiet:
+            cmd.append('--quiet')
+
+        if self.verbose:
+            cmd.append('--verbose')
+        return cmd
+
+
     @staticmethod
     def init(url, password, repo_kind = RepoKind.Local):
         if repo_kind != RepoKind.Local:
@@ -111,7 +130,7 @@ class Repo(object):
         self.snapshots_list = None
 
     def update_snapshots_list(self):
-        snapshots_list = self.get_snapshots()
+        snapshots_list = self._run_snapshots_command()
         for each_snapshot in self.snapshots_list:
             if each_snapshot.snapshot_id not in [each.snapshot_id for each in snapshots_list]:
                 each_snapshot.repo = None
@@ -121,106 +140,11 @@ class Repo(object):
             if each_snapshot.snapshot_id not in [each.snapshot_id for each in self.snapshots_list]:
                 self.snapshots_list.append(each_snapshot)
 
-    def backup(self, file_path, exclude=None, tags=None):
-        # check url valid(TODO)
-
-        # run cmd
-        cmd = [restic_bin]
-        cmd.append('-r')
-        cmd.append(self.path)
-        cmd.append('--verbose')
-        cmd.append('backup')
-        cmd.append(file_path)
-
-        if exclude is not None and type(exclude) == list:
-            exclude_cmd = '--exclude="'
-            for i, each_file in enumerate(exclude):
-                if i != 0:
-                    exclude_cmd += ','
-                exclude_cmd += each_file
-            exclude_cmd += '"'
-            cmd.append(exclude_cmd)
-
-        if tags is not None:
-            if type(tags) == str:
-                cmd.append('--tag')
-                cmd.append(tags)
-            elif type(tags) == list:
-                for each_tag in tags:
-                    cmd.append('--tag')
-                    cmd.append(each_tag)
-            else:
-                raise ValueError('tags shall be type of str or list')
-
-
-        self._run_command(cmd)
-
-    def check(self, read_data=False):
-        cmd = [restic_bin]
-        cmd.append('-r')
-        cmd.append(self.path)
-        cmd.append('check')
-
-        if read_data:
-            cmd.append('--read-data')
-
-        ret_text = self._run_command(cmd)
-
-        if ret_text is None:
-            return
-
-        lines = ret_text.splitlines()
-        has_errors = lines[-1].strip() != 'no errors were found'
-
-        if has_errors:
-            for each_line in lines:
-                if each_line.startswith('error') or each_line.startswith('Fatal'):
-                    print(each_line)
-
-        return has_errors
-
-    def mount(self, target, snapshot='latest'):
-        if 'Linux' not in platform.system():
-            raise RuntimeError('Mounting repositories via FUSE is not possible on OpenBSD, Solaris/illumos and Windows.')
-        if type(snapshot) == Snapshot:
-            snapshot = snapshot.snapshot_id
-        elif type(snapshot) not in [str, Snapshot]:
-            raise ValueError('snapshot shall be type of str or Snapshot')
-
-        cmd = [restic_bin]
-        cmd.append('-r')
-        cmd.append(self.path)
-        cmd.append(snapshot)
-        cmd.append('mount')
-        cmd.append(target)
-
-        self._run_command(cmd)
-
-    def restore(self, target, snapshot='latest'):
-
-        if type(snapshot) == Snapshot:
-            snapshot = snapshot.snapshot_id
-        elif type(snapshot) not in [str, Snapshot]:
-            raise ValueError('snapshot shall be type of str or Snapshot')
-
-        cmd = [restic_bin]
-        cmd.append('-r')
-        cmd.append(self.path)
-        cmd.append('restore')
-        cmd.append(snapshot)
-        cmd.append('--target')
-        cmd.append(target)
-
-        self._run_command(cmd)
-
-    def snapshots(self):
-        self.update_snapshots_list()
-        return self.snapshots_list
-
-    def get_snapshots(self):
-        cmd = [restic_bin]
-        cmd.append('-r')
-        cmd.append(self.path)
+    '''
+    Internal command implement
+    '''
+    def _run_snapshots_command(self):
+        cmd = self._build_command()
         cmd.append('snapshots')
 
         ret = self._run_command(cmd)
@@ -230,51 +154,18 @@ class Repo(object):
 
         return self._parse_snapshots(ret)
 
-    def tag(self, add_tags=None, remove_tags=None, set_tags=None, snapshot='latest'):
-        if type(snapshot) == Snapshot:
-            snapshot = snapshot.snapshot_id
-        elif type(snapshot) not in [str, Snapshot]:
-            raise ValueError('snapshot shall be type of str or Snapshot')
+    def _run_stats_command(self):
+        cmd = self._build_command()
+        cmd.append('stats')
 
-        cmd = [restic_bin, '-r']
-        cmd.append(self.path)
-        cmd.append('tag')
+        ret = self._run_command(cmd)
 
-        if add_tags is not None:
-            if type(add_tags) == str:
-                cmd.append('--add')
-                cmd.append(add_tags)
-            elif type(add_tags) == list:
-                for each_tag in add_tags:
-                    cmd.append('--add')
-                    cmd.append(each_tag)
-            else:
-                raise ValueError('add_tags shall be type of str or list')
+        if ret is None:
+            return
 
-        if remove_tags is not None:
-            if type(remove_tags) == str:
-                cmd.append('--remove')
-                cmd.append(remove_tags)
-            elif type(remove_tags) == list:
-                for each_tag in remove_tags:
-                    cmd.append('--remove')
-                    cmd.append(each_tag)
-            else:
-                raise ValueError('remove_tags shall be type of str or list')
+        return self._parse_stats(ret)
 
-        if set_tags is not None:
-            if type(set_tags) == str:
-                cmd.append('--set')
-                cmd.append(set_tags)
-            elif type(set_tags) == list:
-                for each_tag in set_tags:
-                    cmd.append('--set')
-                    cmd.append(each_tag)
-            else:
-                raise ValueError('set_tags shall be type of str or list')
-        cmd.append(snapshot)
-        self._run_command(cmd)
-       
+    
     def _parse_snapshots(self, text):
         # to header
         lines = text.splitlines()
@@ -349,6 +240,179 @@ class Repo(object):
             raise RuntimeError('Snapshots read failure')
 
         return snapshot_data
+
+    def _parse_stats(self, text):
+        lines = text.splitlines()
+        line_number = 0
+
+        # scanning
+        while line_number < len(lines):
+            if lines[line_number].strip() == 'scanning...':
+                line_number += 1
+                break
+            line_number += 1
+
+        # Stats
+        while line_number < len(lines):
+            if lines[line_number].strip() == 'Stats for all snapshots in restore-size mode:':
+                line_number += 1
+                break
+            line_number += 1
+
+        # file count and total size
+        file_count = '0'
+        total_size = '0'
+        while line_number < len(lines):
+            if lines[line_number].strip().startswith('Total File Count:'):
+                line = lines[line_number].split(':', 1)
+                file_count = line[1].strip()
+            elif lines[line_number].strip().startswith('Total Size:'):
+                line = lines[line_number].split(':', 1)
+                total_size = line[1].strip()
+            line_number += 1
+
+        return {
+            'file_count': file_count,
+            'total_size': total_size
+        }
+
+    '''
+    Public repository API
+    '''
+    def backup(self, file_path, exclude=None, tags=None):
+        # check url valid(TODO)
+
+        # run cmd
+        cmd = self._build_command()
+        cmd.append('backup')
+        cmd.append(file_path)
+
+        if exclude is not None and type(exclude) == list:
+            exclude_cmd = '--exclude="'
+            for i, each_file in enumerate(exclude):
+                if i != 0:
+                    exclude_cmd += ','
+                exclude_cmd += each_file
+            exclude_cmd += '"'
+            cmd.append(exclude_cmd)
+
+        if tags is not None:
+            if type(tags) == str:
+                cmd.append('--tag')
+                cmd.append(tags)
+            elif type(tags) == list:
+                for each_tag in tags:
+                    cmd.append('--tag')
+                    cmd.append(each_tag)
+            else:
+                raise ValueError('tags shall be type of str or list')
+
+
+        self._run_command(cmd)
+
+    def check(self, read_data=False):
+        cmd = self._build_command()
+        cmd.append('check')
+
+        if read_data:
+            cmd.append('--read-data')
+
+        ret_text = self._run_command(cmd)
+
+        if ret_text is None:
+            return
+
+        lines = ret_text.splitlines()
+        has_errors = lines[-1].strip() != 'no errors were found'
+
+        if has_errors:
+            for each_line in lines:
+                if each_line.startswith('error') or each_line.startswith('Fatal'):
+                    print(each_line)
+
+        return has_errors
+
+    def mount(self, target, snapshot='latest'):
+        if 'Linux' not in platform.system():
+            raise RuntimeError('Mounting repositories via FUSE is not possible on OpenBSD, Solaris/illumos and Windows.')
+        if type(snapshot) == Snapshot:
+            snapshot = snapshot.snapshot_id
+        elif type(snapshot) not in [str, Snapshot]:
+            raise ValueError('snapshot shall be type of str or Snapshot')
+
+        cmd = self._build_command()
+        cmd.append(snapshot)
+        cmd.append('mount')
+        cmd.append(target)
+
+        self._run_command(cmd)
+
+    def restore(self, target, snapshot='latest'):
+
+        if type(snapshot) == Snapshot:
+            snapshot = snapshot.snapshot_id
+        elif type(snapshot) not in [str, Snapshot]:
+            raise ValueError('snapshot shall be type of str or Snapshot')
+
+        cmd = self._build_command()
+        cmd.append('restore')
+        cmd.append(snapshot)
+        cmd.append('--target')
+        cmd.append(target)
+
+        self._run_command(cmd)
+
+    def snapshots(self):
+        self.update_snapshots_list()
+        return self.snapshots_list
+
+    def stats(self):
+        return self._run_stats_command()
+
+    def tag(self, add_tags=None, remove_tags=None, set_tags=None, snapshot='latest'):
+        if type(snapshot) == Snapshot:
+            snapshot = snapshot.snapshot_id
+        elif type(snapshot) not in [str, Snapshot]:
+            raise ValueError('snapshot shall be type of str or Snapshot')
+
+        cmd = self._build_command()
+        cmd.append('tag')
+
+        if add_tags is not None:
+            if type(add_tags) == str:
+                cmd.append('--add')
+                cmd.append(add_tags)
+            elif type(add_tags) == list:
+                for each_tag in add_tags:
+                    cmd.append('--add')
+                    cmd.append(each_tag)
+            else:
+                raise ValueError('add_tags shall be type of str or list')
+
+        if remove_tags is not None:
+            if type(remove_tags) == str:
+                cmd.append('--remove')
+                cmd.append(remove_tags)
+            elif type(remove_tags) == list:
+                for each_tag in remove_tags:
+                    cmd.append('--remove')
+                    cmd.append(each_tag)
+            else:
+                raise ValueError('remove_tags shall be type of str or list')
+
+        if set_tags is not None:
+            if type(set_tags) == str:
+                cmd.append('--set')
+                cmd.append(set_tags)
+            elif type(set_tags) == list:
+                for each_tag in set_tags:
+                    cmd.append('--set')
+                    cmd.append(each_tag)
+            else:
+                raise ValueError('set_tags shall be type of str or list')
+        cmd.append(snapshot)
+        self._run_command(cmd)
+
 
 
             

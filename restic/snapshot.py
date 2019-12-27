@@ -37,6 +37,22 @@ class Snapshot(object):
         elif attr.strip() == 'Paths':
             self.snapshot_paths = value
 
+    def get_id(self):
+        return self.snapshot_id
+
+    def get_time(self):
+        return self.snapshot_time
+
+    def get_host(self):
+        return self.snapshot_host
+
+    def get_tags(self):
+        return self.snapshot_tags
+
+
+    def get_paths(self):
+        return self.snapshot_paths
+
     def add_tags(self, tags):
         self.check_valid()
         if type(tags) != list:

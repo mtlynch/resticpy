@@ -23,5 +23,8 @@ def simple_test():
     # repo.mount('/mnt/restic')
 
 if __name__ == "__main__":
-    restic.test_all()
+    # restic.test_all()
+    # repo = restic.Repo.init('repos_test/test_repo', '12345678')
+    repo = restic.Repo('repos_test/test_repo', '12345678')
+    print(repo.stats())
     
