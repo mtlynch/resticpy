@@ -261,7 +261,7 @@ class Repo(object):
 
         # file count and total size
         file_count = '0'
-        total_size = '0'
+        total_size = '0 B'
         while line_number < len(lines):
             if lines[line_number].strip().startswith('Total File Count:'):
                 line = lines[line_number].split(':', 1)
@@ -284,8 +284,7 @@ class Repo(object):
 
         # run cmd
         cmd = self._build_command()
-        cmd.append('backup')
-        cmd.append(file_path)
+        cmd.extend(['backup', file_path])
 
         if exclude is not None and type(exclude) == list:
             exclude_cmd = '--exclude="'
@@ -298,15 +297,12 @@ class Repo(object):
 
         if tags is not None:
             if type(tags) == str:
-                cmd.append('--tag')
-                cmd.append(tags)
+                cmd.extend(['--tag', tags])
             elif type(tags) == list:
                 for each_tag in tags:
-                    cmd.append('--tag')
-                    cmd.append(each_tag)
+                    cmd.extend(['--tag', each_tag])
             else:
                 raise ValueError('tags shall be type of str or list')
-
 
         self._run_command(cmd)
 
@@ -341,9 +337,7 @@ class Repo(object):
             raise ValueError('snapshot shall be type of str or Snapshot')
 
         cmd = self._build_command()
-        cmd.append(snapshot)
-        cmd.append('mount')
-        cmd.append(target)
+        cmd.extend([snapshot, 'mount', target])
 
         self._run_command(cmd)
 
@@ -355,10 +349,7 @@ class Repo(object):
             raise ValueError('snapshot shall be type of str or Snapshot')
 
         cmd = self._build_command()
-        cmd.append('restore')
-        cmd.append(snapshot)
-        cmd.append('--target')
-        cmd.append(target)
+        cmd.extend(['restore', snapshot, '--target', target])
 
         self._run_command(cmd)
 
@@ -380,34 +371,28 @@ class Repo(object):
 
         if add_tags is not None:
             if type(add_tags) == str:
-                cmd.append('--add')
-                cmd.append(add_tags)
+                cmd.extend(['--add', add_tags])
             elif type(add_tags) == list:
                 for each_tag in add_tags:
-                    cmd.append('--add')
-                    cmd.append(each_tag)
+                    cmd.extend(['--add', each_tag])
             else:
                 raise ValueError('add_tags shall be type of str or list')
 
         if remove_tags is not None:
             if type(remove_tags) == str:
-                cmd.append('--remove')
-                cmd.append(remove_tags)
+                cmd.extend(['--remove', remove_tags])
             elif type(remove_tags) == list:
                 for each_tag in remove_tags:
-                    cmd.append('--remove')
-                    cmd.append(each_tag)
+                    cmd.extend(['--remove', each_tag])
             else:
                 raise ValueError('remove_tags shall be type of str or list')
 
         if set_tags is not None:
             if type(set_tags) == str:
-                cmd.append('--set')
-                cmd.append(set_tags)
+                cmd.extend(['--set', set_tags])
             elif type(set_tags) == list:
                 for each_tag in set_tags:
-                    cmd.append('--set')
-                    cmd.append(each_tag)
+                    cmd.extend(['--set', each_tag])
             else:
                 raise ValueError('set_tags shall be type of str or list')
         cmd.append(snapshot)
