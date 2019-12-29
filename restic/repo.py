@@ -374,7 +374,10 @@ class Repo(object):
                 cmd.extend(['--add', add_tags])
             elif type(add_tags) == list:
                 for each_tag in add_tags:
-                    cmd.extend(['--add', each_tag])
+                    if ',' not in each_tag:
+                        cmd.extend(['--add', each_tag])
+                    else:
+                        raise ValueError('the `,` charactor in tag may make PyRestic wrong')
             else:
                 raise ValueError('add_tags shall be type of str or list')
 
@@ -383,7 +386,10 @@ class Repo(object):
                 cmd.extend(['--remove', remove_tags])
             elif type(remove_tags) == list:
                 for each_tag in remove_tags:
-                    cmd.extend(['--remove', each_tag])
+                    if ',' not in each_tag:
+                        cmd.extend(['--remove', each_tag])
+                    else:
+                        raise ValueError('the `,` charactor in tag may make PyRestic wrong')
             else:
                 raise ValueError('remove_tags shall be type of str or list')
 
@@ -392,7 +398,10 @@ class Repo(object):
                 cmd.extend(['--set', set_tags])
             elif type(set_tags) == list:
                 for each_tag in set_tags:
-                    cmd.extend(['--set', each_tag])
+                    if ',' not in each_tag:
+                        cmd.extend(['--set', each_tag])
+                    else:
+                        raise ValueError('the `,` charactor in tag may make PyRestic wrong')
             else:
                 raise ValueError('set_tags shall be type of str or list')
         cmd.append(snapshot)
