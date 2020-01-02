@@ -48,3 +48,16 @@ repo = restic.Repo('/srv/restic-repo', '12345678')
 repo.backup('setup.py')
 ```
 
+
+
+
+
+## Tags for backup
+
+Snapshots can have one or more tags, short strings which add identifying information. Just specify the tags for a snapshot one by one with `--tag`:
+
+```python
+repo.backup('setup.py', tags=['github', 'restic']):
+```
+
+The tags can later be used to keep (or forget) snapshots with the `forget` command. The command `tag` can be used to modify tags on an existing snapshot.

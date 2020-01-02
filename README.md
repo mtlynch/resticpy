@@ -1,7 +1,7 @@
 # PyRestic
 ## Introduction
 
-restic is a backup program that is fast, efficient and secure. It supports the three major operating systems (Linux, macOS, Windows) and a few smaller ones (FreeBSD, OpenBSD). 
+[restic](https://github.com/restic/restic) is a backup program that is fast, efficient and secure. It supports the three major operating systems (Linux, macOS, Windows) and a few smaller ones (FreeBSD, OpenBSD). 
 
 PyRestic is a python wrapper for restic. It makes programmatic data backup in Python possible. It provides a set of object-oriented and easy-used API. 
 

@@ -112,13 +112,24 @@ class Repo(object):
 
     @staticmethod
     def init(url, password, repo_kind = RepoKind.Local):
-        if repo_kind != RepoKind.Local:
+        if repo_kind not in [RepoKind.Local, RepoKind.SFTP, RepoKind.REST, RepoKind.S3]:
             raise NotImplementedError('This kind of repo is not implemented now.')
         
         # check url valid(TODO)
         repo = Repo(url, password, repo_kind)
 
         # create repo
+        repo_url = None
+        if repo_kind == RepoKind.Local:
+            repo_url = url
+        elif repo_kind == RepoKind.SFTP:
+            repo_url = 'sftp:' + url
+        elif repo_kind == RepoKind.REST:
+            repo_url = 'rest:' + url
+        elif repo_kind == RepoKind.S3:
+            repo_url = 's3:' + url
+        else:
+            raise NotImplementedError('This kind of repo is not implemented now.')
         repo._run_command([restic_bin, 'init', '--repo', url])
 
         return repo
