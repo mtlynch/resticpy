@@ -64,3 +64,16 @@ def generate(bash_completion=None, man=None, zsh_completion=None):
             raise ValueError('zsh-completion shall be type of str or None')
 
     run_restic(cmd)
+
+'''
+TODO: if there is a repository, it needs pasword.
+'''
+def is_initialized(path):
+    cmd = ['restic', '-r', path, 'snapshots']
+    ret = run_restic(cmd)
+    lines = ret.splitlines()
+    for each_line in lines:
+        if each_line.strip() == 'Is there a repository at the following location?':
+            return False
+
+    return True

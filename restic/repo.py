@@ -3,9 +3,12 @@ from enum import Enum, unique
 import subprocess
 import platform
 import sys
-from restic.snapshot import Snapshot
+import restic.parser
 from restic.core import version
 from restic.config import restic_bin
+
+from restic.snapshot import Snapshot
+from restic.key import Key
 
 @unique
 class RepoKind(Enum):
@@ -24,8 +27,10 @@ class Repo(object):
     path = None
     password = None
     is_open = False
+    fallback_output = False
 
     # global flags
+    '''
     cacert = None
     cache_dir = None
     no_lock = False
@@ -34,6 +39,7 @@ class Repo(object):
     options = {}
     quiet = False
     verbose = False
+    '''
 
     snapshots_list = []
     def __init__(self, path, password, kind = RepoKind.Local):
@@ -65,6 +71,9 @@ class Repo(object):
                     raise RuntimeError(f'Return code {proc.returncode} is not zero')
         except FileNotFoundError:
             raise RuntimeError('Cannot find restic installed')
+        
+        if out.startswith('read password from stdin\n'):
+            out = out[25:]
 
         return out
 
@@ -72,41 +81,44 @@ class Repo(object):
         cmd = [restic_bin, '-r', self.path]
         return cmd
 
-    def _build_command(self):
+    def _build_command(self, cacert=None, cache_dir=None, no_lock=False, limit_download=None, limit_upload=None, quiet=False, verbose=False, json=False):
         cmd = [restic_bin, '-r', self.path]
 
-        if self.cacert is not None:
+        if cacert is not None:
             if type(self.cacert) == str:
                 cmd.extend(['--cacert', self.cacert])
             else:
                 raise ValueError('cacert shall be type of str or None')
 
-        if self.cache_dir is not None:
+        if cache_dir is not None:
             if type(self.cache_dir) == str:
                 cmd.extend(['--cache-dir', self.cache_dir])
             else:
                 raise ValueError('cache_dir shall be type of str or None')
 
-        if self.no_lock:
+        if no_lock:
             cmd.append('--no-lock')
 
-        if self.limit_download is not None:
+        if limit_download is not None:
             if type(self.limit_download) == int:
                 cmd.extend(['--limit-download', str(self.limit_download)])
             else:
                 raise ValueError('limit_download shall be type of str or None')
 
-        if self.limit_upload is not None:
+        if limit_upload is not None:
             if type(self.limit_upload) == int:
                 cmd.extend(['--limit-upload', str(self.limit_upload)])
             else:
                 raise ValueError('limit_upload shall be type of str or None')
 
-        if self.quiet:
+        if quiet:
             cmd.append('--quiet')
 
-        if self.verbose:
+        if verbose:
             cmd.append('--verbose')
+
+        if json:
+            cmd.append('--json')
         return cmd
 
 
@@ -155,137 +167,70 @@ class Repo(object):
     Internal command implement
     '''
     def _run_snapshots_command(self):
-        cmd = self._build_command()
-        cmd.append('snapshots')
+        if self.fallback_output:
+            cmd = self._build_command()
+            cmd.append('snapshots')
 
-        ret = self._run_command(cmd)
+            ret = self._run_command(cmd)
 
-        if ret is None:
-            return
+            if ret is None:
+                return
 
-        return self._parse_snapshots(ret)
+            return restic.parser.parse_snapshots_fallback(self, ret)
+        else:
+            cmd = self._build_command(json=True)
+            cmd.append('snapshots')
+
+            ret = self._run_command(cmd)
+
+            if ret is None:
+                return
+
+            return restic.parser.parse_snapshots(self, ret)
 
     def _run_stats_command(self):
-        cmd = self._build_command()
-        cmd.append('stats')
+        if self.fallback_output:
+            cmd = self._build_command()
+            cmd.append('stats')
 
-        ret = self._run_command(cmd)
+            ret = self._run_command(cmd)
 
-        if ret is None:
-            return
+            if ret is None:
+                return
 
-        return self._parse_stats(ret)
-
-    
-    def _parse_snapshots(self, text):
-        # to header
-        lines = text.splitlines()
-        header = []
-        header_range = []
-        line_number = 0
-        # skip other data
-        while line_number < len(lines):
-            if lines[line_number].strip() == 'read password from stdin':
-                line_number += 1
-                continue
-            if lines[line_number].startswith('ID'):
-                break
-            line_number += 1
-        # read header
-        while line_number < len(lines):
-            if lines[line_number].startswith('ID'):
-                header = lines[line_number].split()
-                break
-            line_number += 1
-
-        # header length
-        for i, each_header in enumerate(header):
-            start_pos = lines[line_number].find(each_header)
-            header_range.append(start_pos)
-
-        line_number+=1
-
-        if len(header_range) >= 2:
-            horizontal_line = '-'*(header_range[1] + 1)
+            return restic.parser.parse_stats_fallback(self, ret)
         else:
-            horizontal_line = '-'*5
-        # -----
-        while line_number < len(lines):
-            
-            if lines[line_number].startswith(horizontal_line):
-                line_number+=1
-                break
-            line_number += 1
+            cmd = self._build_command(json=True)
+            cmd.append('stats')
 
-        snapshot_data = []
-        while line_number < len(lines):
-            snapshot = Snapshot(self)
-            line = lines[line_number]
-            if line.startswith(horizontal_line):
-                break
-            for i, each_header in enumerate(header):
-                if i == 0:
-                    snapshot.set_attr(each_header, line[:header_range[i+1]].strip())
-                elif i == len(header_range) - 1:
-                    snapshot.set_attr(each_header, line[header_range[i]:].strip())
-                else:
-                    snapshot.set_attr(each_header, line[header_range[i]:header_range[i+1]].strip())
-            snapshot_data.append(snapshot)
-            line_number += 1
+            ret = self._run_command(cmd)
 
-        # -----
-        while line_number < len(lines):
-            if lines[line_number].startswith(horizontal_line):
-                line_number+=1
-                break
-            line_number += 1
+            if ret is None:
+                return
 
-        # snapshots number
-        snapshots_number = 0
-        if line_number < len(lines) and lines[line_number].endswith('snapshots'):
-            splits_line = lines[line_number].split()
-            snapshots_number = int(splits_line[0])
+            return restic.parser.parse_stats(self, ret)
 
-        # check if snapshots number is correct
-        if len(snapshot_data) != snapshots_number:
-            raise RuntimeError('Snapshots read failure')
+    def _run_key_list_commond(self):
+        if self.fallback_output:
+            cmd = self._build_command()
+            cmd.extend(['key', 'list'])
 
-        return snapshot_data
+            ret = self._run_command(cmd)
 
-    def _parse_stats(self, text):
-        lines = text.splitlines()
-        line_number = 0
+            if ret is None:
+                return
 
-        # scanning
-        while line_number < len(lines):
-            if lines[line_number].strip() == 'scanning...':
-                line_number += 1
-                break
-            line_number += 1
+            return restic.parser.parse_key_fallback(self, ret)
+        else:
+            cmd = self._build_command(json=True)
+            cmd.extend(['key', 'list'])
 
-        # Stats
-        while line_number < len(lines):
-            if lines[line_number].strip() == 'Stats for all snapshots in restore-size mode:':
-                line_number += 1
-                break
-            line_number += 1
+            ret = self._run_command(cmd)
 
-        # file count and total size
-        file_count = '0'
-        total_size = '0 B'
-        while line_number < len(lines):
-            if lines[line_number].strip().startswith('Total File Count:'):
-                line = lines[line_number].split(':', 1)
-                file_count = line[1].strip()
-            elif lines[line_number].strip().startswith('Total Size:'):
-                line = lines[line_number].split(':', 1)
-                total_size = line[1].strip()
-            line_number += 1
+            if ret is None:
+                return
 
-        return {
-            'file_count': file_count,
-            'total_size': total_size
-        }
+            return restic.parser.parse_key(self, ret)
 
     '''
     Public repository API

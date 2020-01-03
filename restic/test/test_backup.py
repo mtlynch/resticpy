@@ -10,7 +10,7 @@ class TestBackup(unittest.TestCase):
             repo.backup('setup.py')
             snapshots = repo.snapshots()
             self.assertEqual(len(snapshots), 1)
-            self.assertTrue(snapshots[0].get_paths().endswith('setup.py'))
+            self.assertTrue(snapshots[0].get_paths()[0].endswith('setup.py'))
         except Exception as e:
             shutil.rmtree('repos_test/test_repo')
             raise e

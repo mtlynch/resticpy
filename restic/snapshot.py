@@ -37,6 +37,7 @@ class Snapshot(object):
         elif attr.strip() == 'Paths':
             self.snapshot_paths = value
 
+    # getter
     def get_id(self):
         return self.snapshot_id
 
@@ -53,6 +54,27 @@ class Snapshot(object):
     def get_paths(self):
         return self.snapshot_paths
 
+    # setter， TODO: input type check
+    def set_id(self, value):
+        self.snapshot_id = value
+
+    def set_time(self, value):
+        if type(value) == datetime:
+            self.snapshot_time = value
+        elif type(value) == str:
+            try:
+                self.snapshot_time = datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
+            except ValueError:
+                value = value[:26] + value[-6:-3] + value[-2:]
+                self.snapshot_time = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f%z")
+
+    def set_host(self, value):
+        self.snapshot_host = value
+
+    def set_paths(self, value):
+        self.snapshot_paths = value
+
+    # tagbs
     def add_tags(self, tags):
         self.check_valid()
         if type(tags) != list:
