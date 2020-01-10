@@ -27,7 +27,6 @@ class Repo(object):
     path = None
     password = None
     is_open = False
-    fallback_output = False
 
     # global flags
     '''
@@ -135,11 +134,20 @@ class Repo(object):
         if repo_kind == RepoKind.Local:
             repo_url = url
         elif repo_kind == RepoKind.SFTP:
-            repo_url = 'sftp:' + url
+            if url.startswith('sftp:'):
+                repo_url = url
+            else:
+                repo_url = 'sftp:' + url
         elif repo_kind == RepoKind.REST:
-            repo_url = 'rest:' + url
+            if url.startswith('rest:'):
+                repo_url = url
+            else:
+                repo_url = 'rest:' + url
         elif repo_kind == RepoKind.S3:
-            repo_url = 's3:' + url
+            if url.startswith('s3:'):
+                repo_url = url
+            else:
+                repo_url = 's3:' + url
         else:
             raise NotImplementedError('This kind of repo is not implemented now.')
         repo._run_command([restic_bin, 'init', '--repo', url])
@@ -167,70 +175,37 @@ class Repo(object):
     Internal command implement
     '''
     def _run_snapshots_command(self):
-        if self.fallback_output:
-            cmd = self._build_command()
-            cmd.append('snapshots')
+        cmd = self._build_command(json=True)
+        cmd.append('snapshots')
 
-            ret = self._run_command(cmd)
+        ret = self._run_command(cmd)
 
-            if ret is None:
-                return
+        if ret is None:
+            return
 
-            return restic.parser.parse_snapshots_fallback(self, ret)
-        else:
-            cmd = self._build_command(json=True)
-            cmd.append('snapshots')
-
-            ret = self._run_command(cmd)
-
-            if ret is None:
-                return
-
-            return restic.parser.parse_snapshots(self, ret)
+        return restic.parser.parse_snapshots(self, ret)
 
     def _run_stats_command(self):
-        if self.fallback_output:
-            cmd = self._build_command()
-            cmd.append('stats')
+        cmd = self._build_command(json=True)
+        cmd.append('stats')
 
-            ret = self._run_command(cmd)
+        ret = self._run_command(cmd)
 
-            if ret is None:
-                return
+        if ret is None:
+            return
 
-            return restic.parser.parse_stats_fallback(self, ret)
-        else:
-            cmd = self._build_command(json=True)
-            cmd.append('stats')
-
-            ret = self._run_command(cmd)
-
-            if ret is None:
-                return
-
-            return restic.parser.parse_stats(self, ret)
+        return restic.parser.parse_stats(self, ret)
 
     def _run_key_list_commond(self):
-        if self.fallback_output:
-            cmd = self._build_command()
-            cmd.extend(['key', 'list'])
+        cmd = self._build_command(json=True)
+        cmd.extend(['key', 'list'])
 
-            ret = self._run_command(cmd)
+        ret = self._run_command(cmd)
 
-            if ret is None:
-                return
+        if ret is None:
+            return
 
-            return restic.parser.parse_key_fallback(self, ret)
-        else:
-            cmd = self._build_command(json=True)
-            cmd.extend(['key', 'list'])
-
-            ret = self._run_command(cmd)
-
-            if ret is None:
-                return
-
-            return restic.parser.parse_key(self, ret)
+        return restic.parser.parse_key(self, ret)
 
     '''
     Public repository API

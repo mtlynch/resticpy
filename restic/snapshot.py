@@ -3,6 +3,8 @@ from datetime import datetime
 
 class Snapshot(object):
     repo = None
+    # TODO origin is different from id
+    snapshot_origin = None
     snapshot_id = None
     snapshot_time = None
     snapshot_host = None
