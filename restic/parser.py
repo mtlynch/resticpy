@@ -30,6 +30,10 @@ def parse_snapshots(repo, text):
         single_snapshot.set_host(each_snapshot['username'])
         single_snapshot.set_paths(each_snapshot['paths'])
         single_snapshot.set_time(each_snapshot['time'])
+        if 'parent' in each_snapshot.keys():
+            single_snapshot.set_parent(each_snapshot['parent'])
+        if 'origin' in each_snapshot.keys():
+            single_snapshot.set_origin(each_snapshot['origin'])
         snapshots.append(single_snapshot)
     return snapshots
 

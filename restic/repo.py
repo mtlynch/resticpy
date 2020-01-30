@@ -28,19 +28,6 @@ class Repo(object):
     password = None
     is_open = False
 
-    # global flags
-    '''
-    cacert = None
-    cache_dir = None
-    no_lock = False
-    limit_download = None
-    limit_upload = None
-    options = {}
-    quiet = False
-    verbose = False
-    '''
-
-    snapshots_list = []
     def __init__(self, path, password, kind = RepoKind.Local):
         self.path = path
         self.kind = kind
@@ -84,14 +71,14 @@ class Repo(object):
         cmd = [restic_bin, '-r', self.path]
 
         if cacert is not None:
-            if type(self.cacert) == str:
-                cmd.extend(['--cacert', self.cacert])
+            if type(cacert) == str:
+                cmd.extend(['--cacert', cacert])
             else:
                 raise ValueError('cacert shall be type of str or None')
 
         if cache_dir is not None:
-            if type(self.cache_dir) == str:
-                cmd.extend(['--cache-dir', self.cache_dir])
+            if type(cache_dir) == str:
+                cmd.extend(['--cache-dir', cache_dir])
             else:
                 raise ValueError('cache_dir shall be type of str or None')
 
@@ -99,14 +86,14 @@ class Repo(object):
             cmd.append('--no-lock')
 
         if limit_download is not None:
-            if type(self.limit_download) == int:
-                cmd.extend(['--limit-download', str(self.limit_download)])
+            if type(limit_download) == int:
+                cmd.extend(['--limit-download', str(limit_download)])
             else:
                 raise ValueError('limit_download shall be type of str or None')
 
         if limit_upload is not None:
-            if type(self.limit_upload) == int:
-                cmd.extend(['--limit-upload', str(self.limit_upload)])
+            if type(limit_upload) == int:
+                cmd.extend(['--limit-upload', str(limit_upload)])
             else:
                 raise ValueError('limit_upload shall be type of str or None')
 
@@ -153,23 +140,6 @@ class Repo(object):
         repo._run_command([restic_bin, 'init', '--repo', url])
 
         return repo
-
-    def remove_all_snapshots_list(self):
-        for each_snapshots in self.snapshots_list:
-            each_snapshots.repo = None
-
-        self.snapshots_list = None
-
-    def update_snapshots_list(self):
-        snapshots_list = self._run_snapshots_command()
-        for each_snapshot in self.snapshots_list:
-            if each_snapshot.snapshot_id not in [each.snapshot_id for each in snapshots_list]:
-                each_snapshot.repo = None
-                self.snapshots_list.remove(each_snapshot)
-
-        for each_snapshot in snapshots_list:
-            if each_snapshot.snapshot_id not in [each.snapshot_id for each in self.snapshots_list]:
-                self.snapshots_list.append(each_snapshot)
 
     '''
     Internal command implement
@@ -285,8 +255,8 @@ class Repo(object):
         self._run_command(cmd)
 
     def snapshots(self):
-        self.update_snapshots_list()
-        return self.snapshots_list
+        snapshots_list = self._run_snapshots_command()
+        return snapshots_list
 
     def stats(self):
         return self._run_stats_command()

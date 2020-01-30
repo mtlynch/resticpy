@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 
+.vscode/
 repos_test/

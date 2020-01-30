@@ -10,6 +10,9 @@ class Snapshot(object):
     snapshot_host = None
     snapshot_tags = None
     snapshot_paths = None
+    snapshot_username = None
+    snapshot_parent = None
+
     def __init__(self, repo):
         super().__init__()
         self.repo = repo
@@ -56,6 +59,15 @@ class Snapshot(object):
     def get_paths(self):
         return self.snapshot_paths
 
+    def get_username(self):
+        return self.snapshot_username
+
+    def get_parent(self):
+        return self.snapshot_parent
+
+    def get_origin(self):
+        return self.snapshot_origin
+
     # setter， TODO: input type check
     def set_id(self, value):
         self.snapshot_id = value
@@ -67,14 +79,25 @@ class Snapshot(object):
             try:
                 self.snapshot_time = datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
             except ValueError:
-                value = value[:26] + value[-6:-3] + value[-2:]
-                self.snapshot_time = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f%z")
+                index = value.find('.')
+                if index != -1:
+                    value = value[:index]
+                self.snapshot_time = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
 
     def set_host(self, value):
         self.snapshot_host = value
 
     def set_paths(self, value):
         self.snapshot_paths = value
+
+    def set_username(self, name):
+        self.snapshot_username = name
+
+    def set_parent(self, parent):
+        self.snapshot_parent = parent
+
+    def set_origin(self, origin):
+        self.snapshot_origin = origin
 
     # tagbs
     def add_tags(self, tags):
@@ -92,18 +115,12 @@ class Snapshot(object):
             raise ValueError('tag shall be type of str')
         self.repo.tag(add_tags=tag, remove_tags=None, set_tags=None, snapshot=self)
 
-        # update id
-        self.repo.update_snapshots_list()
-
     def remove_tags(self, tags):
         self.check_valid()
         
         if type(tags) != list:
             raise ValueError('tags shall be type of list')
         self.repo.tag(add_tags=None, remove_tags=tags, set_tags=None, snapshot=self)
-
-        # update id
-        self.repo.update_snapshots_list()
 
     def remove_tag(self, tag):
         self.check_valid()
@@ -112,18 +129,12 @@ class Snapshot(object):
             raise ValueError('tag shall be type of str')
         self.repo.tag(add_tags=None, remove_tags=tag, set_tags=None, snapshot=self)
 
-        # update id
-        self.repo.update_snapshots_list()
-
     def set_tags(self, tags):
         self.check_valid()
 
         if type(tags) != list:
             raise ValueError('tags shall be type of list')
         self.repo.tag(add_tags=None, remove_tags=None, set_tags=tags, snapshot=self)
-
-        # update id
-        self.repo.update_snapshots_list()
     
     def set_tag(self, tag):
         self.check_valid()
@@ -131,9 +142,6 @@ class Snapshot(object):
         if type(tag) != str:
             raise ValueError('tag shall be type of str')
         self.repo.tag(add_tags=None, remove_tags=None, set_tags=tag, snapshot=self)
-
-        # update id
-        self.repo.update_snapshots_list()
 
     def restore(self, target):
         self.check_valid()
