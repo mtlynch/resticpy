@@ -1,28 +1,16 @@
-# PyRestic
+# pyrestic
 
-[![CircleCI](https://circleci.com/gh/mtlynch/pyrestic.svg?style=svg)](https://circleci.com/gh/mtlynch/pyrestic)
+[![CircleCI](https://circleci.com/gh/mtlynch/pyrestic.svg?style=svg)](https://circleci.com/gh/mtlynch/pyrestic) [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](LICENSE)
 
-## Introduction
+## Overview
 
-[restic](https://github.com/restic/restic) is a backup program that is fast, efficient and secure. It supports the three major operating systems (Linux, macOS, Windows) and a few smaller ones (FreeBSD, OpenBSD).
-
-PyRestic is a python wrapper for restic. It makes programmatic data backup in Python possible. It provides a set of object-oriented and easy-used API.
+Minimal Python wrapper around the [restic](https://restic.readthedocs.io/) backup command-line interface.
 
 ## Installation
 
-Before using PyRestic, you need to install newest restic and add it to your ENV variable. Make sure command `restic version` works.
-
-Next you can install PyRestic by pip:
-
-```powershell
-pip install pyrestic
-```
-
-or you can install it from source:
-
-```powershell
-git clone https://github.com/jstzwj/PyRestic.git
-cd PyRestic
+```bash
+git clone https://github.com/mtlynch/pyrestic.git
+cd pyrestic
 pip install .
 ```
 
@@ -44,3 +32,7 @@ import restic
 repo = restic.Repo('/srv/restic-repo', '12345678')
 repo.backup('setup.py')
 ```
+
+## Acknowledgments
+
+This project is forked from [jstzwj/PyRestic](https://github.com/jstzwj/PyRestic).
