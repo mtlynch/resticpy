@@ -1,0 +1,18 @@
+version: 2.1
+jobs:
+  install:
+    docker:
+      - image: circleci/python:3.7.3
+    steps:
+      - checkout
+      - run:
+          name: Install from setup.py
+          command: |
+            mkdir -p ./venv
+            virtualenv --python python3 ./venv
+            . venv/bin/activate
+            pip install .
+workflows:
+  test:
+    jobs:
+      - install
