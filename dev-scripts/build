@@ -15,6 +15,13 @@ readonly SOURCE_DIR=restic
 # Location of virtualenv.
 readonly VIRTUALENV_DIR=venv
 
+# Delete pyc files from previous builds.
+find . \
+  -name "*.pyc" \
+  -type f \
+  -not -path "./${VIRTUALENV_DIR}/*" \
+  -delete
+
 # Check that source has correct formatting.
 yapf \
   --diff \
