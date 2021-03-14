@@ -4,14 +4,26 @@ from restic.internal import version as internal_version
 
 binary_path = 'restic'
 
+# Global flags
+repository = None
+
 
 def generate(*args, **kwargs):
-    return internal_generate.run(binary_path, *args, **kwargs)
+    return internal_generate.run(_make_base_command(), *args, **kwargs)
 
 
 def self_update():
-    return internal_self_update.run(binary_path)
+    return internal_self_update.run(_make_base_command())
 
 
 def version():
-    return internal_version.run(binary_path)
+    return internal_version.run(_make_base_command())
+
+
+def _make_base_command():
+    base_command = [binary_path]
+
+    if repository:
+        base_command.extend(['--repo', repository])
+
+    return base_command
