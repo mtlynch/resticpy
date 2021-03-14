@@ -10,7 +10,18 @@ set -x
 set -u
 
 # Location of app source files.
-SOURCE_DIR=restic
+readonly SOURCE_DIR=restic
+
+# Location of virtualenv.
+readonly VIRTUALENV_DIR=venv
+
+# Check that source has correct formatting.
+yapf \
+  --diff \
+  --recursive \
+  --style google \
+  ./ \
+  --exclude="${VIRTUALENV_DIR}/*"
 
 # Run static analysis for Python bugs/cruft.
 pyflakes "${SOURCE_DIR}/"

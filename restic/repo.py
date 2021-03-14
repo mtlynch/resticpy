@@ -1,4 +1,3 @@
-
 from enum import Enum, unique
 import subprocess
 import platform
@@ -21,13 +20,14 @@ class RepoKind(Enum):
     GoogleStorage = 7
     Rclone = 8
 
+
 class Repo(object):
     kind = None
     path = None
     password = None
     is_open = False
 
-    def __init__(self, path, password, kind = RepoKind.Local):
+    def __init__(self, path, password, kind=RepoKind.Local):
         self.path = path
         self.kind = kind
         self.password = password
@@ -42,18 +42,18 @@ class Repo(object):
         out = ''
         err = ''
         try:
-            with subprocess.Popen(
-                cmd,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                encoding='utf-8',
-                text=True) as proc:
+            with subprocess.Popen(cmd,
+                                  stdin=subprocess.PIPE,
+                                  stdout=subprocess.PIPE,
+                                  encoding='utf-8',
+                                  text=True) as proc:
                 out, err = proc.communicate(self.password)
                 if err is not None:
                     raise RuntimeError('Command runtime failure')
                 proc.wait()
                 if proc.returncode != 0:
-                    raise RuntimeError(f'Return code {proc.returncode} is not zero')
+                    raise RuntimeError(
+                        f'Return code {proc.returncode} is not zero')
         except FileNotFoundError:
             raise RuntimeError('Cannot find restic installed')
 
@@ -66,7 +66,15 @@ class Repo(object):
         cmd = [restic_bin, '-r', self.path]
         return cmd
 
-    def _build_command(self, cacert=None, cache_dir=None, no_lock=False, limit_download=None, limit_upload=None, quiet=False, verbose=False, json=False):
+    def _build_command(self,
+                       cacert=None,
+                       cache_dir=None,
+                       no_lock=False,
+                       limit_download=None,
+                       limit_upload=None,
+                       quiet=False,
+                       verbose=False,
+                       json=False):
         cmd = [restic_bin, '-r', self.path]
 
         if cacert is not None:
@@ -106,11 +114,13 @@ class Repo(object):
             cmd.append('--json')
         return cmd
 
-
     @staticmethod
-    def init(url, password, repo_kind = RepoKind.Local):
-        if repo_kind not in [RepoKind.Local, RepoKind.SFTP, RepoKind.REST, RepoKind.S3]:
-            raise NotImplementedError('This kind of repo is not implemented now.')
+    def init(url, password, repo_kind=RepoKind.Local):
+        if repo_kind not in [
+                RepoKind.Local, RepoKind.SFTP, RepoKind.REST, RepoKind.S3
+        ]:
+            raise NotImplementedError(
+                'This kind of repo is not implemented now.')
 
         # check url valid(TODO)
         repo = Repo(url, password, repo_kind)
@@ -121,6 +131,7 @@ class Repo(object):
     '''
     Internal command implement
     '''
+
     def _run_snapshots_command(self):
         cmd = self._build_command(json=True)
         cmd.append('snapshots')
@@ -157,6 +168,7 @@ class Repo(object):
     '''
     Public repository API
     '''
+
     def backup(self, file_path, exclude=None, tags=None):
         # check url valid(TODO)
 
@@ -201,14 +213,17 @@ class Repo(object):
 
         if has_errors:
             for each_line in lines:
-                if each_line.startswith('error') or each_line.startswith('Fatal'):
+                if each_line.startswith('error') or each_line.startswith(
+                        'Fatal'):
                     print(each_line)
 
         return has_errors
 
     def mount(self, target, snapshot='latest'):
         if 'Linux' not in platform.system():
-            raise RuntimeError('Mounting repositories via FUSE is not possible on OpenBSD, Solaris/illumos and Windows.')
+            raise RuntimeError(
+                'Mounting repositories via FUSE is not possible on OpenBSD, Solaris/illumos and Windows.'
+            )
         if type(snapshot) == Snapshot:
             snapshot = snapshot.snapshot_id
         elif type(snapshot) not in [str, Snapshot]:
@@ -238,7 +253,11 @@ class Repo(object):
     def stats(self):
         return self._run_stats_command()
 
-    def tag(self, add_tags=None, remove_tags=None, set_tags=None, snapshot='latest'):
+    def tag(self,
+            add_tags=None,
+            remove_tags=None,
+            set_tags=None,
+            snapshot='latest'):
         if type(snapshot) == Snapshot:
             snapshot = snapshot.snapshot_id
         elif type(snapshot) not in [str, Snapshot]:
@@ -255,7 +274,8 @@ class Repo(object):
                     if ',' not in each_tag:
                         cmd.extend(['--add', each_tag])
                     else:
-                        raise ValueError('the `,` charactor in tag may make PyRestic wrong')
+                        raise ValueError(
+                            'the `,` charactor in tag may make PyRestic wrong')
             else:
                 raise ValueError('add_tags shall be type of str or list')
 
@@ -267,7 +287,8 @@ class Repo(object):
                     if ',' not in each_tag:
                         cmd.extend(['--remove', each_tag])
                     else:
-                        raise ValueError('the `,` charactor in tag may make PyRestic wrong')
+                        raise ValueError(
+                            'the `,` charactor in tag may make PyRestic wrong')
             else:
                 raise ValueError('remove_tags shall be type of str or list')
 
@@ -279,7 +300,8 @@ class Repo(object):
                     if ',' not in each_tag:
                         cmd.extend(['--set', each_tag])
                     else:
-                        raise ValueError('the `,` charactor in tag may make PyRestic wrong')
+                        raise ValueError(
+                            'the `,` charactor in tag may make PyRestic wrong')
             else:
                 raise ValueError('set_tags shall be type of str or list')
         cmd.append(snapshot)

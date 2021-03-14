@@ -1,18 +1,17 @@
-
 import re
 import subprocess
 from restic.config import restic_bin
+
 
 def run_restic(cmd):
     out = ''
     err = ''
     try:
-        with subprocess.Popen(
-            cmd,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            encoding='utf-8',
-            text=True) as proc:
+        with subprocess.Popen(cmd,
+                              stdin=subprocess.PIPE,
+                              stdout=subprocess.PIPE,
+                              encoding='utf-8',
+                              text=True) as proc:
             out, err = proc.communicate()
             if err is not None:
                 raise RuntimeError('Command runtime failure')
@@ -24,18 +23,22 @@ def run_restic(cmd):
 
     return out
 
+
 def version():
     cmd = [restic_bin, 'version']
     out = run_restic(cmd)
     if out is None:
         return None
-    matchObj = re.match(r'restic ([0-9\.]+) compiled with go([0-9\.]+) on ([a-zA-Z0-9]+)/([a-zA-Z0-9]+)', out)
+    matchObj = re.match(
+        r'restic ([0-9\.]+) compiled with go([0-9\.]+) on ([a-zA-Z0-9]+)/([a-zA-Z0-9]+)',
+        out)
     return {
         'restic_version': matchObj.group(1),
         'go_version': matchObj.group(2),
         'platform_version': matchObj.group(3),
         'Architecture': matchObj.group(4)
     }
+
 
 def self_update():
     cmd = [restic_bin, 'self-update']
@@ -56,7 +59,6 @@ def generate(bash_completion=None, man=None, zsh_completion=None):
         else:
             raise ValueError('man shall be type of str or None')
 
-
     if zsh_completion is not None:
         if type(zsh_completion) == str:
             cmd.extend(['--zsh-completion', zsh_completion])
@@ -65,15 +67,19 @@ def generate(bash_completion=None, man=None, zsh_completion=None):
 
     run_restic(cmd)
 
+
 '''
 TODO: if there is a repository, it needs pasword.
 '''
+
+
 def is_initialized(path):
     cmd = ['restic', '-r', path, 'snapshots']
     ret = run_restic(cmd)
     lines = ret.splitlines()
     for each_line in lines:
-        if each_line.strip() == 'Is there a repository at the following location?':
+        if each_line.strip(
+        ) == 'Is there a repository at the following location?':
             return False
 
     return True

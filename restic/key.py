@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 class Key(object):
     repo = None
     key_current = False
@@ -7,6 +8,7 @@ class Key(object):
     key_user = None
     key_host = None
     key_created = None
+
     def __init__(self, repo):
         super().__init__()
         self.repo = repo
@@ -19,7 +21,9 @@ class Key(object):
 
     def check_valid(self):
         if not self.is_valid():
-            raise RuntimeError('The key is removed or updated, please get object from repo again')
+            raise RuntimeError(
+                'The key is removed or updated, please get object from repo again'
+            )
 
     def set_attr(self, attr, value):
         if attr.strip() == 'ID':
@@ -33,7 +37,6 @@ class Key(object):
                 self.key_created = value
             elif type(value) == str:
                 self.key_created = datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
-
 
     # TODO: set methods type check
     def set_id(self, value):
@@ -54,7 +57,6 @@ class Key(object):
     def set_current(self, value):
         self.key_current = value
 
-
     def get_id(self):
         return self.key_id
 
@@ -69,4 +71,3 @@ class Key(object):
 
     def get_current(self, value):
         return self.key_current
-    
