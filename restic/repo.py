@@ -4,7 +4,6 @@ from enum import Enum
 from enum import unique
 
 import restic.parser
-from restic.config import restic_bin
 from restic.core import version
 from restic.snapshot import Snapshot
 
@@ -64,7 +63,7 @@ class Repo(object):
         return out
 
     def _build_command_internal(self):
-        cmd = [restic_bin, '-r', self.path]
+        cmd = [restic.binary_path, '-r', self.path]
         return cmd
 
     def _build_command(self,
@@ -76,7 +75,7 @@ class Repo(object):
                        quiet=False,
                        verbose=False,
                        json=False):
-        cmd = [restic_bin, '-r', self.path]
+        cmd = [restic.binary_path, '-r', self.path]
 
         if cacert is not None:
             if type(cacert) == str:
@@ -125,7 +124,7 @@ class Repo(object):
 
         # check url valid(TODO)
         repo = Repo(url, password, repo_kind)
-        repo._run_command([restic_bin, 'init', '--repo', url])
+        repo._run_command([restic.binary_path, 'init', '--repo', url])
 
         return repo
 
