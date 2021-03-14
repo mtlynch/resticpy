@@ -29,6 +29,11 @@ def configure_logging():
 
 configure_logging()
 
+version_info = restic.version()
+logger.info('Running end-to-end tests with restic version %s (%s/%s/go%s)',
+            version_info['restic_version'], version_info['architecture'],
+            version_info['platform_version'], version_info['go_version'])
+
 PASSWORD = 'mysecretpass'
 PASSWORD_FILE = tempfile.NamedTemporaryFile()
 PASSWORD_FILE.write(PASSWORD.encode('utf-8'))
