@@ -26,7 +26,7 @@ jobs:
       - checkout
       - run:
           name: Install bzip2
-          command: apt-get install bzip2
+          command: sudo apt-get install bzip2
       - run:
           name: Download restic
           command: |
