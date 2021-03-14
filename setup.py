@@ -20,7 +20,7 @@ setuptools.setup(
     license="MIT",
     keywords="backup",
     url='https://github.com/mtlynch/resticpy.git',
-    packages=['restic'],
+    packages=['restic', 'restic.internal'],
     install_requires=[],
     python_requires='>=3.7',
 )
