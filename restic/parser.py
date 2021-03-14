@@ -1,7 +1,7 @@
 import json
 
-from restic.snapshot import Snapshot
 from restic.key import Key
+from restic.snapshot import Snapshot
 
 
 def parse_key(repo, text):
