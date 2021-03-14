@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 class Snapshot(object):
     repo = None
     # TODO origin is different from id
@@ -24,7 +25,9 @@ class Snapshot(object):
 
     def check_valid(self):
         if not self.is_valid():
-            raise RuntimeError('The snapshot is removed or updated, please get it from repo again')
+            raise RuntimeError(
+                'The snapshot is removed or updated, please get it from repo again'
+            )
 
     def set_attr(self, attr, value):
         if attr.strip() == 'ID':
@@ -33,7 +36,8 @@ class Snapshot(object):
             if type(value) == datetime:
                 self.snapshot_time = value
             elif type(value) == str:
-                self.snapshot_time = datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
+                self.snapshot_time = datetime.strptime(value,
+                                                       "%Y-%m-%d %H:%M:%S")
         elif attr.strip() == 'Host':
             self.snapshot_host = value
         elif attr.strip() == 'Tags':
@@ -53,7 +57,6 @@ class Snapshot(object):
 
     def get_tags(self):
         return self.snapshot_tags
-
 
     def get_paths(self):
         return self.snapshot_paths
@@ -76,12 +79,14 @@ class Snapshot(object):
             self.snapshot_time = value
         elif type(value) == str:
             try:
-                self.snapshot_time = datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
+                self.snapshot_time = datetime.strptime(value,
+                                                       "%Y-%m-%d %H:%M:%S")
             except ValueError:
                 index = value.find('.')
                 if index != -1:
                     value = value[:index]
-                self.snapshot_time = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
+                self.snapshot_time = datetime.strptime(value,
+                                                       "%Y-%m-%dT%H:%M:%S")
 
     def set_host(self, value):
         self.snapshot_host = value
@@ -103,7 +108,10 @@ class Snapshot(object):
         self.check_valid()
         if type(tags) != list:
             raise ValueError('tags shall be type of list')
-        self.repo.tag(add_tags=tags, remove_tags=None, set_tags=None, snapshot=self)
+        self.repo.tag(add_tags=tags,
+                      remove_tags=None,
+                      set_tags=None,
+                      snapshot=self)
 
         # update id
         self.repo.update_snapshots_list()
@@ -112,35 +120,50 @@ class Snapshot(object):
         self.check_valid()
         if type(tag) != str:
             raise ValueError('tag shall be type of str')
-        self.repo.tag(add_tags=tag, remove_tags=None, set_tags=None, snapshot=self)
+        self.repo.tag(add_tags=tag,
+                      remove_tags=None,
+                      set_tags=None,
+                      snapshot=self)
 
     def remove_tags(self, tags):
         self.check_valid()
 
         if type(tags) != list:
             raise ValueError('tags shall be type of list')
-        self.repo.tag(add_tags=None, remove_tags=tags, set_tags=None, snapshot=self)
+        self.repo.tag(add_tags=None,
+                      remove_tags=tags,
+                      set_tags=None,
+                      snapshot=self)
 
     def remove_tag(self, tag):
         self.check_valid()
 
         if type(tag) != str:
             raise ValueError('tag shall be type of str')
-        self.repo.tag(add_tags=None, remove_tags=tag, set_tags=None, snapshot=self)
+        self.repo.tag(add_tags=None,
+                      remove_tags=tag,
+                      set_tags=None,
+                      snapshot=self)
 
     def set_tags(self, tags):
         self.check_valid()
 
         if type(tags) != list:
             raise ValueError('tags shall be type of list')
-        self.repo.tag(add_tags=None, remove_tags=None, set_tags=tags, snapshot=self)
+        self.repo.tag(add_tags=None,
+                      remove_tags=None,
+                      set_tags=tags,
+                      snapshot=self)
 
     def set_tag(self, tag):
         self.check_valid()
 
         if type(tag) != str:
             raise ValueError('tag shall be type of str')
-        self.repo.tag(add_tags=None, remove_tags=None, set_tags=tag, snapshot=self)
+        self.repo.tag(add_tags=None,
+                      remove_tags=None,
+                      set_tags=tag,
+                      snapshot=self)
 
     def restore(self, target):
         self.check_valid()
