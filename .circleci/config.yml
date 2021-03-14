@@ -19,20 +19,29 @@ jobs:
             . venv/bin/activate
             pip install coveralls==3.0.1
             coveralls
-  install:
+  e2e:
     docker:
       - image: circleci/python:3.7.3
     steps:
       - checkout
       - run:
-          name: Install from setup.py
+          name: Download restic
+          command: |
+            wget https://github.com/restic/restic/releases/download/v0.12.0/restic_0.12.0_linux_amd64.bz2
+            bzip restic_0.12.0_linux_amd64.bz2
+            mv restic_0.12.0_linux_amd64 restic
+            chmod +x restic
+            mv restic /usr/local/bin
+      - run:
+          name: Install from setup.py and run end-to-end tests
           command: |
             mkdir -p ./venv
             virtualenv --python python3 ./venv
             . venv/bin/activate
             pip install .
+            ./e2e/test.py
 workflows:
   test:
     jobs:
       - build
-      - install
+      - e2e
