@@ -2,13 +2,12 @@
 from enum import Enum, unique
 import subprocess
 import platform
-import sys
 import restic.parser
 from restic.core import version
 from restic.config import restic_bin
 
 from restic.snapshot import Snapshot
-from restic.key import Key
+
 
 @unique
 class RepoKind(Enum):
@@ -57,7 +56,7 @@ class Repo(object):
                     raise RuntimeError(f'Return code {proc.returncode} is not zero')
         except FileNotFoundError:
             raise RuntimeError('Cannot find restic installed')
-        
+
         if out.startswith('read password from stdin\n'):
             out = out[25:]
 
@@ -112,31 +111,9 @@ class Repo(object):
     def init(url, password, repo_kind = RepoKind.Local):
         if repo_kind not in [RepoKind.Local, RepoKind.SFTP, RepoKind.REST, RepoKind.S3]:
             raise NotImplementedError('This kind of repo is not implemented now.')
-        
+
         # check url valid(TODO)
         repo = Repo(url, password, repo_kind)
-
-        # create repo
-        repo_url = None
-        if repo_kind == RepoKind.Local:
-            repo_url = url
-        elif repo_kind == RepoKind.SFTP:
-            if url.startswith('sftp:'):
-                repo_url = url
-            else:
-                repo_url = 'sftp:' + url
-        elif repo_kind == RepoKind.REST:
-            if url.startswith('rest:'):
-                repo_url = url
-            else:
-                repo_url = 'rest:' + url
-        elif repo_kind == RepoKind.S3:
-            if url.startswith('s3:'):
-                repo_url = url
-            else:
-                repo_url = 's3:' + url
-        else:
-            raise NotImplementedError('This kind of repo is not implemented now.')
         repo._run_command([restic_bin, 'init', '--repo', url])
 
         return repo
@@ -307,9 +284,3 @@ class Repo(object):
                 raise ValueError('set_tags shall be type of str or list')
         cmd.append(snapshot)
         self._run_command(cmd)
-
-
-
-            
-
-
