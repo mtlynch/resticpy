@@ -1,3 +1,4 @@
+from restic.internal import backup as internal_backup
 from restic.internal import generate as internal_generate
 from restic.internal import init as internal_init
 from restic.internal import self_update as internal_self_update
@@ -8,6 +9,10 @@ binary_path = 'restic'
 # Global flags
 repository = None
 password_file = None
+
+
+def backup(*args, **kwargs):
+    return internal_backup.run(_make_base_command(), *args, **kwargs)
 
 
 def generate(*args, **kwargs):
