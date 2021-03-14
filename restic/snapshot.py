@@ -1,4 +1,3 @@
-import time
 from datetime import datetime
 
 class Snapshot(object):
@@ -117,7 +116,7 @@ class Snapshot(object):
 
     def remove_tags(self, tags):
         self.check_valid()
-        
+
         if type(tags) != list:
             raise ValueError('tags shall be type of list')
         self.repo.tag(add_tags=None, remove_tags=tags, set_tags=None, snapshot=self)
@@ -135,7 +134,7 @@ class Snapshot(object):
         if type(tags) != list:
             raise ValueError('tags shall be type of list')
         self.repo.tag(add_tags=None, remove_tags=None, set_tags=tags, snapshot=self)
-    
+
     def set_tag(self, tag):
         self.check_valid()
 
@@ -147,5 +146,3 @@ class Snapshot(object):
         self.check_valid()
 
         self.repo.restore(target, self)
-
-    
