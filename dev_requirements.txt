@@ -1,2 +1,3 @@
+isort[requirements_deprecated_finder]==5.7.0
 pyflakes==2.2.0
 yapf==0.31.0

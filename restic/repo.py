@@ -1,10 +1,11 @@
-from enum import Enum, unique
-import subprocess
 import platform
-import restic.parser
-from restic.core import version
-from restic.config import restic_bin
+import subprocess
+from enum import Enum
+from enum import unique
 
+import restic.parser
+from restic.config import restic_bin
+from restic.core import version
 from restic.snapshot import Snapshot
 
 

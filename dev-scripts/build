@@ -23,5 +23,13 @@ yapf \
   ./ \
   --exclude="${VIRTUALENV_DIR}/*"
 
+# Check correct sorting for imports.
+isort \
+  . \
+  --force-single-line-imports \
+  --diff \
+  --check-only \
+  --skip-glob="${VIRTUALENV_DIR}/*"
+
 # Run static analysis for Python bugs/cruft.
 pyflakes "${SOURCE_DIR}/"
