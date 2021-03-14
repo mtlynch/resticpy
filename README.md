@@ -24,22 +24,33 @@ pip install .
 
 ## Quick start
 
-Initialize a repository and back up a file:
+### Create a password file
+
+```bash
+printf "mysecretpass" > password.txt
+```
+
+### Initialize a repository and back up a file
 
 ```python
 import restic
 
-PASSWORD = 'mysecretpass'
-PASSWORD_FILE_PATH = 'secret.txt'
-
-with open(PASSWORD_FILE_PATH, 'w') as password_file:
-  password_file.write(PASSWORD)
-
 restic.repository = '/tmp/backup1'
-restic.password_file = PASSWORD_FILE_PATH
+restic.password_file = 'password.txt'
 
 restic.init()
 restic.backup('some-file.txt')
+```
+
+### Restore a snapshot
+
+```python
+import restic
+
+restic.repository = '/tmp/backup1'
+restic.password_file = 'password.txt'
+
+restic.restore(snapshot_id='latest', target_dir='~/restored')
 ```
 
 ## API Documentation

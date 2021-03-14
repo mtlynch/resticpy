@@ -1,0 +1,27 @@
+import unittest
+from unittest import mock
+
+import restic
+from restic.internal import restore
+
+
+class restoreTest(unittest.TestCase):
+
+    @mock.patch.object(restore.command_executor, 'execute')
+    def test_restore_with_no_snapshot_id(self, mock_execute):
+        restic.restore()
+        mock_execute.assert_called_with(['restic', 'restore', 'latest'])
+
+    @mock.patch.object(restore.command_executor, 'execute')
+    def test_restore_specific_snapshot_id(self, mock_execute):
+        restic.restore('dummy-snapshot-id')
+        mock_execute.assert_called_with(
+            ['restic', 'restore', 'dummy-snapshot-id'])
+
+    @mock.patch.object(restore.command_executor, 'execute')
+    def test_restore_specific_snapshot_id_and_target(self, mock_execute):
+        restic.restore(snapshot_id='dummy-snapshot-id',
+                       target_dir='/tmp/restore')
+        mock_execute.assert_called_with([
+            'restic', 'restore', 'dummy-snapshot-id', '--target', '/tmp/restore'
+        ])
