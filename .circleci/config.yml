@@ -1,5 +1,18 @@
 version: 2.1
 jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7.3
+    steps:
+      - checkout
+      - run:
+          name: Install requirements and run build script
+          command: |
+            mkdir -p ./venv
+            virtualenv --python python3 ./venv
+            . venv/bin/activate
+            pip install --requirement dev_requirements.txt
+            ./dev-scripts/build
   install:
     docker:
       - image: circleci/python:3.7.3
