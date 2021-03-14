@@ -28,4 +28,5 @@ jobs:
 workflows:
   test:
     jobs:
+      - build
       - install
