@@ -16,22 +16,17 @@ pip install .
 
 ## Quick start
 
-Once you have installed restic and PyRestic, you can create a repository:
+Back up a file:
 
 ```python
 import restic
-repo = restic.Repo('/srv/restic-repo', '12345678')
+repo = restic.Repo(path='/srv/restic-repo', password='12345678')
+repo.backup('file-to-backup.txt')
 ```
 
-The new repository is located in `/srv/restic-repo` with password `12345678`
+## API Documentation
 
-Then try to backup some files:
-
-```python
-import restic
-repo = restic.Repo('/srv/restic-repo', '12345678')
-repo.backup('setup.py')
-```
+Coming soon.
 
 ## Acknowledgments
 
