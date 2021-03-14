@@ -14,11 +14,11 @@ jobs:
             pip install --requirement dev_requirements.txt
             ./dev-scripts/build
       - run:
-          name: install coveralls
-          command: pip install coveralls==3.0.1
-      - run:
-          name: upload coverage information to coveralls
-          command: coveralls
+          name: install coveralls and upload coverage information
+          command: |
+            . venv/bin/activate
+            pip install coveralls==3.0.1
+            coveralls
   install:
     docker:
       - image: circleci/python:3.7.3
