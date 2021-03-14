@@ -65,4 +65,6 @@ if RESTORED_DATA != 'some data to back up':
     logger.fatal('Expected to restored file to contain %s (got %s)',
                  'some data to back up', RESTORED_DATA)
 
+logger.info('repo stats: %s', restic.stats())
+
 logger.info('End-to-end test succeeded!')
