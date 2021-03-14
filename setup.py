@@ -11,8 +11,7 @@ setuptools.setup(name='pyrestic',
       keywords="backup",
       url='https://github.com/jstzwj/PyRestic.git',
       packages=[
-            'restic',
-            'restic.test'
+            'restic'
       ],
       install_requires=[
       ],
