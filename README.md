@@ -38,4 +38,4 @@ Coming soon.
 
 ## Acknowledgments
 
-This project is forked from [jstzwj/resticpy](https://github.com/jstzwj/PyRestic).
+This project is forked from [jstzwj/PyRestic](https://github.com/jstzwj/PyRestic).
