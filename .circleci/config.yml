@@ -34,7 +34,7 @@ jobs:
             bzip2 -d restic_0.12.0_linux_amd64.bz2
             mv restic_0.12.0_linux_amd64 restic
             chmod +x restic
-            mv restic /usr/local/bin
+            sudo mv restic /usr/local/bin
       - run:
           name: Install from setup.py and run end-to-end tests
           command: |
