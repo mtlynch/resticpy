@@ -1,6 +1,6 @@
 # pyrestic
 
-[![CircleCI](https://circleci.com/gh/mtlynch/pyrestic.svg?style=svg)](https://circleci.com/gh/mtlynch/pyrestic) [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](LICENSE)
+[![CircleCI](https://circleci.com/gh/mtlynch/pyrestic.svg?style=svg)](https://circleci.com/gh/mtlynch/pyrestic) [![Coverage Status](https://coveralls.io/repos/github/mtlynch/pyrestic/badge.svg?branch=master)](https://coveralls.io/github/mtlynch/pyrestic?branch=master) [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](LICENSE)
 
 ## Overview
 
