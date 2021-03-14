@@ -19,3 +19,18 @@ class BackupTest(unittest.TestCase):
         mock_execute.assert_called_with([
             'restic', 'backup', '/tmp/dummy-file-1.txt', '/tmp/dummy-file-2.txt'
         ])
+
+    @mock.patch.object(backup.command_executor, 'execute')
+    def test_excludes_single_pattern(self, mock_execute):
+        restic.backup(['/data/music'], exclude_patterns=['Justin Bieber*'])
+        mock_execute.assert_called_with(
+            ['restic', 'backup', '/data/music', '--exclude', 'Justin Bieber*'])
+
+    @mock.patch.object(backup.command_executor, 'execute')
+    def test_excludes_multiple_patterns(self, mock_execute):
+        restic.backup(['/data/music'],
+                      exclude_patterns=['Justin Bieber*', 'Selena Gomez*'])
+        mock_execute.assert_called_with([
+            'restic', 'backup', '/data/music', '--exclude', 'Justin Bieber*',
+            '--exclude', 'Selena Gomez*'
+        ])
