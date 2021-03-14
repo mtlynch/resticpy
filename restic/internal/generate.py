@@ -1,11 +1,11 @@
-from restic.config import restic_bin
 from restic.internal import command_executor
 
 
-def run(bash_completion_path=None,
+def run(restic_binary_path,
+        bash_completion_path=None,
         man_directory=None,
         zsh_completion_path=None):
-    cmd = [restic_bin, 'generate']
+    cmd = [restic_binary_path, 'generate']
 
     if bash_completion_path is not None:
         cmd.extend(['--bash-completion', bash_completion_path])

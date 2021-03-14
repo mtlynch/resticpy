@@ -1,11 +1,10 @@
 import re
 
-from restic import config
 from restic.internal import command_executor
 
 
-def run():
-    cmd = [config.restic_bin, 'version']
+def run(restic_binary_path):
+    cmd = [restic_binary_path, 'version']
     out = command_executor.execute(cmd)
     match = re.match(
         r'restic ([0-9\.]+) compiled with go([0-9\.]+) on ([a-zA-Z0-9]+)/([a-zA-Z0-9]+)',
