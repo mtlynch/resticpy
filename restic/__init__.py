@@ -7,6 +7,7 @@ binary_path = 'restic'
 
 # Global flags
 repository = None
+password_file = None
 
 
 def generate(*args, **kwargs):
@@ -30,5 +31,8 @@ def _make_base_command():
 
     if repository:
         base_command.extend(['--repo', repository])
+
+    if password_file:
+        base_command.extend(['--password-file', password_file])
 
     return base_command
