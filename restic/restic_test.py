@@ -10,10 +10,12 @@ class ResticTest(unittest.TestCase):
     def setUp(self):
         self.original_binary = restic.binary_path
         self.original_repository = restic.repository
+        self.original_password_file = restic.password_file
 
     def tearDown(self):
         restic.binary_path = self.original_binary
         restic.repository = self.original_repository
+        restic.password_file = self.original_password_file
 
     @mock.patch.object(generate.command_executor, 'execute')
     def test_can_change_restic_binary_path(self, mock_execute):
@@ -25,6 +27,13 @@ class ResticTest(unittest.TestCase):
     @mock.patch.object(generate.command_executor, 'execute')
     def test_can_set_repository_path(self, mock_execute):
         restic.repository = '/dummy/repo/path'
-        restic.generate()
+        restic.init()
         mock_execute.assert_called_with(
-            ['restic', '--repo', '/dummy/repo/path', 'generate'])
+            ['restic', '--repo', '/dummy/repo/path', 'init'])
+
+    @mock.patch.object(generate.command_executor, 'execute')
+    def test_can_set_password_file(self, mock_execute):
+        restic.password_file = 'secret-pw.txt'
+        restic.init()
+        mock_execute.assert_called_with(
+            ['restic', '--password-file', 'secret-pw.txt', 'init'])
