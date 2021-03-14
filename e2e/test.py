@@ -19,11 +19,10 @@ def configure_logging():
                 raise SystemExit(255)
 
     root_logger = logging.getLogger()
-    handler = logging.StreamHandler()
+    handler = ShutdownHandler()
     formatter = logging.Formatter('%(name)-15s %(levelname)-4s %(message)s')
     handler.setFormatter(formatter)
     root_logger.addHandler(handler)
-    root_logger.addHandler(ShutdownHandler())
     root_logger.setLevel(logging.DEBUG)
 
 
