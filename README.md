@@ -8,6 +8,14 @@ Minimal Python wrapper around the [restic](https://restic.readthedocs.io/) backu
 
 ## Installation
 
+### From pip
+
+```bash
+pip install resticpy
+```
+
+### From source
+
 ```bash
 git clone https://github.com/mtlynch/resticpy.git
 cd resticpy
@@ -30,4 +38,4 @@ Coming soon.
 
 ## Acknowledgments
 
-This project is forked from [jstzwj/resticpy](https://github.com/jstzwj/resticpy).
+This project is forked from [jstzwj/resticpy](https://github.com/jstzwj/PyRestic).
