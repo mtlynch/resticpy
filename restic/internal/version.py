@@ -7,8 +7,6 @@ from restic.internal import command_executor
 def run():
     cmd = [config.restic_bin, 'version']
     out = command_executor.execute(cmd)
-    if out is None:
-        return None
     match = re.match(
         r'restic ([0-9\.]+) compiled with go([0-9\.]+) on ([a-zA-Z0-9]+)/([a-zA-Z0-9]+)',
         out)
