@@ -276,7 +276,7 @@ class Repo(object):
                         cmd.extend(['--add', each_tag])
                     else:
                         raise ValueError(
-                            'the `,` charactor in tag may make PyRestic wrong')
+                            'the `,` charactor in tag may make resticpy wrong')
             else:
                 raise ValueError('add_tags shall be type of str or list')
 
@@ -289,7 +289,7 @@ class Repo(object):
                         cmd.extend(['--remove', each_tag])
                     else:
                         raise ValueError(
-                            'the `,` charactor in tag may make PyRestic wrong')
+                            'the `,` charactor in tag may make resticpy wrong')
             else:
                 raise ValueError('remove_tags shall be type of str or list')
 
@@ -302,7 +302,7 @@ class Repo(object):
                         cmd.extend(['--set', each_tag])
                     else:
                         raise ValueError(
-                            'the `,` charactor in tag may make PyRestic wrong')
+                            'the `,` charactor in tag may make resticpy wrong')
             else:
                 raise ValueError('set_tags shall be type of str or list')
         cmd.append(snapshot)
