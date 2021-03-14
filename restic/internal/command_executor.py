@@ -1,7 +1,11 @@
+import logging
 import subprocess
+
+logger = logging.getLogger(__name__)
 
 
 def execute(cmd):
+    logger.debug('Executing restic command: %s', str(cmd))
     out = ''
     err = ''
     try:
