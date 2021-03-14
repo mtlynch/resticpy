@@ -1,4 +1,5 @@
 from restic.internal import generate as internal_generate
+from restic.internal import init as internal_init
 from restic.internal import self_update as internal_self_update
 from restic.internal import version as internal_version
 
@@ -10,6 +11,10 @@ repository = None
 
 def generate(*args, **kwargs):
     return internal_generate.run(_make_base_command(), *args, **kwargs)
+
+
+def init(*args, **kwargs):
+    return internal_init.run(_make_base_command(), *args, **kwargs)
 
 
 def self_update():
