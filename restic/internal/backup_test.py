@@ -40,3 +40,11 @@ class BackupTest(unittest.TestCase):
             'restic', '--json', 'backup', '/data/music', '--exclude',
             'Justin Bieber*', '--exclude', 'Selena Gomez*'
         ])
+
+    @mock.patch.object(backup.command_executor, 'execute')
+    def test_excludes_single_exclude_file(self, mock_execute):
+        restic.backup(['/data/music'], exclude_files=['bad-songs.txt'])
+        mock_execute.assert_called_with([
+            'restic', '--json', 'backup', '/data/music', '--exclude-file',
+            'bad-songs.txt'
+        ])
