@@ -16,8 +16,8 @@ A dictionary with a summary of the backup result.
 
 ```python
 >>> restic.backup(paths=['/data/music'],
-              exclude_patterns=['Justin Bieber*', 'Selena Gomez*'],
-              exclude_files=['bad-songs.txt'])
+                  exclude_patterns=['Justin Bieber*', 'Selena Gomez*'],
+                  exclude_files=['bad-songs.txt'])
 {
   "message_type": "summary",
   "files_new": 1,
