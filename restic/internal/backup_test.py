@@ -12,13 +12,19 @@ class BackupTest(unittest.TestCase):
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_backup_single_path(self, mock_execute):
+        mock_execute.return_value = '{}'
+
         restic.backup(['/tmp/dummy-file.txt'])
+
         mock_execute.assert_called_with(
             ['restic', '--json', 'backup', '/tmp/dummy-file.txt'])
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_backup_multiple_paths(self, mock_execute):
+        mock_execute.return_value = '{}'
+
         restic.backup(['/tmp/dummy-file-1.txt', '/tmp/dummy-file-2.txt'])
+
         mock_execute.assert_called_with([
             'restic', '--json', 'backup', '/tmp/dummy-file-1.txt',
             '/tmp/dummy-file-2.txt'
@@ -26,7 +32,10 @@ class BackupTest(unittest.TestCase):
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_excludes_single_pattern(self, mock_execute):
+        mock_execute.return_value = '{}'
+
         restic.backup(['/data/music'], exclude_patterns=['Justin Bieber*'])
+
         mock_execute.assert_called_with([
             'restic', '--json', 'backup', '/data/music', '--exclude',
             'Justin Bieber*'
@@ -34,8 +43,11 @@ class BackupTest(unittest.TestCase):
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_excludes_multiple_patterns(self, mock_execute):
+        mock_execute.return_value = '{}'
+
         restic.backup(['/data/music'],
                       exclude_patterns=['Justin Bieber*', 'Selena Gomez*'])
+
         mock_execute.assert_called_with([
             'restic', '--json', 'backup', '/data/music', '--exclude',
             'Justin Bieber*', '--exclude', 'Selena Gomez*'
@@ -43,8 +55,45 @@ class BackupTest(unittest.TestCase):
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_excludes_single_exclude_file(self, mock_execute):
+        mock_execute.return_value = '{}'
+
         restic.backup(['/data/music'], exclude_files=['bad-songs.txt'])
+
         mock_execute.assert_called_with([
             'restic', '--json', 'backup', '/data/music', '--exclude-file',
             'bad-songs.txt'
         ])
+
+    @mock.patch.object(backup.command_executor, 'execute')
+    def test_parses_result_json(self, mock_execute):
+        mock_execute.return_value = """
+{"message_type":"status","percent_done":0,"total_files":1,"total_bytes":20}
+{"message_type":"status","percent_done":0,"total_files":1,"total_bytes":20}
+{"message_type":"status","percent_done":0,"total_files":1,"total_bytes":20,"current_files":["/tmp/tmpvg2jkmqw/mydata.txt"]}
+{"message_type":"status","percent_done":1,"total_files":1,"total_bytes":20,"bytes_done":20,"current_files":["/tmp/tmpvg2jkmqw/mydata.txt"]}
+{"message_type":"status","percent_done":1,"total_files":1,"files_done":1,"total_bytes":20,"bytes_done":20,"current_files":["/tmp/tmpvg2jkmqw/mydata.txt"]}
+{"message_type":"status","percent_done":1,"total_files":1,"files_done":1,"total_bytes":20,"bytes_done":20}
+{"message_type":"status","percent_done":1,"total_files":1,"files_done":1,"total_bytes":20,"bytes_done":20}
+{"message_type":"status","percent_done":1,"total_files":1,"files_done":1,"total_bytes":20,"bytes_done":20}
+{"message_type":"status","percent_done":1,"total_files":1,"files_done":1,"total_bytes":20,"bytes_done":20}
+{"message_type":"status","percent_done":1,"total_files":1,"files_done":1,"total_bytes":20,"bytes_done":20}
+{"message_type":"summary","files_new":1,"files_changed":0,"files_unmodified":0,"dirs_new":2,"dirs_changed":0,"dirs_unmodified":0,"data_blobs":1,"tree_blobs":3,"data_added":1115,"total_files_processed":1,"total_bytes_processed":20,"total_duration":0.216764185,"snapshot_id":"01d88ea7"}
+""".lstrip()
+        backup_summary = restic.backup(['/tmp/dummy-file.txt'])
+        self.assertEqual(
+            {
+                'message_type': 'summary',
+                'files_new': 1,
+                'files_changed': 0,
+                'files_unmodified': 0,
+                'dirs_new': 2,
+                'dirs_changed': 0,
+                'dirs_unmodified': 0,
+                'data_blobs': 1,
+                'tree_blobs': 3,
+                'data_added': 1115,
+                'total_files_processed': 1,
+                'total_bytes_processed': 20,
+                'total_duration': 0.216764185,
+                'snapshot_id': '01d88ea7'
+            }, backup_summary)

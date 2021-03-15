@@ -1,3 +1,5 @@
+import json
+
 from restic.internal import command_executor
 
 
@@ -12,4 +14,11 @@ def run(restic_base_command, paths, exclude_patterns=None, exclude_files=None):
         for exclude_file in exclude_files:
             cmd.extend(['--exclude-file', exclude_file])
 
-    return command_executor.execute(cmd)
+    result_raw = command_executor.execute(cmd)
+    return _parse_result(result_raw)
+
+
+def _parse_result(result):
+    lines = [line.strip() for line in result.split('\n') if line.strip()]
+
+    return json.loads(lines[-1])
