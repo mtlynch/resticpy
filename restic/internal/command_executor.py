@@ -20,7 +20,7 @@ def execute(cmd):
             proc.wait()
             if proc.returncode != 0:
                 raise RuntimeError(f'Return code {proc.returncode} is not zero')
-    except FileNotFoundError:
-        raise RuntimeError('Cannot find restic installed')
+    except FileNotFoundError as e:
+        raise RuntimeError('Cannot find restic installed') from e
 
     return out

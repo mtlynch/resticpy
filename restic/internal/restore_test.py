@@ -4,8 +4,11 @@ from unittest import mock
 import restic
 from restic.internal import restore
 
+# Ignore suggestions to turn methods into functions.
+# pylint: disable=R0201
 
-class restoreTest(unittest.TestCase):
+
+class RestoreTest(unittest.TestCase):
 
     @mock.patch.object(restore.command_executor, 'execute')
     def test_restore_with_no_snapshot_id(self, mock_execute):

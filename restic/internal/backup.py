@@ -1,7 +1,7 @@
 from restic.internal import command_executor
 
 
-def run(restic_base_command, paths, exclude_patterns=[]):
+def run(restic_base_command, paths, exclude_patterns=None):
     cmd = restic_base_command + ['backup'] + paths
 
     if exclude_patterns:
