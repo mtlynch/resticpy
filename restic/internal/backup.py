@@ -27,7 +27,13 @@ def run(restic_base_command, paths, exclude_patterns=None, exclude_files=None):
 
 
 def _parse_result(result):
-    lines = [line.strip() for line in result.split('\n') if line.strip()]
+    # On Windows, terminal markers appear at the beginning of each line.
+    terminal_markers = '\x1b[2K'
+    lines = [
+        line.strip().strip(terminal_markers)
+        for line in result.split('\n')
+        if line.strip()
+    ]
 
     try:
         return json.loads(lines[-1])
