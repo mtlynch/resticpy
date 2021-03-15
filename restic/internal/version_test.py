@@ -20,4 +20,4 @@ class VersionTest(unittest.TestCase):
                 'restic_version': '0.12.0'
             }, restic.version())
 
-        mock_execute.assert_called_with(['restic', 'version'])
+        mock_execute.assert_called_with(['restic', '--json', 'version'])

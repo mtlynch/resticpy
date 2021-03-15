@@ -33,8 +33,10 @@ def restore(*args, **kwargs):
 def self_update():
     return internal_self_update.run(_make_base_command())
 
+
 def stats():
     return internal_stats.run(_make_base_command())
+
 
 def version():
     return internal_version.run(_make_base_command())

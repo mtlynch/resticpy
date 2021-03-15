@@ -60,11 +60,16 @@ restic.restore(snapshot_id='latest', target_dir=RESTORE_DIR)
 RESTORED_DATA_PATH = os.path.join(RESTORE_DIR, DUMMY_DATA_PATH)
 if not os.path.exists(RESTORED_DATA_PATH):
     logger.fatal('Expected to find %s', RESTORED_DATA_PATH)
-RESTORED_DATA = open(RESTORED_DATA_PATH).read()
-if RESTORED_DATA != 'some data to back up':
+RESTORED_DATA_EXPECTED = 'some data to back up'
+RESTORED_DATA_ACTUAL = open(RESTORED_DATA_PATH).read()
+if RESTORED_DATA_EXPECTED != RESTORED_DATA_ACTUAL:
     logger.fatal('Expected to restored file to contain %s (got %s)',
-                 'some data to back up', RESTORED_DATA)
+                 RESTORED_DATA_EXPECTED, RESTORED_DATA_ACTUAL)
 
-logger.info('repo stats: %s', restic.stats())
+stats = restic.stats()
+logger.info('repo stats: %s', stats)
+if stats['total_size'] != len(RESTORED_DATA_EXPECTED):
+    logger.fatal('Expected to total size of %d (got %d)',
+                 len(RESTORED_DATA_EXPECTED), stats['total_size'])
 
 logger.info('End-to-end test succeeded!')

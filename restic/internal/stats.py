@@ -1,5 +1,4 @@
 import json
-import re
 
 from restic.internal import command_executor
 

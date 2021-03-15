@@ -11,26 +11,29 @@ class BackupTest(unittest.TestCase):
     def test_backup_single_path(self, mock_execute):
         restic.backup(['/tmp/dummy-file.txt'])
         mock_execute.assert_called_with(
-            ['restic', 'backup', '/tmp/dummy-file.txt'])
+            ['restic', '--json', 'backup', '/tmp/dummy-file.txt'])
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_backup_multiple_paths(self, mock_execute):
         restic.backup(['/tmp/dummy-file-1.txt', '/tmp/dummy-file-2.txt'])
         mock_execute.assert_called_with([
-            'restic', 'backup', '/tmp/dummy-file-1.txt', '/tmp/dummy-file-2.txt'
+            'restic', '--json', 'backup', '/tmp/dummy-file-1.txt',
+            '/tmp/dummy-file-2.txt'
         ])
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_excludes_single_pattern(self, mock_execute):
         restic.backup(['/data/music'], exclude_patterns=['Justin Bieber*'])
-        mock_execute.assert_called_with(
-            ['restic', 'backup', '/data/music', '--exclude', 'Justin Bieber*'])
+        mock_execute.assert_called_with([
+            'restic', '--json', 'backup', '/data/music', '--exclude',
+            'Justin Bieber*'
+        ])
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_excludes_multiple_patterns(self, mock_execute):
         restic.backup(['/data/music'],
                       exclude_patterns=['Justin Bieber*', 'Selena Gomez*'])
         mock_execute.assert_called_with([
-            'restic', 'backup', '/data/music', '--exclude', 'Justin Bieber*',
-            '--exclude', 'Selena Gomez*'
+            'restic', '--json', 'backup', '/data/music', '--exclude',
+            'Justin Bieber*', '--exclude', 'Selena Gomez*'
         ])
