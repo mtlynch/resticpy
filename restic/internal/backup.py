@@ -3,6 +3,14 @@ import json
 from restic.internal import command_executor
 
 
+class Error(Exception):
+    pass
+
+
+class UnexpectedResticResult(Error):
+    pass
+
+
 def run(restic_base_command, paths, exclude_patterns=None, exclude_files=None):
     cmd = restic_base_command + ['backup'] + paths
 
@@ -21,4 +29,8 @@ def run(restic_base_command, paths, exclude_patterns=None, exclude_files=None):
 def _parse_result(result):
     lines = [line.strip() for line in result.split('\n') if line.strip()]
 
-    return json.loads(lines[-1])
+    try:
+        return json.loads(lines[-1])
+    except json.decoder.JSONDecodeError as e:
+        raise UnexpectedResticResult(
+            'Expected valid JSON response from restic, got %s' % result) from e

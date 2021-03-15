@@ -97,3 +97,10 @@ class BackupTest(unittest.TestCase):
                 'total_duration': 0.216764185,
                 'snapshot_id': '01d88ea7'
             }, backup_summary)
+
+    @mock.patch.object(backup.command_executor, 'execute')
+    def test_wraps_non_json_response(self, mock_execute):
+        mock_execute.return_value = '[[invalid response]]'
+
+        with self.assertRaises(backup.UnexpectedResticResult):
+            restic.backup(['/tmp/dummy-file.txt'])
