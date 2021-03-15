@@ -1,5 +1,13 @@
 # resticpy API
 
+## Global options
+
+| Option                   | Default Value | Notes |
+|--------------------------|---------------|-------|
+| `restic.binary_path`     | `'restic'`    | Specifies the location of your restic binary if it's not in the user's default path. (e.g., `/path/to/restic.exe`) |
+| `restic.repository`      | `None`      | Specifies the path or URL of your restic backup repository. |
+| `restic.password_file`   | `None`      | Specifies the path to the file containing your restic repository password. |
+
 ## `backup`
 
 ### Args
