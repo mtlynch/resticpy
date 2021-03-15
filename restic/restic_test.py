@@ -22,18 +22,18 @@ class ResticTest(unittest.TestCase):
         restic.binary_path = '/dummy/path/to/restic-binary'
         restic.generate()
         mock_execute.assert_called_with(
-            ['/dummy/path/to/restic-binary', 'generate'])
+            ['/dummy/path/to/restic-binary', '--json', 'generate'])
 
     @mock.patch.object(generate.command_executor, 'execute')
     def test_can_set_repository_path(self, mock_execute):
         restic.repository = '/dummy/repo/path'
         restic.init()
         mock_execute.assert_called_with(
-            ['restic', '--repo', '/dummy/repo/path', 'init'])
+            ['restic', '--repo', '/dummy/repo/path', '--json', 'init'])
 
     @mock.patch.object(generate.command_executor, 'execute')
     def test_can_set_password_file(self, mock_execute):
         restic.password_file = 'secret-pw.txt'
         restic.init()
         mock_execute.assert_called_with(
-            ['restic', '--password-file', 'secret-pw.txt', 'init'])
+            ['restic', '--password-file', 'secret-pw.txt', '--json', 'init'])
