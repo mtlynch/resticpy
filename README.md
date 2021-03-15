@@ -42,7 +42,7 @@ restic.repository = '/tmp/backup1'
 restic.password_file = 'password.txt'
 
 restic.init()
-restic.backup('some-file.txt')
+restic.backup(paths=['some-file.txt'])
 ```
 
 ### Restore a snapshot
@@ -58,7 +58,7 @@ restic.restore(snapshot_id='latest', target_dir='~/restored')
 
 ## API Documentation
 
-Coming soon.
+See [docs/api.md](docs/api.md).
 
 ## Acknowledgments
 
