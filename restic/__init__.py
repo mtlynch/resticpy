@@ -6,9 +6,13 @@ from restic.internal import self_update as internal_self_update
 from restic.internal import stats as internal_stats
 from restic.internal import version as internal_version
 
+# Ignore warnings about naming of globals.
+# pylint: disable=C0103
 binary_path = 'restic'
 
 # Global flags
+# Ignore warnings about naming of globals.
+# pylint: disable=C0103
 repository = None
 password_file = None
 json = True
