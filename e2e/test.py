@@ -48,14 +48,14 @@ restic.repository = tempfile.mkdtemp()
 restic.password_file = PASSWORD_FILE.name
 
 logger.info('Initializing repository')
-restic.init()
+logger.info(restic.init())
 
 logger.info('Backing up %s', DUMMY_DATA_PATH)
-restic.backup(paths=[DUMMY_DATA_PATH])
+logger.info(restic.backup(paths=[DUMMY_DATA_PATH]))
 
 RESTORE_DIR = tempfile.mkdtemp()
 logger.info('Restoring to %s', RESTORE_DIR)
-restic.restore(snapshot_id='latest', target_dir=RESTORE_DIR)
+logger.info(restic.restore(snapshot_id='latest', target_dir=RESTORE_DIR))
 
 RESTORED_DATA_PATH = os.path.join(RESTORE_DIR, DUMMY_DATA_PATH)
 if not os.path.exists(RESTORED_DATA_PATH):
