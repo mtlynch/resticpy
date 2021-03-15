@@ -1,4 +1,5 @@
 from restic.internal import backup as internal_backup
+from restic.internal import forget as internal_forget
 from restic.internal import generate as internal_generate
 from restic.internal import init as internal_init
 from restic.internal import restore as internal_restore
@@ -24,6 +25,10 @@ def backup(*args, **kwargs):
 
 def generate(*args, **kwargs):
     return internal_generate.run(_make_base_command(), *args, **kwargs)
+
+
+def forget(*args, **kwargs):
+    return internal_forget.run(_make_base_command(), *args, **kwargs)
 
 
 def init(*args, **kwargs):
