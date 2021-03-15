@@ -51,7 +51,13 @@ logger.info('Initializing repository')
 logger.info(restic.init())
 
 logger.info('Backing up %s', DUMMY_DATA_PATH)
-logger.info(restic.backup(paths=[DUMMY_DATA_PATH]))
+backup_result = restic.backup(paths=[DUMMY_DATA_PATH])
+logger.info('backup_result: %s', json.dumps(backup_summary))
+if backup_result['files_new'] != 1:
+    logger.fatal('Expected 1 new file (got %d)', backup_result['files_new'])
+if backup_result['files_changed'] != 0:
+    logger.fatal('Expected 0 changed files (got %d)',
+                 backup_result['files_changed'])
 
 RESTORE_DIR = tempfile.mkdtemp()
 logger.info('Restoring to %s', RESTORE_DIR)
