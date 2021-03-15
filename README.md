@@ -60,6 +60,10 @@ restic.restore(snapshot_id='latest', target_dir='~/restored')
 
 See [docs/api.md](docs/api.md).
 
+## Compatibility
+
+resticpy is tested against [restic 0.12.0](https://github.com/restic/restic/releases/tag/v0.12.0).
+
 ## Acknowledgments
 
 This project is forked from [jstzwj/PyRestic](https://github.com/jstzwj/PyRestic).
