@@ -78,7 +78,7 @@ class BackupTest(unittest.TestCase):
 {"message_type":"status","percent_done":1,"total_files":1,"files_done":1,"total_bytes":20,"bytes_done":20}
 {"message_type":"status","percent_done":1,"total_files":1,"files_done":1,"total_bytes":20,"bytes_done":20}
 {"message_type":"summary","files_new":1,"files_changed":0,"files_unmodified":0,"dirs_new":2,"dirs_changed":0,"dirs_unmodified":0,"data_blobs":1,"tree_blobs":3,"data_added":1115,"total_files_processed":1,"total_bytes_processed":20,"total_duration":0.216764185,"snapshot_id":"01d88ea7"}
-""".strip()
+""".lstrip()
         backup_summary = restic.backup(['/tmp/dummy-file.txt'])
         self.assertEqual(
             {

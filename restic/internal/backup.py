@@ -19,4 +19,6 @@ def run(restic_base_command, paths, exclude_patterns=None, exclude_files=None):
 
 
 def _parse_result(result):
-    return json.loads(result.split('\n')[-1])
+    lines = [line.strip() for line in result.split('\n') if line.strip()]
+
+    return json.loads(lines[-1])
