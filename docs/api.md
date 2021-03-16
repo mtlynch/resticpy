@@ -95,7 +95,23 @@ A dictionary with a summary of the forget result.
 
 ## `generate`
 
-TODO(mtlynch): Write this.
+### Args
+
+* `bash_completion_path`: Path to bash completion file to write
+* `man_directory`: Path to man directory to write to
+* `zsh_completion_path`: Path to zsh completion file to write
+
+### Returns
+
+None
+
+### Example
+
+```python
+>>> restic.generate(bash_completion_path='/etc/bash_completion.d/restic',
+                    man_directory='/usr/local/man',
+                    zsh_completion_path='/etc/zsh_completion.d/restic')
+```
 
 ## `init`
 
