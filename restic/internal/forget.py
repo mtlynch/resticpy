@@ -1,3 +1,5 @@
+import json
+
 from restic.internal import command_executor
 
 
@@ -10,4 +12,4 @@ def run(restic_base_command, prune=False, keep_daily=None):
     if keep_daily is not None:
         cmd.extend(['--keep-daily', str(keep_daily)])
 
-    return command_executor.execute(cmd)
+    return json.loads(command_executor.execute(cmd))
