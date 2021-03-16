@@ -131,4 +131,25 @@ TODO(mtlynch): Write this.
 
 ## `version`
 
-TODO(mtlynch): Write this.
+Retrieves the version information about the restic binary.
+
+### Args
+
+None
+
+### Returns
+
+None
+
+### Example
+
+```python
+>>> restic.binary_path = 'c:/restic/restic_0.12.0_windows_amd64.exe'
+>>> restic.version()
+{
+    'architecture': 'amd64',
+    'go_version': '1.15.8',
+    'platform_version': 'windows',
+    'restic_version': '0.12.0'
+}
+```
