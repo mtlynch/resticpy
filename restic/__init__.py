@@ -23,12 +23,12 @@ def backup(*args, **kwargs):
     return internal_backup.run(_make_base_command(), *args, **kwargs)
 
 
-def generate(*args, **kwargs):
-    return internal_generate.run(_make_base_command(), *args, **kwargs)
-
-
 def forget(*args, **kwargs):
     return internal_forget.run(_make_base_command(), *args, **kwargs)
+
+
+def generate(*args, **kwargs):
+    return internal_generate.run(_make_base_command(), *args, **kwargs)
 
 
 def init(*args, **kwargs):
