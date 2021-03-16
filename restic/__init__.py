@@ -16,7 +16,6 @@ binary_path = 'restic'
 # pylint: disable=C0103
 repository = None
 password_file = None
-json = True
 
 
 def backup(*args, **kwargs):
@@ -54,13 +53,13 @@ def version():
 def _make_base_command():
     base_command = [binary_path]
 
+    # Always add the JSON flag so we get back results in JSON.
+    base_command.extend(['--json'])
+
     if repository:
         base_command.extend(['--repo', repository])
 
     if password_file:
         base_command.extend(['--password-file', password_file])
-
-    if json:
-        base_command.extend(['--json'])
 
     return base_command
