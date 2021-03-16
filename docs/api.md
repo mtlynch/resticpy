@@ -119,7 +119,22 @@ TODO(mtlynch): Write this.
 
 ## restore
 
-TODO(mtlynch): Write this.
+Restores a snapshot from the repository to the specified path.
+
+### Args
+
+* `snapshot_id`: ID of snapshot to restore (default: `latest`)
+* `target_dir`: String specifying output directory to place restored data
+
+### Returns
+
+None
+
+### Example
+
+```python
+>>> restic.restore(target_dir='/tmp/restored1')
+```
 
 ## `self_update`
 
