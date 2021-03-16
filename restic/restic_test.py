@@ -32,11 +32,11 @@ class ResticTest(unittest.TestCase):
         restic.repository = '/dummy/repo/path'
         restic.init()
         mock_execute.assert_called_with(
-            ['restic', '--repo', '/dummy/repo/path', '--json', 'init'])
+            ['restic', '--json', '--repo', '/dummy/repo/path', 'init'])
 
     @mock.patch.object(generate.command_executor, 'execute')
     def test_can_set_password_file(self, mock_execute):
         restic.password_file = 'secret-pw.txt'
         restic.init()
         mock_execute.assert_called_with(
-            ['restic', '--password-file', 'secret-pw.txt', '--json', 'init'])
+            ['restic', '--json', '--password-file', 'secret-pw.txt', 'init'])
