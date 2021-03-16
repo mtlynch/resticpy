@@ -115,7 +115,20 @@ None
 
 ## `init`
 
-TODO(mtlynch): Write this.
+Initializes a new restic repository at the current repository location.
+
+### Args
+
+### Returns
+
+The repository ID of the new reposityory.
+
+### Example
+
+```python
+>>> restic.init()
+'054ed643d8'
+```
 
 ## restore
 
