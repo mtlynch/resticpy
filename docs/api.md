@@ -127,7 +127,25 @@ TODO(mtlynch): Write this.
 
 ## `stats`
 
-TODO(mtlynch): Write this.
+Retrieve stats about the current restic repository.
+
+### Args
+
+None
+
+### Returns
+
+A dictionary of stats about the restic repository.
+
+### Example
+
+```python
+>>> restic.stats()
+{
+  'total_size': 20,
+  'total_file_count': 3
+}
+```
 
 ## `version`
 
