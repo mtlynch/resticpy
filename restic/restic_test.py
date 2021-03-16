@@ -29,14 +29,22 @@ class ResticTest(unittest.TestCase):
 
     @mock.patch.object(generate.command_executor, 'execute')
     def test_can_set_repository_path(self, mock_execute):
+        mock_execute.return_value = (
+            'created restic repository 054ed643d8 at /media/backup1')
+
         restic.repository = '/dummy/repo/path'
         restic.init()
+
         mock_execute.assert_called_with(
             ['restic', '--json', '--repo', '/dummy/repo/path', 'init'])
 
     @mock.patch.object(generate.command_executor, 'execute')
     def test_can_set_password_file(self, mock_execute):
+        mock_execute.return_value = (
+            'created restic repository 054ed643d8 at /media/backup1')
+
         restic.password_file = 'secret-pw.txt'
         restic.init()
+
         mock_execute.assert_called_with(
             ['restic', '--json', '--password-file', 'secret-pw.txt', 'init'])
