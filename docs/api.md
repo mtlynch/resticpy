@@ -123,7 +123,21 @@ TODO(mtlynch): Write this.
 
 ## `self_update`
 
-TODO(mtlynch): Write this.
+Updates the restic binary in place.
+
+### Args
+
+None
+
+### Returns
+
+None
+
+### Example
+
+```python
+>>> restic.self_update()
+```
 
 ## `stats`
 
