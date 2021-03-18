@@ -13,10 +13,15 @@ def run(restic_base_command, prune=False, keep_daily=None):
     if keep_daily is not None:
         cmd.extend(['--keep-daily', str(keep_daily)])
 
-    result = command_executor.execute(cmd)
+    return _parse_result(command_executor.execute(cmd))
+
+
+def _parse_result(result):
+    # The result is JSON followed by 0 or more non-JSON lines.
+    result_lines = result.split('\n')
     try:
-        return json.loads(result)
+        return json.loads(result_lines[0])
     except json.decoder.JSONDecodeError as e:
         raise errors.UnexpectedResticResponse(
             'Unexpected result from restic. Expected JSON, got: %s' %
-            result) from e
+            result_lines[0]) from e
