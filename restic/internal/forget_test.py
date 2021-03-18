@@ -2,6 +2,7 @@ import unittest
 from unittest import mock
 
 import restic
+from restic.internal import errors
 from restic.internal import forget
 
 # Ignore suggestions to turn methods into functions.
@@ -142,3 +143,10 @@ class ForgetTest(unittest.TestCase):
                 }
             }]
         }], forget_result)
+
+    @mock.patch.object(forget.command_executor, 'execute')
+    def test_forget_raises_exception_when_response_is_invalid_json(
+            self, mock_execute):
+        mock_execute.return_value = '{{{{{{{[[[[[['
+        with self.assertRaises(errors.UnexpectedResticResponse):
+            restic.forget()
