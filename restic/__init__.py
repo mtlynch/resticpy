@@ -5,6 +5,7 @@ from restic.internal import init as internal_init
 from restic.internal import restore as internal_restore
 from restic.internal import self_update as internal_self_update
 from restic.internal import stats as internal_stats
+from restic.internal import unlock as internal_unlock
 from restic.internal import version as internal_version
 
 # Ignore warnings about naming of globals.
@@ -44,6 +45,10 @@ def self_update():
 
 def stats():
     return internal_stats.run(_make_base_command())
+
+
+def unlock():
+    return internal_unlock.run(_make_base_command())
 
 
 def version():
