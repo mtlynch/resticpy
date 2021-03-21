@@ -6,21 +6,19 @@ logger = logging.getLogger(__name__)
 
 def execute(cmd):
     logger.debug('Executing restic command: %s', str(cmd))
-    out = ''
-    err = ''
     try:
-        with subprocess.Popen(cmd,
-                              stdin=subprocess.PIPE,
-                              stdout=subprocess.PIPE,
-                              encoding='utf-8',
-                              text=True) as proc:
-            out, err = proc.communicate()
-            if err is not None:
-                raise RuntimeError('Command runtime failure')
-            proc.wait()
-            if proc.returncode != 0:
-                raise RuntimeError(f'Return code {proc.returncode} is not zero')
+        process = subprocess.run(cmd,
+                                 capture_output=True,
+                                 text=True,
+                                 encoding='utf-8')
     except FileNotFoundError as e:
         raise RuntimeError('Cannot find restic installed') from e
 
-    return out
+    logger.debug('Restic command completed with return code %d',
+                 process.returncode)
+
+    if process.returncode != 0:
+        raise RuntimeError('Restic failed with exit code %s: %s' %
+                           (process.returncode, process.stderr))
+
+    return process.stdout
