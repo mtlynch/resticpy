@@ -73,7 +73,7 @@ if RESTORED_DATA_EXPECTED != RESTORED_DATA_ACTUAL:
     logger.fatal('Expected to restored file to contain %s (got %s)',
                  RESTORED_DATA_EXPECTED, RESTORED_DATA_ACTUAL)
 
-stats = restic.stats()
+stats = restic.stats(mode='blobs-per-file')
 logger.info('repo stats: %s', stats)
 if stats['total_size'] != len(RESTORED_DATA_EXPECTED):
     logger.fatal('Expected to total size of %d (got %d)',

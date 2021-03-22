@@ -43,8 +43,8 @@ def self_update():
     return internal_self_update.run(_make_base_command())
 
 
-def stats():
-    return internal_stats.run(_make_base_command())
+def stats(*args, **kwargs):
+    return internal_stats.run(_make_base_command(), *args, **kwargs)
 
 
 def unlock():
