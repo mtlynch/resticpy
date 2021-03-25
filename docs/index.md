@@ -49,6 +49,24 @@ A dictionary with a summary of the backup result.
 
 ---
 
+## check
+
+### Args
+
+* `read_data`: Boolean indicating whether to read all data blobs in the repo.
+
+### Returns
+
+TODO
+
+### Example
+
+```python
+>>> restic.check(read_data=True)
+```
+
+---
+
 ## forget
 
 ### Args
