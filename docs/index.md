@@ -55,6 +55,8 @@ A dictionary with a summary of the backup result.
 
 * `prune`: A boolean representing whether to automatically run the 'prune' command if snapshots have been removed
 * `keep_daily`: An int representing the last N daily snapshots to keep
+* `group_by`: A string for grouping snapshots
+* `keep_within` A string representing a duration before which to prune relative to the latest snapshot
 
 ### Returns
 
