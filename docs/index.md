@@ -128,7 +128,8 @@ Initializes a new restic repository at the current repository location.
 
 ### Args
 
-None
+* `copy-chunker-params`: Copy chunker parameters from the secondary repository.
+* `repo2`: Secondary repository to copy chunker parameters from.
 
 ### Returns
 
