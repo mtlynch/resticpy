@@ -1,5 +1,7 @@
 # resticpy API
 
+{:toc}
+
 ## Global options
 
 | Option                   | Default Value | Notes |
