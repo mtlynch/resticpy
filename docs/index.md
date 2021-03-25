@@ -1,5 +1,3 @@
-# resticpy API
-
 {:toc}
 
 ## Global options
