@@ -119,6 +119,8 @@ Initializes a new restic repository at the current repository location.
 
 ### Args
 
+None
+
 ### Returns
 
 The repository ID of the new reposityory.
@@ -173,7 +175,7 @@ Retrieve stats about the current restic repository.
 
 ### Args
 
-None
+* `mode`: Type of stats to retrieve. Can be one of `restore-size`, `files-by-contents`, `blobs-per-file` or `raw-data`.
 
 ### Returns
 
@@ -182,7 +184,7 @@ A dictionary of stats about the restic repository.
 ### Example
 
 ```python
->>> restic.stats()
+>>> restic.stats(mode='restore-size')
 {
   'total_size': 20,
   'total_file_count': 3
