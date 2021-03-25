@@ -1,3 +1,4 @@
+* Table of Contents
 {:toc}
 
 ## Global options
@@ -8,7 +9,9 @@
 | `restic.repository`      | `None`      | Specifies the path or URL of your restic backup repository. |
 | `restic.password_file`   | `None`      | Specifies the path to the file containing your restic repository password. |
 
-## `backup`
+---
+
+## backup
 
 ### Args
 
@@ -44,7 +47,9 @@ A dictionary with a summary of the backup result.
 }
 ```
 
-## `forget`
+---
+
+## forget
 
 ### Args
 
@@ -93,7 +98,9 @@ A dictionary with a summary of the forget result.
 }]
 ```
 
-## `generate`
+---
+
+## generate
 
 ### Args
 
@@ -113,7 +120,9 @@ None
                     zsh_completion_path='/etc/zsh_completion.d/restic')
 ```
 
-## `init`
+---
+
+## init
 
 Initializes a new restic repository at the current repository location.
 
@@ -131,6 +140,8 @@ The repository ID of the new reposityory.
 >>> restic.init()
 '054ed643d8'
 ```
+
+---
 
 ## restore
 
@@ -151,7 +162,9 @@ None
 >>> restic.restore(target_dir='/tmp/restored1')
 ```
 
-## `self_update`
+---
+
+## self_update
 
 Updates the restic binary in place.
 
@@ -169,7 +182,9 @@ None
 >>> restic.self_update()
 ```
 
-## `stats`
+---
+
+## stats
 
 Retrieve stats about the current restic repository.
 
@@ -191,7 +206,9 @@ A dictionary of stats about the restic repository.
 }
 ```
 
-## `version`
+---
+
+## version
 
 Retrieves the version information about the restic binary.
 
