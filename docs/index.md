@@ -49,6 +49,39 @@ A dictionary with a summary of the backup result.
 
 ---
 
+## check
+
+### Args
+
+* `read_data`: Boolean indicating whether to read all data blobs in the repo.
+
+### Returns
+
+Log messages relating to checking the repo integrity
+
+### Raises
+
+* `restic.errors.RepoIntegrityError` if the check fails.
+
+### Example
+
+```python
+>>> restic.check(read_data=True)
+using temporary cache in /tmp/restic-check-cache-842210662
+create exclusive lock for repository
+load indexes
+check all packs
+check snapshots, trees and blobs
+read all data
+[0:00] 100.00%  1 / 1 snapshots
+
+[0:00] 100.00%  2 / 2 packs
+
+no errors were found
+```
+
+---
+
 ## forget
 
 ### Args

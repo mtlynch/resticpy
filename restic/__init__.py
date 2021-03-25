@@ -1,4 +1,5 @@
 from restic.internal import backup as internal_backup
+from restic.internal import check as internal_check
 from restic.internal import forget as internal_forget
 from restic.internal import generate as internal_generate
 from restic.internal import init as internal_init
@@ -21,6 +22,10 @@ password_file = None
 
 def backup(*args, **kwargs):
     return internal_backup.run(_make_base_command(), *args, **kwargs)
+
+
+def check(*args, **kwargs):
+    return internal_check.run(_make_base_command(), *args, **kwargs)
 
 
 def forget(*args, **kwargs):

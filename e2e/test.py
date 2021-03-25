@@ -81,4 +81,6 @@ if stats['total_size'] != len(RESTORED_DATA_EXPECTED):
 
 logger.info('pruning repo: %s', restic.forget(prune=True, keep_daily=5))
 
+logger.info('check result: %s', restic.check(read_data=True))
+
 logger.info('End-to-end test succeeded!')
