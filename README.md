@@ -58,7 +58,7 @@ restic.restore(snapshot_id='latest', target_dir='~/restored')
 
 ## API Documentation
 
-See [docs/api.md](docs/api.md).
+<https://mtlynch.github.io/resticpy/>
 
 ## Compatibility
 
