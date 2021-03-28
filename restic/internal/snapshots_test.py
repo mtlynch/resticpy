@@ -8,7 +8,7 @@ from restic.internal import snapshots
 # pylint: disable=R0201
 
 
-class SelfUpdateTest(unittest.TestCase):
+class SnapshotsTest(unittest.TestCase):
 
     @mock.patch.object(snapshots.command_executor, 'execute')
     def test_snapshots_simple(self, mock_execute):
