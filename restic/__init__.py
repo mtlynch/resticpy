@@ -5,6 +5,7 @@ from restic.internal import generate as internal_generate
 from restic.internal import init as internal_init
 from restic.internal import restore as internal_restore
 from restic.internal import self_update as internal_self_update
+from restic.internal import snapshots as internal_snapshots
 from restic.internal import stats as internal_stats
 from restic.internal import unlock as internal_unlock
 from restic.internal import version as internal_version
@@ -46,6 +47,10 @@ def restore(*args, **kwargs):
 
 def self_update():
     return internal_self_update.run(_make_base_command())
+
+
+def snapshots(*args, **kwargs):
+    return internal_snapshots.run(_make_base_command(), *args, **kwargs)
 
 
 def stats(*args, **kwargs):
