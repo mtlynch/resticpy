@@ -25,7 +25,7 @@ class CheckTest(unittest.TestCase):
             ['restic', '--json', 'check', '--read-data'])
 
     @mock.patch.object(check.command_executor, 'execute')
-    def test_check_returns_false_on_restic_failure(self, mock_execute):
+    def test_check_returns_none_on_restic_failure(self, mock_execute):
         mock_execute.side_effect = command_executor.ResticFailedError(
             'dummy restic failure')
 
