@@ -12,7 +12,7 @@ class CopyTest(unittest.TestCase):
 
     @mock.patch.object(copy.command_executor, 'execute')
     def test_copy_simple(self, mock_execute):
-        mock_execute.return_value = '{}'
+        mock_execute.return_value = ''
 
         restic.copy(repo2='s3:https://dummyrepo.example.com/bucket',
                     password_file2='/dummy/pass.txt')

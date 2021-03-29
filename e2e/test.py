@@ -107,7 +107,8 @@ logger.info(restic.init())
 restic.repository = primary_repo
 restic.password_file = PASSWORD_FILE.name
 
-result = restic.copy(repo2=secondary_repo, password_file2=PASSWORD_FILE2.name)
-logger.info('repo copy result: %s', result)
+logger.info(
+    'repo copy result: %s',
+    restic.copy(repo2=secondary_repo, password_file2=PASSWORD_FILE2.name))
 
 logger.info('End-to-end test succeeded!')

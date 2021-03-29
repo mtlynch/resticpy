@@ -1,5 +1,3 @@
-import json
-
 from restic.internal import command_executor
 
 
@@ -12,4 +10,4 @@ def run(restic_base_command, repo2=None, password_file2=None):
     if password_file2:
         cmd.extend(['--password-file2', password_file2])
 
-    return json.loads(command_executor.execute(cmd))
+    return command_executor.execute(cmd)
