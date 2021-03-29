@@ -57,11 +57,9 @@ A dictionary with a summary of the backup result.
 
 ### Returns
 
-Log messages relating to checking the repo integrity
+On success, returns log messages relating to checking the repo integrity.
 
-### Raises
-
-* `restic.errors.RepoIntegrityError` if the check fails.
+On failure, returns None.
 
 ### Example
 
