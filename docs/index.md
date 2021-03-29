@@ -242,6 +242,50 @@ None
 
 ---
 
+## snapshots
+
+Retrieve a list of snapshots in the repo
+
+### Args
+
+* `group_by`: String for grouping snapshots by host, paths, tags.
+
+### Returns
+
+A list of dictionary objects representing each snapshot.
+
+### Example
+
+```python
+>>> restic.snapshots(group_by='host')
+[
+  {
+    "group_key": {
+      "hostname": "ace809d23440",
+      "paths": null,
+      "tags": null
+    },
+    "snapshots": [
+      {
+        "gid": 3434,
+        "hostname": "ace809d23440",
+        "id": "bbe7f04941ed969ee940bb41dc04196027fcfb83dbdfea93c16afb2cb9f6dd81",
+        "paths": [
+          "/tmp/tmp6594jneh/mydata.txt"
+        ],
+        "short_id": "bbe7f049",
+        "time": "2021-03-28T21:31:44.477122573Z",
+        "tree": "f589421bafdae95f5be5eea6285074b7ddc54aa0ffd1ad606f74d1e6207d20a3",
+        "uid": 3434,
+        "username": "circleci"
+      }
+    ]
+  }
+]
+```
+
+---
+
 ## stats
 
 Retrieve stats about the current restic repository.
