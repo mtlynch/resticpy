@@ -44,8 +44,10 @@ DUMMY_DATA_PATH = os.path.join(DUMMY_SOURCE_DIR, 'mydata.txt')
 with open(DUMMY_DATA_PATH, 'w') as dummy_data_file:
     dummy_data_file.write('some data to back up')
 
+primary_repo = tempfile.mkdtemp()
+
 restic.binary_path = 'restic'
-restic.repository = tempfile.mkdtemp()
+restic.repository = primary_repo
 restic.password_file = PASSWORD_FILE.name
 
 logger.info('Initializing repository')
@@ -85,5 +87,28 @@ if stats['total_size'] != len(RESTORED_DATA_EXPECTED):
 logger.info('pruning repo: %s', restic.forget(prune=True, keep_daily=5))
 
 logger.info('check result: %s', restic.check(read_data=True))
+
+# Initialiize a secondary repo
+logger.info('making secondary repository')
+
+PASSWORD2 = 'myothersecret'
+PASSWORD_FILE2 = tempfile.NamedTemporaryFile()
+PASSWORD_FILE2.write(PASSWORD2.encode('utf-8'))
+PASSWORD_FILE2.flush()
+
+secondary_repo = tempfile.mkdtemp()
+
+restic.repository = secondary_repo
+restic.password_file = PASSWORD_FILE2.name
+
+logger.info(restic.init())
+
+# Go back to original repo
+restic.repository = primary_repo
+restic.password_file = PASSWORD_FILE.name
+
+logger.info(
+    'repo copy result: %s',
+    restic.copy(repo2=secondary_repo, password_file2=PASSWORD_FILE2.name))
 
 logger.info('End-to-end test succeeded!')

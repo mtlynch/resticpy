@@ -82,6 +82,28 @@ no errors were found
 
 ---
 
+## copy
+
+### Args
+
+* `repo2`: Destination repository to copy to.
+* `password_file2`: Path to file containing password for destination reposity.
+
+### Returns
+
+Log messages related to the copy.
+
+### Example
+
+```python
+>>> restic.copy(repo2='/mediabackup2/', password_file2='~/pwd2.txt')
+snapshot 670792c6 of [/tmp/tmp9k613t9a/mydata.txt] at 2021-03-29 00:56:31.183738563 +0000 UTC)
+  copy started, this may take a while...
+snapshot 3671204c saved
+```
+
+---
+
 ## forget
 
 ### Args
