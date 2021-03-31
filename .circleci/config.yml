@@ -54,8 +54,9 @@ jobs:
             mkdir -p ./venv
             virtualenv --python python3 ./venv
             . venv/bin/activate
-            pip install build
-            python -m build --sdist --wheel --outdir dist/ .
+            pip install --upgrade setuptools wheel twine
+            python setup.py sdist bdist_wheel
+            twine check dist/*
 workflows:
   test:
     jobs:
