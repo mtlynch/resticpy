@@ -1,7 +1,7 @@
 import json
 
+import restic.errors
 from restic.internal import command_executor
-from restic.internal import errors
 
 
 def run(restic_base_command,
@@ -32,6 +32,6 @@ def _parse_result(result):
     try:
         return json.loads(result_lines[0])
     except json.decoder.JSONDecodeError as e:
-        raise errors.UnexpectedResticResponse(
+        raise restic.errors.UnexpectedResticResponse(
             'Unexpected result from restic. Expected JSON, got: %s' %
             result_lines[0]) from e
