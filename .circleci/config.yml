@@ -42,8 +42,22 @@ jobs:
             . venv/bin/activate
             pip install .
             ./e2e/test.py
+  prepare_pypi_package:
+    docker:
+      - image: circleci/python:3.7.3
+    steps:
+      - checkout
+      - run:
+          name: Install requirements and run build script
+          command: |
+            mkdir -p ./venv
+            virtualenv --python python3 ./venv
+            . venv/bin/activate
+            pip install build
+            python -m build --sdist --wheel --outdir dist/ .
 workflows:
   test:
     jobs:
       - build
       - e2e
+      - prepare_pypi_package
