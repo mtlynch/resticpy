@@ -81,7 +81,7 @@ workflows:
       - build
       - e2e
       - prepare_pypi_package
-      - publish
+      - publish:
           requires:
             - prepare_pypi_package
           filters:
