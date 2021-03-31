@@ -72,6 +72,7 @@ jobs:
           at: .
       - run:
           name: publish to PyPI
+          # Requires TWINE_USERNAME and TWINE_PASSWORD environment variables.
           command: |
               set -x
               . venv/bin/activate
@@ -84,6 +85,8 @@ workflows:
       - prepare_pypi_package
       - publish:
           requires:
+            - build
+            - e2e
             - prepare_pypi_package
           filters:
             tags:
