@@ -63,6 +63,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
+            - venv
             - dist
   publish:
     docker:
