@@ -70,11 +70,12 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run: publish to PyPI
-        command: |
-            set -x
-            . venv/bin/activate
-            twine upload dist/*
+      - run:
+          name: publish to PyPI
+          command: |
+              set -x
+              . venv/bin/activate
+              twine upload dist/*
 workflows:
   test:
     jobs:
