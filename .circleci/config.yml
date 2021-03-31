@@ -42,8 +42,54 @@ jobs:
             . venv/bin/activate
             pip install .
             ./e2e/test.py
+  prepare_pypi_package:
+    docker:
+      - image: circleci/python:3.7.3
+    steps:
+      - checkout
+      - run:
+          name: Install requirements and run build script
+          command: |
+            set -x
+            mkdir -p ./venv
+            virtualenv --python python3 ./venv
+            . venv/bin/activate
+            pip install \
+              setuptools==54.2.0 \
+              wheel==0.36.2 \
+              twine==3.4.1
+            python setup.py sdist bdist_wheel
+            twine check dist/*
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+  publish:
+    docker:
+      - image: circleci/python:3.7.3
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: publish to PyPI
+          # Requires TWINE_USERNAME and TWINE_PASSWORD environment variables.
+          command: |
+              set -x
+              . venv/bin/activate
+              twine upload dist/*
 workflows:
   test:
     jobs:
       - build
       - e2e
+      - prepare_pypi_package
+      - publish:
+          requires:
+            - build
+            - e2e
+            - prepare_pypi_package
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+){2}/
+            branches:
+              ignore: /.*/
