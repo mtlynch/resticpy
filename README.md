@@ -60,6 +60,10 @@ restic.restore(snapshot_id='latest', target_dir='~/restored')
 
 <https://mtlynch.github.io/resticpy/>
 
+## Example
+
+I personally use this library for my backups. I've published my backup script at [mtlynch/mtlynch-backup](https://github.com/mtlynch/mtlynch-backup).
+
 ## Compatibility
 
 resticpy is tested against [restic 0.12.0](https://github.com/restic/restic/releases/tag/v0.12.0).
