@@ -20,6 +20,7 @@ binary_path = 'restic'
 # pylint: disable=C0103
 repository = None
 password_file = None
+verbosity = None
 
 
 def backup(*args, **kwargs):
@@ -81,5 +82,8 @@ def _make_base_command():
 
     if password_file:
         base_command.extend(['--password-file', password_file])
+
+    if verbosity:
+        base_command.extend(['--verbose', verbosity])
 
     return base_command

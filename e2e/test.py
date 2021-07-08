@@ -49,6 +49,7 @@ primary_repo = tempfile.mkdtemp()
 restic.binary_path = 'restic'
 restic.repository = primary_repo
 restic.password_file = PASSWORD_FILE.name
+restic.verbose = 3
 
 logger.info('Initializing repository')
 logger.info(restic.init())
