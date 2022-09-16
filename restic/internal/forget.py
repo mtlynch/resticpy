@@ -5,6 +5,7 @@ from restic.internal import command_executor
 
 
 def run(restic_base_command,
+        dry_run=None,
         prune=False,
         keep_last=None,
         keep_hourly=None,
@@ -15,6 +16,9 @@ def run(restic_base_command,
         keep_within=None,
         group_by=None):
     cmd = restic_base_command + ['forget']
+
+    if dry_run:
+        cmd.extend(['--dry-run'])
 
     if prune:
         cmd.extend(['--prune'])

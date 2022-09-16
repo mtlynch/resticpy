@@ -108,6 +108,7 @@ snapshot 3671204c saved
 
 ### Args
 
+* `dry_run`: Set to `True` to perform just a dry run of the backup
 * `prune`: A boolean representing whether to automatically run the 'prune' command if snapshots have been removed
 * `group_by`: A string for grouping snapshots
 * `keep_last`: An int representing the last N snapshots to keep

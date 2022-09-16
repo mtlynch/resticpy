@@ -20,6 +20,15 @@ class ForgetTest(unittest.TestCase):
         mock_execute.assert_called_with(['restic', '--json', 'forget'])
 
     @mock.patch.object(forget.command_executor, 'execute')
+    def test_dry_run(self, mock_execute):
+        mock_execute.return_value = '{}'
+
+        restic.forget(dry_run=True)
+
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'forget', '--dry-run'])
+
+    @mock.patch.object(forget.command_executor, 'execute')
     def test_forget_and_prune(self, mock_execute):
         mock_execute.return_value = '{}'
         restic.forget(prune=True)
