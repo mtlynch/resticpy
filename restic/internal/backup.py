@@ -15,6 +15,7 @@ def run(restic_base_command,
         paths,
         exclude_patterns=None,
         exclude_files=None,
+        tags=None,
         dry_run=None):
     cmd = restic_base_command + ['backup'] + paths
 
@@ -25,6 +26,10 @@ def run(restic_base_command,
     if exclude_files:
         for exclude_file in exclude_files:
             cmd.extend(['--exclude-file', exclude_file])
+
+    if tags:
+        for tag in tags:
+            cmd.extend(['--tag', tag])
 
     if dry_run:
         cmd.extend(['--dry-run'])
