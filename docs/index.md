@@ -109,7 +109,6 @@ snapshot 3671204c saved
 ### Args
 
 * `dry_run`: Set to `True` to perform just a dry run of the backup
-* `prune`: A boolean representing whether to automatically run the 'prune' command if snapshots have been removed
 * `group_by`: A string for grouping snapshots
 * `keep_last`: An int representing the last N snapshots to keep
 * `keep_hourly`: An int representing the last N hourly snapshots to keep
@@ -118,6 +117,7 @@ snapshot 3671204c saved
 * `keep_monthly`: An int representing the last N monthly snapshots to keep
 * `keep_yearly`: An int representing the last N yearly snapshots to keep
 * `keep_within` A string representing a duration before which to prune relative to the latest snapshot
+* `prune`: A boolean representing whether to automatically run the 'prune' command if snapshots have been removed
 
 ### Returns
 

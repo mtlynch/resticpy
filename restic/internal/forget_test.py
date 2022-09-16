@@ -29,11 +29,11 @@ class ForgetTest(unittest.TestCase):
             ['restic', '--json', 'forget', '--dry-run'])
 
     @mock.patch.object(forget.command_executor, 'execute')
-    def test_forget_and_prune(self, mock_execute):
+    def test_forget_with_group_by(self, mock_execute):
         mock_execute.return_value = '{}'
-        restic.forget(prune=True)
+        restic.forget(prune=True, group_by='host')
         mock_execute.assert_called_with(
-            ['restic', '--json', 'forget', '--prune'])
+            ['restic', '--json', 'forget', '--group-by', 'host', '--prune'])
 
     @mock.patch.object(forget.command_executor, 'execute')
     def test_forget_keep_last_10(self, mock_execute):
@@ -82,21 +82,21 @@ class ForgetTest(unittest.TestCase):
         mock_execute.return_value = '{}'
         restic.forget(prune=True, keep_daily=30)
         mock_execute.assert_called_with(
-            ['restic', '--json', 'forget', '--prune', '--keep-daily', '30'])
+            ['restic', '--json', 'forget', '--keep-daily', '30', '--prune'])
 
     @mock.patch.object(forget.command_executor, 'execute')
-    def test_forget_with_group_by(self, mock_execute):
+    def test_forget_and_prune(self, mock_execute):
         mock_execute.return_value = '{}'
-        restic.forget(prune=True, group_by='host')
+        restic.forget(prune=True)
         mock_execute.assert_called_with(
-            ['restic', '--json', 'forget', '--prune', '--group-by', 'host'])
+            ['restic', '--json', 'forget', '--prune'])
 
     @mock.patch.object(forget.command_executor, 'execute')
     def test_forget_and_keep_within(self, mock_execute):
         mock_execute.return_value = '{}'
         restic.forget(prune=True, keep_within='60d')
         mock_execute.assert_called_with(
-            ['restic', '--json', 'forget', '--prune', '--keep-within', '60d'])
+            ['restic', '--json', 'forget', '--keep-within', '60d', '--prune'])
 
     @mock.patch.object(forget.command_executor, 'execute')
     def test_parses_result_json(self, mock_execute):

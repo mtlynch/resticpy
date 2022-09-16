@@ -6,7 +6,7 @@ from restic.internal import command_executor
 
 def run(restic_base_command,
         dry_run=None,
-        prune=False,
+        group_by=None,
         keep_last=None,
         keep_hourly=None,
         keep_daily=None,
@@ -14,14 +14,14 @@ def run(restic_base_command,
         keep_monthly=None,
         keep_yearly=None,
         keep_within=None,
-        group_by=None):
+        prune=False):
     cmd = restic_base_command + ['forget']
 
     if dry_run:
         cmd.extend(['--dry-run'])
 
-    if prune:
-        cmd.extend(['--prune'])
+    if group_by:
+        cmd.extend(['--group-by', group_by])
 
     if keep_last:
         cmd.extend(['--keep-last', str(keep_last)])
@@ -44,8 +44,8 @@ def run(restic_base_command,
     if keep_within:
         cmd.extend(['--keep-within', str(keep_within)])
 
-    if group_by:
-        cmd.extend(['--group-by', group_by])
+    if prune:
+        cmd.extend(['--prune'])
 
     return _parse_result(command_executor.execute(cmd))
 
