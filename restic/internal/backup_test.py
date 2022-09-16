@@ -54,6 +54,17 @@ class BackupTest(unittest.TestCase):
         ])
 
     @mock.patch.object(backup.command_executor, 'execute')
+    def test_tags(self, mock_execute):
+        mock_execute.return_value = '{}'
+
+        restic.backup(['/data/music'], tags=['musician1', 'musician2'])
+
+        mock_execute.assert_called_with([
+            'restic', '--json', 'backup', '/data/music', '--tag', 'musician1',
+            '--tag', 'musician2'
+        ])
+
+    @mock.patch.object(backup.command_executor, 'execute')
     def test_dry_run(self, mock_execute):
         mock_execute.return_value = '{}'
 
