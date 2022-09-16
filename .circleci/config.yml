@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/python:3.7.3
+      - image: cimg/python:3.7.13
     steps:
       - checkout
       - run:
@@ -21,7 +21,7 @@ jobs:
             coveralls
   e2e:
     docker:
-      - image: circleci/python:3.7.3
+      - image: cimg/python:3.7.13
     steps:
       - checkout
       - run:
@@ -44,7 +44,7 @@ jobs:
             ./e2e/test.py
   prepare_pypi_package:
     docker:
-      - image: circleci/python:3.7.3
+      - image: cimg/python:3.7.13
     steps:
       - checkout
       - run:
@@ -67,7 +67,7 @@ jobs:
             - dist
   publish:
     docker:
-      - image: circleci/python:3.7.3
+      - image: cimg/python:3.7.13
     steps:
       - attach_workspace:
           at: .
