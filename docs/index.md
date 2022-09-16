@@ -18,6 +18,7 @@
 * `paths`: A list of paths to files or directories to back up
 * `exclude_patterns`: A list of patterns of path exclusions
 * `exclude_files`: A list of files containing exclude lists
+* `dry_run`: Set to `True` to perform just a dry run of the backup
 
 ### Returns
 
