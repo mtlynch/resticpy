@@ -11,7 +11,11 @@ class UnexpectedResticResult(Error):
     pass
 
 
-def run(restic_base_command, paths, exclude_patterns=None, exclude_files=None):
+def run(restic_base_command,
+        paths,
+        exclude_patterns=None,
+        exclude_files=None,
+        dry_run=None):
     cmd = restic_base_command + ['backup'] + paths
 
     if exclude_patterns:
@@ -21,6 +25,9 @@ def run(restic_base_command, paths, exclude_patterns=None, exclude_files=None):
     if exclude_files:
         for exclude_file in exclude_files:
             cmd.extend(['--exclude-file', exclude_file])
+
+    if dry_run:
+        cmd.extend(['--dry-run'])
 
     result_raw = command_executor.execute(cmd)
     return _parse_result(result_raw)

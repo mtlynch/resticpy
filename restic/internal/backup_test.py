@@ -54,6 +54,15 @@ class BackupTest(unittest.TestCase):
         ])
 
     @mock.patch.object(backup.command_executor, 'execute')
+    def test_dry_run(self, mock_execute):
+        mock_execute.return_value = '{}'
+
+        restic.backup(['/data/music'], dry_run=True)
+
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'backup', '/data/music', '--dry-run'])
+
+    @mock.patch.object(backup.command_executor, 'execute')
     def test_excludes_single_exclude_file(self, mock_execute):
         mock_execute.return_value = '{}'
 
