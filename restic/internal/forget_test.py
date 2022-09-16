@@ -27,11 +27,46 @@ class ForgetTest(unittest.TestCase):
             ['restic', '--json', 'forget', '--prune'])
 
     @mock.patch.object(forget.command_executor, 'execute')
+    def test_forget_keep_last_10(self, mock_execute):
+        mock_execute.return_value = '{}'
+        restic.forget(keep_last=10)
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'forget', '--keep-last', '10'])
+
+    @mock.patch.object(forget.command_executor, 'execute')
+    def test_forget_keep_hourly_10(self, mock_execute):
+        mock_execute.return_value = '{}'
+        restic.forget(keep_hourly=10)
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'forget', '--keep-hourly', '10'])
+
+    @mock.patch.object(forget.command_executor, 'execute')
     def test_forget_all_except_last_30_days(self, mock_execute):
         mock_execute.return_value = '{}'
         restic.forget(keep_daily=30)
         mock_execute.assert_called_with(
             ['restic', '--json', 'forget', '--keep-daily', '30'])
+
+    @mock.patch.object(forget.command_executor, 'execute')
+    def test_forget_keep_weekly_10(self, mock_execute):
+        mock_execute.return_value = '{}'
+        restic.forget(keep_weekly=10)
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'forget', '--keep-weekly', '10'])
+
+    @mock.patch.object(forget.command_executor, 'execute')
+    def test_forget_keep_monthly_10(self, mock_execute):
+        mock_execute.return_value = '{}'
+        restic.forget(keep_monthly=10)
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'forget', '--keep-monthly', '10'])
+
+    @mock.patch.object(forget.command_executor, 'execute')
+    def test_forget_keep_yearly_10(self, mock_execute):
+        mock_execute.return_value = '{}'
+        restic.forget(keep_yearly=10)
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'forget', '--keep-yearly', '10'])
 
     @mock.patch.object(forget.command_executor, 'execute')
     def test_forget_all_except_last_30_days_and_prune(self, mock_execute):
