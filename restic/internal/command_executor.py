@@ -12,6 +12,7 @@ def execute(cmd):
         process = subprocess.run(cmd,
                                  capture_output=True,
                                  text=True,
+                                 check=False,
                                  encoding='utf-8')
     except FileNotFoundError as e:
         raise restic.errors.NoResticBinaryEror(
