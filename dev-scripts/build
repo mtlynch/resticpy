@@ -35,7 +35,6 @@ coverage report
 yapf \
   --diff \
   --recursive \
-  --style google \
   ./ \
   --exclude="${VIRTUALENV_DIR}/*"
 
