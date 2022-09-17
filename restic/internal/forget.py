@@ -57,5 +57,5 @@ def _parse_result(result):
         return json.loads(result_lines[0])
     except json.decoder.JSONDecodeError as e:
         raise restic.errors.UnexpectedResticResponse(
-            'Unexpected result from restic. Expected JSON, got: %s' %
+            'Unexpected result from restic. Expected JSON, got: ' +
             result_lines[0]) from e

@@ -23,7 +23,7 @@ def execute(cmd):
 
     if process.returncode != 0:
         raise restic.errors.ResticFailedError(
-            'Restic failed with exit code %s: %s' %
-            (process.returncode, process.stderr))
+            f'Restic failed with exit code {process.returncode}: ' +
+            process.stderr)
 
     return process.stdout

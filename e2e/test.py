@@ -9,6 +9,8 @@ import restic
 
 logger = logging.getLogger(__name__)
 
+# pylint: disable=consider-using-with
+
 
 def configure_logging():
 
@@ -70,7 +72,8 @@ RESTORED_DATA_PATH = os.path.join(RESTORE_DIR, DUMMY_DATA_PATH)
 if not os.path.exists(RESTORED_DATA_PATH):
     logger.fatal('Expected to find %s', RESTORED_DATA_PATH)
 RESTORED_DATA_EXPECTED = 'some data to back up'
-RESTORED_DATA_ACTUAL = open(RESTORED_DATA_PATH).read()
+with open(RESTORED_DATA_PATH, encoding='utf-8') as f:
+    RESTORED_DATA_ACTUAL = f.read()
 if RESTORED_DATA_EXPECTED != RESTORED_DATA_ACTUAL:
     logger.fatal('Expected to restored file to contain %s (got %s)',
                  RESTORED_DATA_EXPECTED, RESTORED_DATA_ACTUAL)
