@@ -4,9 +4,6 @@ from unittest import mock
 import restic.errors
 from restic.internal import check
 
-# Ignore suggestions to turn methods into functions.
-# pylint: disable=R0201
-
 
 class CheckTest(unittest.TestCase):
 

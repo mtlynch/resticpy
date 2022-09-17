@@ -41,7 +41,7 @@ PASSWORD_FILE.flush()
 
 DUMMY_SOURCE_DIR = tempfile.mkdtemp()
 DUMMY_DATA_PATH = os.path.join(DUMMY_SOURCE_DIR, 'mydata.txt')
-with open(DUMMY_DATA_PATH, 'w') as dummy_data_file:
+with open(DUMMY_DATA_PATH, 'w', encoding='utf-8') as dummy_data_file:
     dummy_data_file.write('some data to back up')
 
 primary_repo = tempfile.mkdtemp()

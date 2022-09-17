@@ -7,7 +7,6 @@ from restic.internal import init
 
 class InitTest(unittest.TestCase):
 
-    # pylint: disable=no-self-use
     @mock.patch.object(init.command_executor, 'execute')
     def test_unlock_with_no_parameters(self, mock_execute):
         restic.unlock()
