@@ -4,9 +4,6 @@ from unittest import mock
 import restic
 from restic.internal import stats
 
-# Ignore suggestions to turn methods into functions.
-# pylint: disable=R0201
-
 
 class SelfUpdateTest(unittest.TestCase):
 

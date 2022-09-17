@@ -12,6 +12,7 @@ def execute(cmd):
         process = subprocess.run(cmd,
                                  capture_output=True,
                                  text=True,
+                                 check=False,
                                  encoding='utf-8')
     except FileNotFoundError as e:
         raise restic.errors.NoResticBinaryEror(
@@ -22,7 +23,7 @@ def execute(cmd):
 
     if process.returncode != 0:
         raise restic.errors.ResticFailedError(
-            'Restic failed with exit code %s: %s' %
-            (process.returncode, process.stderr))
+            f'Restic failed with exit code {process.returncode}: ' +
+            process.stderr)
 
     return process.stdout
