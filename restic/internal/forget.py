@@ -54,7 +54,10 @@ def _parse_result(result):
     # The result is JSON followed by 0 or more non-JSON lines.
     result_lines = result.split('\n')
     try:
-        return json.loads(result_lines[0])
+        # forget result can be empty
+        if result_lines[0]:
+            return json.loads(result_lines[0])
+        return {}
     except json.decoder.JSONDecodeError as e:
         raise restic.errors.UnexpectedResticResponse(
             'Unexpected result from restic. Expected JSON, got: ' +
