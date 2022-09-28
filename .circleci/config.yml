@@ -13,9 +13,21 @@ jobs:
             . venv/bin/activate
             pip install --requirement dev_requirements.txt
             ./dev-scripts/build
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - .coverage
+  coverage:
+    docker:
+      - image: cimg/python:3.7.13
+    steps:
+      - attach_workspace:
+          at: ./
       - run:
           name: install coveralls and upload coverage information
           command: |
+            mkdir -p ./venv
+            virtualenv --python python3 ./venv
             . venv/bin/activate
             pip install coveralls==3.0.1
             coveralls
@@ -75,9 +87,9 @@ jobs:
           name: publish to PyPI
           # Requires TWINE_USERNAME and TWINE_PASSWORD environment variables.
           command: |
-              set -x
-              . venv/bin/activate
-              twine upload dist/*
+            set -x
+            . venv/bin/activate
+            twine upload dist/*
 workflows:
   test:
     jobs:
@@ -85,6 +97,13 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - coverage:
+          filters:
+            branches:
+              # Skip forked pull requests because they don't have access to the
+              # Coveralls auth token environment variable. Forked pull requests
+              # have CIRCLE_BRANCH set to "pull/XXX".
+              ignore: /pull\/[0-9]+/
       - e2e:
           filters:
             tags:
