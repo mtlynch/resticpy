@@ -17,6 +17,12 @@ class ForgetTest(unittest.TestCase):
         mock_execute.assert_called_with(['restic', '--json', 'forget'])
 
     @mock.patch.object(forget.command_executor, 'execute')
+    def test_forget_empty_return(self, mock_execute):
+        mock_execute.return_value = ''
+        restic.forget()
+        mock_execute.assert_called_with(['restic', '--json', 'forget'])
+
+    @mock.patch.object(forget.command_executor, 'execute')
     def test_dry_run(self, mock_execute):
         mock_execute.return_value = '{}'
 
