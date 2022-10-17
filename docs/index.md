@@ -20,7 +20,7 @@
 * `exclude_files`: A list of files containing exclude lists
 * `tags`: A list of tags for the new snapshot
 * `dry_run`: Set to `True` to perform just a dry run of the backup
-* `host`: Set the hostname for the snapshot manually. To prevent an expensive rescan use the "parent" flag
+* `host`: Set the hostname for the snapshot manually
 
 ### Returns
 
