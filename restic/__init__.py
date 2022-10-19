@@ -1,6 +1,7 @@
 from restic.internal import backup as internal_backup
 from restic.internal import check as internal_check
 from restic.internal import copy as internal_copy
+from restic.internal import find as internal_find
 from restic.internal import forget as internal_forget
 from restic.internal import generate as internal_generate
 from restic.internal import init as internal_init
@@ -32,6 +33,10 @@ def check(*args, **kwargs):
 
 def copy(*args, **kwargs):
     return internal_copy.run(_make_base_command(), *args, **kwargs)
+
+
+def find(*args, **kwargs):
+    return internal_find.run(_make_base_command(), *args, **kwargs)
 
 
 def forget(*args, **kwargs):
