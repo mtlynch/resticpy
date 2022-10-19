@@ -215,6 +215,7 @@ Restores a snapshot from the repository to the specified path.
 ### Args
 
 * `snapshot_id`: ID of snapshot to restore (default: `latest`)
+* `include`: String specifying a pattern to include, exclude everything else
 * `target_dir`: String specifying output directory to place restored data
 
 ### Returns
