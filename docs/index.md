@@ -113,7 +113,7 @@ snapshot 3671204c saved
 
 ### Returns
 
-A dictionary containing the result of the find.
+A list of dictionaries representing the files that matched the search pattern in the target repo's snapshots. Each item in the list represents one snapshot in the repository that contained a matching file. If the repository contains more than one matching file, the matches appear in a list under the matches property of the dictionary.
 
 ### Example
 
