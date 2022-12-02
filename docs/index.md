@@ -207,6 +207,37 @@ The repository ID of the new reposityory.
 
 ---
 
+## key
+
+The "key" command manages keys (passwords) for accessing the repository.
+
+### Args
+
+* `subcommand`: Subcommand of the `key` command. Needs to be one of 'list', 'add', 'remove' or 'passwd'.
+* `host`: Hostname for new keys
+* `new_password_file`: File from which to read the new password
+* `user`: Username for new keys
+* `key_id`: ID of the key which should be removed. Only valid with 'subcommand' == 'remove'.
+
+### Returns
+
+List of repository keys or nothing.
+
+### Example
+
+```python
+>>> restic.key('list')
+[{'current': True, 'id': 'f1fe5fc6', 'userName': 'user1', 'hostName': 'example', 'created': '2022-12-02 11:25:13'}]
+>>> restic.key('add', new_password_file='/tmp/new-password-file')
+'saved new key as <Key of mbaur@mbaur, created on 2022-12-02 13:01:50.203169 +0100 CET m=+3.228546835>\n'
+>>> restic.key('remove', key_id='34b8e8c5')
+'removed key 34b8e8c5907825a738c07de8b2500147b305ea78d1f59f17ce3119c11dd177b2\n'
+>>> restic.key('passwd', new_password_file='/tmp/new-password-file')
+'saved new key as <Key of mbaur@mbaur, created on 2022-12-02 13:03:17.384077 +0100 CET m=+3.256624876>\n'
+```
+
+---
+
 ## restore
 
 Restores a snapshot from the repository to the specified path.
