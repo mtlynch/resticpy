@@ -56,7 +56,7 @@ A dictionary with a summary of the backup result.
 
 ### Args
 
-- `read_data`: Boolean indicating whether to read all data blobs in the repo.
+- `read_data`: Boolean indicating whether to read all data blobs in the repo
 
 ### Returns
 
@@ -87,8 +87,8 @@ no errors were found
 
 ### Args
 
-- `repo2`: Destination repository to copy to.
-- `password_file2`: Path to file containing password for destination reposity.
+- `repo2`: Destination repository to copy to
+- `password_file2`: Path to file containing password for destination repository
 
 ### Returns
 
@@ -192,8 +192,8 @@ Initializes a new restic repository at the current repository location.
 
 ### Args
 
-- `copy-chunker-params`: Copy chunker parameters from the secondary repository.
-- `repo2`: Secondary repository to copy chunker parameters from.
+- `copy-chunker-params`: Copy chunker parameters from the secondary repository
+- `repo2`: Secondary repository to copy chunker parameters from
 
 ### Returns
 
@@ -256,7 +256,7 @@ Retrieve a list of snapshots in the repo
 
 ### Args
 
-- `group_by`: String for grouping snapshots by host, paths, tags.
+- `group_by`: String for grouping snapshots by host, paths, tags
 
 ### Returns
 
@@ -300,7 +300,7 @@ Retrieve stats about the current restic repository.
 
 ### Args
 
-- `mode`: Type of stats to retrieve. Can be one of `restore-size`, `files-by-contents`, `blobs-per-file` or `raw-data`.
+- `mode`: Type of stats to retrieve. Can be one of `restore-size`, `files-by-contents`, `blobs-per-file` or `raw-data`
 
 ### Returns
 
