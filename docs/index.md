@@ -1,13 +1,13 @@
-* Table of Contents
-{:toc}
+- Table of Contents
+  {:toc}
 
 ## Global options
 
-| Option                   | Default Value | Notes |
-|--------------------------|---------------|-------|
-| `restic.binary_path`     | `'restic'`    | Specifies the location of your restic binary if it's not in the user's default path. (e.g., `/path/to/restic.exe`) |
-| `restic.repository`      | `None`      | Specifies the path or URL of your restic backup repository. |
-| `restic.password_file`   | `None`      | Specifies the path to the file containing your restic repository password. |
+| Option                 | Default Value | Notes                                                                                                              |
+| ---------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `restic.binary_path`   | `'restic'`    | Specifies the location of your restic binary if it's not in the user's default path. (e.g., `/path/to/restic.exe`) |
+| `restic.repository`    | `None`        | Specifies the path or URL of your restic backup repository.                                                        |
+| `restic.password_file` | `None`        | Specifies the path to the file containing your restic repository password.                                         |
 
 ---
 
@@ -15,12 +15,12 @@
 
 ### Args
 
-* `paths`: A list of paths to files or directories to back up
-* `exclude_patterns`: A list of patterns of path exclusions
-* `exclude_files`: A list of files containing exclude lists
-* `tags`: A list of tags for the new snapshot
-* `dry_run`: Set to `True` to perform just a dry run of the backup
-* `host`: Set the hostname for the snapshot manually
+- `paths`: A list of paths to files or directories to back up
+- `exclude_patterns`: A list of patterns of path exclusions
+- `exclude_files`: A list of files containing exclude lists
+- `tags`: A list of tags for the new snapshot
+- `dry_run`: Set to `True` to perform just a dry run of the backup
+- `host`: Set the hostname for the snapshot manually
 
 ### Returns
 
@@ -56,7 +56,7 @@ A dictionary with a summary of the backup result.
 
 ### Args
 
-* `read_data`: Boolean indicating whether to read all data blobs in the repo.
+- `read_data`: Boolean indicating whether to read all data blobs in the repo.
 
 ### Returns
 
@@ -87,8 +87,8 @@ no errors were found
 
 ### Args
 
-* `repo2`: Destination repository to copy to.
-* `password_file2`: Path to file containing password for destination reposity.
+- `repo2`: Destination repository to copy to.
+- `password_file2`: Path to file containing password for destination reposity.
 
 ### Returns
 
@@ -109,16 +109,16 @@ snapshot 3671204c saved
 
 ### Args
 
-* `dry_run`: Set to `True` to perform just a dry run of the backup
-* `group_by`: A string for grouping snapshots
-* `keep_last`: An int representing the last N snapshots to keep
-* `keep_hourly`: An int representing the last N hourly snapshots to keep
-* `keep_daily`: An int representing the last N daily snapshots to keep
-* `keep_weekly`: An int representing the last N weekly snapshots to keep
-* `keep_monthly`: An int representing the last N monthly snapshots to keep
-* `keep_yearly`: An int representing the last N yearly snapshots to keep
-* `keep_within` A string representing a duration before which to prune relative to the latest snapshot
-* `prune`: A boolean representing whether to automatically run the 'prune' command if snapshots have been removed
+- `dry_run`: Set to `True` to perform just a dry run of the backup
+- `group_by`: A string for grouping snapshots
+- `keep_last`: An int representing the last N snapshots to keep
+- `keep_hourly`: An int representing the last N hourly snapshots to keep
+- `keep_daily`: An int representing the last N daily snapshots to keep
+- `keep_weekly`: An int representing the last N weekly snapshots to keep
+- `keep_monthly`: An int representing the last N monthly snapshots to keep
+- `keep_yearly`: An int representing the last N yearly snapshots to keep
+- `keep_within` A string representing a duration before which to prune relative to the latest snapshot
+- `prune`: A boolean representing whether to automatically run the 'prune' command if snapshots have been removed
 
 ### Returns
 
@@ -168,9 +168,9 @@ A dictionary with a summary of the forget result.
 
 ### Args
 
-* `bash_completion_path`: Path to bash completion file to write
-* `man_directory`: Path to man directory to write to
-* `zsh_completion_path`: Path to zsh completion file to write
+- `bash_completion_path`: Path to bash completion file to write
+- `man_directory`: Path to man directory to write to
+- `zsh_completion_path`: Path to zsh completion file to write
 
 ### Returns
 
@@ -192,8 +192,8 @@ Initializes a new restic repository at the current repository location.
 
 ### Args
 
-* `copy-chunker-params`: Copy chunker parameters from the secondary repository.
-* `repo2`: Secondary repository to copy chunker parameters from.
+- `copy-chunker-params`: Copy chunker parameters from the secondary repository.
+- `repo2`: Secondary repository to copy chunker parameters from.
 
 ### Returns
 
@@ -214,9 +214,9 @@ Restores a snapshot from the repository to the specified path.
 
 ### Args
 
-* `snapshot_id`: ID of snapshot to restore (default: `latest`)
-* `include`: String specifying a pattern to include, exclude everything else
-* `target_dir`: String specifying output directory to place restored data
+- `snapshot_id`: ID of snapshot to restore (default: `latest`)
+- `include`: String specifying a pattern to include, exclude everything else
+- `target_dir`: String specifying output directory to place restored data
 
 ### Returns
 
@@ -256,7 +256,7 @@ Retrieve a list of snapshots in the repo
 
 ### Args
 
-* `group_by`: String for grouping snapshots by host, paths, tags.
+- `group_by`: String for grouping snapshots by host, paths, tags.
 
 ### Returns
 
@@ -300,7 +300,7 @@ Retrieve stats about the current restic repository.
 
 ### Args
 
-* `mode`: Type of stats to retrieve. Can be one of `restore-size`, `files-by-contents`, `blobs-per-file` or `raw-data`.
+- `mode`: Type of stats to retrieve. Can be one of `restore-size`, `files-by-contents`, `blobs-per-file` or `raw-data`.
 
 ### Returns
 
