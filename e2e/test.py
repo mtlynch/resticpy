@@ -64,6 +64,17 @@ if backup_result['files_changed'] != 0:
     logger.fatal('Expected 0 changed files (got %d)',
                  backup_result['files_changed'])
 
+logger.info('Finding files')
+find1_result = restic.find('mydata.txt')
+if len(find1_result) != 1 or 'matches' not in find1_result[0] or len(
+        find1_result[0]['matches']) != 1:
+    logger.fatal('Expected to find exactly 1 match, instead got result %s',
+                 find1_result)
+find2_result = restic.find('non-existent-file.txt')
+if len(find2_result) > 0:
+    logger.fatal('Expected to not find any matches, instead got result %s',
+                 find2_result)
+
 RESTORE_DIR = tempfile.mkdtemp()
 logger.info('Restoring to %s', RESTORE_DIR)
 logger.info(restic.restore(snapshot_id='latest', target_dir=RESTORE_DIR))
