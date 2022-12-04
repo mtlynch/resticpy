@@ -11,7 +11,7 @@ class FindTest(unittest.TestCase):
     def test_find_no_results(self, mock_execute):
         mock_execute.return_value = '[]'
 
-        restic.find('dummyfile')
+        self.assertEqual([], restic.find('dummyfile'))
 
         mock_execute.assert_called_with(
             ['restic', '--json', 'find', 'dummyfile'])
