@@ -91,14 +91,14 @@ repo_keys = restic.key.list()
 logger.info('listing repo keys: %s', repo_keys)
 
 NEW_PASSWORD = 'mysecretpass2'
-NEW_PASSWORD_FILE = tempfile.NamedTemporaryFile()
-NEW_PASSWORD_FILE.write(NEW_PASSWORD.encode('utf-8'))
+NEW_PASSWORD_FILE = tempfile.NamedTemporaryFile(mode='w+t')
+NEW_PASSWORD_FILE.write(NEW_PASSWORD)
 NEW_PASSWORD_FILE.flush()
 logger.info('adding a repo key: %s',
             restic.key.add(new_password_file=NEW_PASSWORD_FILE.name))
 
 restic.password_file = NEW_PASSWORD_FILE.name
-with tempfile.NamedTemporaryFile(mode="w+t") as tf:
+with tempfile.NamedTemporaryFile(mode='w+t') as tf:
     NEW_PASSWORD = 'new-mysecretpass2'
     tf.write(NEW_PASSWORD)
     tf.flush()
@@ -106,7 +106,7 @@ with tempfile.NamedTemporaryFile(mode="w+t") as tf:
                 restic.key.passwd(new_password_file=tf.name))
 
     NEW_PASSWORD_FILE.seek(0)
-    NEW_PASSWORD_FILE.write(NEW_PASSWORD.encode('utf-8'))
+    NEW_PASSWORD_FILE.write(NEW_PASSWORD)
     NEW_PASSWORD_FILE.flush()
 
 logger.info('remove a repo key: %s', restic.key.remove(repo_keys[0]['id']))
