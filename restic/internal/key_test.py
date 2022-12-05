@@ -18,7 +18,7 @@ class KeyTest(unittest.TestCase):
              "created":"2022-12-02 11:25:13"
             }]"""
 
-        key_result = restic.key('list')
+        key_result = restic.key.list()
 
         mock_execute.assert_called_with(['restic', '--json', 'key', 'list'])
 
@@ -32,7 +32,7 @@ class KeyTest(unittest.TestCase):
 
     @mock.patch.object(key.command_executor, 'execute')
     def test_key_add(self, mock_execute):
-        restic.key('add', new_password_file='/path/to/new-password-file')
+        restic.key.add(new_password_file='/path/to/new-password-file')
 
         mock_execute.assert_called_with([
             'restic', '--json', 'key', 'add', '--new-password-file',
@@ -41,7 +41,7 @@ class KeyTest(unittest.TestCase):
 
     @mock.patch.object(key.command_executor, 'execute')
     def test_key_passwd(self, mock_execute):
-        restic.key('passwd', new_password_file='/path/to/new-password-file')
+        restic.key.passwd(new_password_file='/path/to/new-password-file')
 
         mock_execute.assert_called_with([
             'restic', '--json', 'key', 'passwd', '--new-password-file',
@@ -50,7 +50,7 @@ class KeyTest(unittest.TestCase):
 
     @mock.patch.object(key.command_executor, 'execute')
     def test_key_remove(self, mock_execute):
-        restic.key('remove', key_id='abc123')
+        restic.key.remove(key_id='abc123')
 
         mock_execute.assert_called_with(
             ['restic', '--json', 'key', 'remove', 'abc123'])

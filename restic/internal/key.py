@@ -3,27 +3,40 @@ import json
 from restic.internal import command_executor
 
 
-def run(restic_base_command,
-        subcommand,
-        host=None,
-        new_password_file=None,
-        user=None,
-        key_id=None):
-    cmd = restic_base_command + ['key', subcommand]
+class Key:
 
-    if host:
-        cmd.extend(['--host', host])
+    def __init__(self, restic_base_command):
+        self.base_command = restic_base_command + ['key']
 
-    if new_password_file:
-        cmd.extend(['--new-password-file', new_password_file])
+    def list(self):
+        cmd = self.base_command + ['list']
 
-    if user:
-        cmd.extend(['--user', user])
-
-    if key_id:
-        cmd.extend([key_id])
-
-    result = command_executor.execute(cmd)
-    if subcommand == 'list':
+        result = command_executor.execute(cmd)
         return json.loads(result)
-    return result
+
+    def add(self, host=None, new_password_file=None, user=None):
+        cmd = self.base_command + ['add']
+
+        if host:
+            cmd.extend(['--host', host])
+
+        if new_password_file:
+            cmd.extend(['--new-password-file', new_password_file])
+
+        if user:
+            cmd.extend(['--user', user])
+
+        return command_executor.execute(cmd)
+
+    def remove(self, key_id):
+        cmd = self.base_command + ['remove', key_id]
+
+        return command_executor.execute(cmd)
+
+    def passwd(self, new_password_file=None):
+        cmd = self.base_command + ['passwd']
+
+        if new_password_file:
+            cmd.extend(['--new-password-file', new_password_file])
+
+        return command_executor.execute(cmd)

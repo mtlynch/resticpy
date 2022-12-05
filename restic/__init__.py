@@ -47,10 +47,6 @@ def init(*args, **kwargs):
     return internal_init.run(_make_base_command(), *args, **kwargs)
 
 
-def key(*args, **kwargs):
-    return internal_key.run(_make_base_command(), *args, **kwargs)
-
-
 def restore(*args, **kwargs):
     return internal_restore.run(_make_base_command(), *args, **kwargs)
 
@@ -88,3 +84,6 @@ def _make_base_command():
         base_command.extend(['--password-file', password_file])
 
     return base_command
+
+
+key = internal_key.Key(_make_base_command())
