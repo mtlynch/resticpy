@@ -94,14 +94,16 @@ NEW_PASSWORD = 'mysecretpass2'
 NEW_PASSWORD_FILE = tempfile.NamedTemporaryFile()
 NEW_PASSWORD_FILE.write(NEW_PASSWORD.encode('utf-8'))
 NEW_PASSWORD_FILE.flush()
-logger.info('adding a repo key: %s', restic.key.add(new_password_file=NEW_PASSWORD_FILE.name))
+logger.info('adding a repo key: %s',
+            restic.key.add(new_password_file=NEW_PASSWORD_FILE.name))
 
 restic.password_file = NEW_PASSWORD_FILE.name
 with tempfile.NamedTemporaryFile(mode="w+t") as tf:
     NEW_PASSWORD = 'new-mysecretpass2'
     tf.write(NEW_PASSWORD)
     tf.flush()
-    logger.info('changing repo key: %s', restic.key.passwd(new_password_file=tf.name))
+    logger.info('changing repo key: %s',
+                restic.key.passwd(new_password_file=tf.name))
 
     NEW_PASSWORD_FILE.seek(0)
     NEW_PASSWORD_FILE.write(NEW_PASSWORD.encode('utf-8'))
@@ -130,7 +132,7 @@ logger.info(restic.init())
 
 # Go back to original repo
 restic.repository = primary_repo
-restic.password_file = PASSWORD_FILE.name
+restic.password_file = NEW_PASSWORD_FILE.name
 
 logger.info(
     'repo copy result: %s',
