@@ -213,11 +213,11 @@ The "key" command manages keys (passwords) for accessing the repository.
 
 ### Args
 
-* `subcommand`: Subcommand of the `key` command. Needs to be one of 'list', 'add', 'remove' or 'passwd'.
+* `subcommand`: Subcommand of the `key` command. Needs to be one of 'list', 'add', 'remove' or 'passwd'
 * `host`: Hostname for new keys
 * `new_password_file`: File from which to read the new password
 * `user`: Username for new keys
-* `key_id`: ID of the key which should be removed. Only valid with 'subcommand' == 'remove'.
+* `key_id`: ID of the key which should be removed. Only valid with 'subcommand' == 'remove'
 
 ### Returns
 
