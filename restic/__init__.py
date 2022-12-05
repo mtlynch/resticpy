@@ -86,4 +86,4 @@ def _make_base_command():
     return base_command
 
 
-key = internal_key.Key(_make_base_command())
+key = internal_key.Key(_make_base_command)
