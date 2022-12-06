@@ -246,64 +246,68 @@ The repository ID of the new reposityory.
 
 ---
 
-## key
+## key.list
 
-The "key" command manages keys (passwords) for accessing the repository.
+Lists keys associated with the given repository.
 
-### list
-
-#### Args
+### Args
 
 None
 
-#### Returns
+### Returns
 
 List of repository keys.
 
-#### Example
+### Example
 
 ```python
 >>> restic.key.list()
 [{'current': True, 'id': 'f1fe5fc6', 'userName': 'user1', 'hostName': 'example', 'created': '2022-12-02 11:25:13'}]
 ```
 
-### add
+---
 
-#### Args
+## key.add
+
+### Args
 
 - `host`: Hostname for new keys
 - `new_password_file`: File from which to read the new password
 - `user`: Username for new keys
 
-#### Returns
+### Returns
 
 None
 
-#### Example
+### Example
 
 ```python
 >>> restic.key.add(new_password_file='/tmp/new-password-file')
 'saved new key as <Key of mbaur@mbaur, created on 2022-12-02 13:01:50.203169 +0100 CET m=+3.228546835>\n'
 ```
 
-### remove
+---
 
-#### Args
+## key.remove
+
+### Args
 
 - `key_id`: ID of the key which should be removed
 
-#### Returns
+### Returns
 
 None
 
-#### Example
+### Example
 
 ```python
 >>> restic.key.remove(key_id='34b8e8c5')
 'removed key 34b8e8c5907825a738c07de8b2500147b305ea78d1f59f17ce3119c11dd177b2\n'
 ```
 
-#### passwd
+---
+
+## key.passwd
 
 ### Args
 
