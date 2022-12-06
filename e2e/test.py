@@ -37,8 +37,8 @@ logger.info('Running end-to-end tests with restic version %s (%s/%s/go%s)',
             version_info['platform_version'], version_info['go_version'])
 
 PASSWORD = 'mysecretpass'
-PASSWORD_FILE = tempfile.NamedTemporaryFile()
-PASSWORD_FILE.write(PASSWORD.encode('utf-8'))
+PASSWORD_FILE = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
+PASSWORD_FILE.write(PASSWORD)
 PASSWORD_FILE.flush()
 
 DUMMY_SOURCE_DIR = tempfile.mkdtemp()
@@ -102,14 +102,14 @@ repo_keys = restic.key.list()
 logger.info('listing repo keys: %s', repo_keys)
 
 NEW_PASSWORD = 'mysecretpass2'
-NEW_PASSWORD_FILE = tempfile.NamedTemporaryFile(mode='w+t')
+NEW_PASSWORD_FILE = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
 NEW_PASSWORD_FILE.write(NEW_PASSWORD)
 NEW_PASSWORD_FILE.flush()
 logger.info('adding a repo key: %s',
             restic.key.add(new_password_file=NEW_PASSWORD_FILE.name))
 
 restic.password_file = NEW_PASSWORD_FILE.name
-with tempfile.NamedTemporaryFile(mode='w+t') as tf:
+with tempfile.NamedTemporaryFile(mode='wt', encoding='utf-8') as tf:
     NEW_PASSWORD = 'new-mysecretpass2'
     tf.write(NEW_PASSWORD)
     tf.flush()
@@ -130,8 +130,8 @@ logger.info('check result: %s', restic.check(read_data=True))
 logger.info('making secondary repository')
 
 PASSWORD2 = 'myothersecret'
-PASSWORD_FILE2 = tempfile.NamedTemporaryFile()
-PASSWORD_FILE2.write(PASSWORD2.encode('utf-8'))
+PASSWORD_FILE2 = tempfile.NamedTemporaryFile(mode='wt', encoding='utf-8')
+PASSWORD_FILE2.write(PASSWORD2)
 PASSWORD_FILE2.flush()
 
 secondary_repo = tempfile.mkdtemp()
