@@ -99,28 +99,48 @@ if stats['total_size'] != len(RESTORED_DATA_EXPECTED):
                  len(RESTORED_DATA_EXPECTED), stats['total_size'])
 
 repo_keys = restic.key.list()
-logger.info('listing repo keys: %s', repo_keys)
+logger.info('repo keys: %s', repo_keys)
+REPO_KEYS_LEN_EXPECTED = 1
+REPO_KEYS_LEN_ACTUAL = len(repo_keys)
+if REPO_KEYS_LEN_EXPECTED != REPO_KEYS_LEN_ACTUAL:
+    logger.fatal('Expected key count of %d (got %d)', REPO_KEYS_LEN_EXPECTED,
+                 REPO_KEYS_LEN_ACTUAL)
 
-NEW_PASSWORD = 'mysecretpass2'
-NEW_PASSWORD_FILE = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
-NEW_PASSWORD_FILE.write(NEW_PASSWORD)
-NEW_PASSWORD_FILE.flush()
+PASSWORD2 = 'mysecretpass2'
+PASSWORD2_FILE = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
+PASSWORD2_FILE.write(PASSWORD2)
+PASSWORD2_FILE.flush()
 logger.info('adding a repo key: %s',
-            restic.key.add(new_password_file=NEW_PASSWORD_FILE.name))
+            restic.key.add(new_password_file=PASSWORD2_FILE.name))
 
-restic.password_file = NEW_PASSWORD_FILE.name
-with tempfile.NamedTemporaryFile(mode='wt', encoding='utf-8') as tf:
-    NEW_PASSWORD = 'new-mysecretpass2'
-    tf.write(NEW_PASSWORD)
-    tf.flush()
-    logger.info('changing repo key: %s',
-                restic.key.passwd(new_password_file=tf.name))
+repo_keys = restic.key.list()
+logger.info('after changing key, repo keys: %s', repo_keys)
+REPO_KEYS_LEN_EXPECTED = 2
+REPO_KEYS_LEN_ACTUAL = len(repo_keys)
+if REPO_KEYS_LEN_EXPECTED != REPO_KEYS_LEN_ACTUAL:
+    logger.fatal('Expected key count of %d (got %d)', REPO_KEYS_LEN_EXPECTED,
+                 REPO_KEYS_LEN_ACTUAL)
 
-    NEW_PASSWORD_FILE.seek(0)
-    NEW_PASSWORD_FILE.write(NEW_PASSWORD)
-    NEW_PASSWORD_FILE.flush()
+restic.password_file = PASSWORD2_FILE.name
+with tempfile.NamedTemporaryFile(mode='wt', encoding='utf-8') as PASSWORD3_FILE:
+    PASSWORD3 = 'mysecretpass3'
+    PASSWORD3_FILE.write(PASSWORD3)
+    PASSWORD3_FILE.flush()
+    logger.info('changing repo default key: %s',
+                restic.key.passwd(new_password_file=PASSWORD3_FILE.name))
 
-logger.info('remove a repo key: %s', restic.key.remove(repo_keys[0]['id']))
+restic.password_file = PASSWORD_FILE.name
+repo_keys = restic.key.list()
+logger.info('after changing key, repo keys: %s', repo_keys)
+
+logger.info('removing second repo key: %s',
+            restic.key.remove(repo_keys[1]['id']))
+repo_keys = restic.key.list()
+REPO_KEYS_LEN_EXPECTED = 1
+REPO_KEYS_LEN_ACTUAL = len(repo_keys)
+if REPO_KEYS_LEN_EXPECTED != REPO_KEYS_LEN_ACTUAL:
+    logger.fatal('Expected key count of %d (got %d)', REPO_KEYS_LEN_EXPECTED,
+                 REPO_KEYS_LEN_ACTUAL)
 
 logger.info('pruning repo: %s', restic.forget(prune=True, keep_daily=5))
 
@@ -129,24 +149,24 @@ logger.info('check result: %s', restic.check(read_data=True))
 # Initialiize a secondary repo
 logger.info('making secondary repository')
 
-PASSWORD2 = 'myothersecret'
-PASSWORD_FILE2 = tempfile.NamedTemporaryFile(mode='wt', encoding='utf-8')
-PASSWORD_FILE2.write(PASSWORD2)
-PASSWORD_FILE2.flush()
+PASSWORD4 = 'mysecretpass4'
+PASSWORD4_FILE = tempfile.NamedTemporaryFile(mode='wt', encoding='utf-8')
+PASSWORD4_FILE.write(PASSWORD4)
+PASSWORD4_FILE.flush()
 
 secondary_repo = tempfile.mkdtemp()
 
 restic.repository = secondary_repo
-restic.password_file = PASSWORD_FILE2.name
+restic.password_file = PASSWORD4_FILE.name
 
 logger.info(restic.init())
 
 # Go back to original repo
 restic.repository = primary_repo
-restic.password_file = NEW_PASSWORD_FILE.name
+restic.password_file = PASSWORD_FILE.name
 
 logger.info(
     'repo copy result: %s',
-    restic.copy(repo2=secondary_repo, password_file2=PASSWORD_FILE2.name))
+    restic.copy(repo2=secondary_repo, password_file2=PASSWORD4_FILE.name))
 
 logger.info('End-to-end test succeeded!')
