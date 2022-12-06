@@ -1,5 +1,16 @@
 version: 2.1
 jobs:
+  check_style:
+    docker:
+      - image: cimg/node:14.17.5
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install
+      - run:
+          name: Check code style
+          command: ./dev-scripts/check-style
   build:
     docker:
       - image: cimg/python:3.7.13
@@ -96,6 +107,10 @@ jobs:
 workflows:
   test:
     jobs:
+      - check_style:
+          filters:
+            tags:
+              only: /.*/
       - build:
           filters:
             tags:
@@ -119,6 +134,7 @@ workflows:
               only: /.*/
       - publish:
           requires:
+            - check_style
             - build
             - e2e
             - prepare_pypi_package
