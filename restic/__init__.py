@@ -5,6 +5,7 @@ from restic.internal import find as internal_find
 from restic.internal import forget as internal_forget
 from restic.internal import generate as internal_generate
 from restic.internal import init as internal_init
+from restic.internal import key as internal_key
 from restic.internal import restore as internal_restore
 from restic.internal import self_update as internal_self_update
 from restic.internal import snapshots as internal_snapshots
@@ -88,3 +89,6 @@ def _make_base_command():
         base_command.extend(['--password-file', password_file])
 
     return base_command
+
+
+key = internal_key.Key(_make_base_command)

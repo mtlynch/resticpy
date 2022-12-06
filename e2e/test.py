@@ -98,6 +98,30 @@ if stats['total_size'] != len(RESTORED_DATA_EXPECTED):
     logger.fatal('Expected to total size of %d (got %d)',
                  len(RESTORED_DATA_EXPECTED), stats['total_size'])
 
+repo_keys = restic.key.list()
+logger.info('listing repo keys: %s', repo_keys)
+
+NEW_PASSWORD = 'mysecretpass2'
+NEW_PASSWORD_FILE = tempfile.NamedTemporaryFile(mode='w+t')
+NEW_PASSWORD_FILE.write(NEW_PASSWORD)
+NEW_PASSWORD_FILE.flush()
+logger.info('adding a repo key: %s',
+            restic.key.add(new_password_file=NEW_PASSWORD_FILE.name))
+
+restic.password_file = NEW_PASSWORD_FILE.name
+with tempfile.NamedTemporaryFile(mode='w+t') as tf:
+    NEW_PASSWORD = 'new-mysecretpass2'
+    tf.write(NEW_PASSWORD)
+    tf.flush()
+    logger.info('changing repo key: %s',
+                restic.key.passwd(new_password_file=tf.name))
+
+    NEW_PASSWORD_FILE.seek(0)
+    NEW_PASSWORD_FILE.write(NEW_PASSWORD)
+    NEW_PASSWORD_FILE.flush()
+
+logger.info('remove a repo key: %s', restic.key.remove(repo_keys[0]['id']))
+
 logger.info('pruning repo: %s', restic.forget(prune=True, keep_daily=5))
 
 logger.info('check result: %s', restic.check(read_data=True))
@@ -119,7 +143,7 @@ logger.info(restic.init())
 
 # Go back to original repo
 restic.repository = primary_repo
-restic.password_file = PASSWORD_FILE.name
+restic.password_file = NEW_PASSWORD_FILE.name
 
 logger.info(
     'repo copy result: %s',
