@@ -5,7 +5,7 @@ import restic
 from restic.internal import key
 
 
-class KeyTest(unittest.TestCase):
+class KeyListTest(unittest.TestCase):
 
     @mock.patch.object(key.command_executor, 'execute')
     def test_key_list(self, mock_execute):
@@ -30,6 +30,9 @@ class KeyTest(unittest.TestCase):
             'created': '2022-12-02 11:25:13',
         }], key_result)
 
+
+class KeyAddTest(unittest.TestCase):
+
     @mock.patch.object(key.command_executor, 'execute')
     def test_key_add(self, mock_execute):
         restic.key.add(new_password_file='/path/to/new-password-file')
@@ -39,6 +42,9 @@ class KeyTest(unittest.TestCase):
             '/path/to/new-password-file'
         ])
 
+
+class KeyPasswdTest(unittest.TestCase):
+
     @mock.patch.object(key.command_executor, 'execute')
     def test_key_passwd(self, mock_execute):
         restic.key.passwd(new_password_file='/path/to/new-password-file')
@@ -47,6 +53,9 @@ class KeyTest(unittest.TestCase):
             'restic', '--json', 'key', 'passwd', '--new-password-file',
             '/path/to/new-password-file'
         ])
+
+
+class KeyRemoveTest(unittest.TestCase):
 
     @mock.patch.object(key.command_executor, 'execute')
     def test_key_remove(self, mock_execute):
