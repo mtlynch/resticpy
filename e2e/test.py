@@ -125,8 +125,12 @@ with tempfile.NamedTemporaryFile(mode='wt', encoding='utf-8') as PASSWORD3_FILE:
     PASSWORD3 = 'mysecretpass3'
     PASSWORD3_FILE.write(PASSWORD3)
     PASSWORD3_FILE.flush()
-    logger.info('changing repo key: %s',
+    logger.info('changing repo default key: %s',
                 restic.key.passwd(new_password_file=PASSWORD3_FILE.name))
+
+    # Update the original password file with the new password.
+    PASSWORD_FILE.write(PASSWORD3)
+    PASSWORD_FILE.flush()
 
 logger.info('removing second repo key: %s',
             restic.key.remove(repo_keys[1]['id']))
