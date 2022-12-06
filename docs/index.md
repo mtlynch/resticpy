@@ -307,17 +307,17 @@ None
 
 ---
 
-### key.passwd
+## key.passwd
 
-## Args
+### Args
 
 - `new_password_file`: File from which to read the new password
 
-## Returns
+### Returns
 
 None
 
-## Example
+### Example
 
 ```python
 >>> restic.key.passwd(new_password_file='/tmp/new-password-file')
