@@ -109,7 +109,7 @@ snapshot 3671204c saved
 
 ### Args
 
-* `pattern`: Pattern to search for in the repository.
+- `pattern`: Pattern to search for in the repository.
 
 ### Returns
 
@@ -271,9 +271,9 @@ List of repository keys.
 
 #### Args
 
-* `host`: Hostname for new keys
-* `new_password_file`: File from which to read the new password
-* `user`: Username for new keys
+- `host`: Hostname for new keys
+- `new_password_file`: File from which to read the new password
+- `user`: Username for new keys
 
 #### Returns
 
@@ -290,7 +290,7 @@ None
 
 #### Args
 
-* `key_id`: ID of the key which should be removed
+- `key_id`: ID of the key which should be removed
 
 #### Returns
 
@@ -307,7 +307,7 @@ None
 
 ### Args
 
-* `new_password_file`: File from which to read the new password
+- `new_password_file`: File from which to read the new password
 
 ### Returns
 
