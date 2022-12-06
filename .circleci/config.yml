@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   check_style:
     docker:
-      - image: cimg/node:14.17.5
+      - image: cimg/node:18.12.1
     steps:
       - checkout
       - run:
