@@ -114,6 +114,7 @@ logger.info('adding a repo key: %s',
             restic.key.add(new_password_file=PASSWORD2_FILE.name))
 
 repo_keys = restic.key.list()
+logger.info('after changing key, repo keys: %s', repo_keys)
 REPO_KEYS_LEN_EXPECTED = 2
 REPO_KEYS_LEN_ACTUAL = len(repo_keys)
 if REPO_KEYS_LEN_EXPECTED != REPO_KEYS_LEN_ACTUAL:
@@ -127,6 +128,8 @@ with tempfile.NamedTemporaryFile(mode='wt', encoding='utf-8') as PASSWORD3_FILE:
     PASSWORD3_FILE.flush()
     logger.info('changing repo default key: %s',
                 restic.key.passwd(new_password_file=PASSWORD3_FILE.name))
+
+logger.info('after changing key, repo keys: %s', restic.key.list())
 
 restic.password_file = PASSWORD_FILE.name
 logger.info('removing second repo key: %s',
