@@ -142,6 +142,9 @@ if REPO_KEYS_LEN_EXPECTED != REPO_KEYS_LEN_ACTUAL:
     logger.fatal('Expected key count of %d (got %d)', REPO_KEYS_LEN_EXPECTED,
                  REPO_KEYS_LEN_ACTUAL)
 
+logger.info('repository config: %s', restic.cat.config())
+logger.info('repository masterkey: %s', restic.cat.masterkey())
+
 logger.info('pruning repo: %s', restic.forget(prune=True, keep_daily=5))
 
 logger.info('check result: %s', restic.check(read_data=True))

@@ -1,4 +1,5 @@
 from restic.internal import backup as internal_backup
+from restic.internal import cat as internal_cat
 from restic.internal import check as internal_check
 from restic.internal import copy as internal_copy
 from restic.internal import find as internal_find
@@ -91,4 +92,5 @@ def _make_base_command():
     return base_command
 
 
+cat = internal_cat.Cat(_make_base_command)
 key = internal_key.Key(_make_base_command)
