@@ -28,7 +28,7 @@ class CatBlobTest(unittest.TestCase):
 {"name":"bar", "type":"file", "mode":420, "mtime":"2022-12-09T08:36:42.052086879+01:00",
  "atime":"2022-12-09T08:36:42.052086879+01:00","ctime":"2022-12-09T08:36:42.052086879+01:00",
  "uid":501,"gid":0,"user":"user1","group":"wheel","inode":10367333,"device_id":16777232,
- "links":1,"content":[]}]}""".lstrip()
+ "links":1,"content":[]}]}"""
 
         result = restic.cat.blob(
             '7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730')
@@ -67,7 +67,7 @@ class CatSnapshotTest(unittest.TestCase):
         "time": "2022-12-09T08:36:50.814165+01:00",
 "tree": "f374bd541231781ab084c5a6a49df21810e2dbebfaa79eb5137172842a01a177",
 "paths": [  "/tmp/foo" ], "hostname": "server1", "username": "user1",
-"uid": 501, "gid": 20}""".lstrip()
+"uid": 501, "gid": 20}"""
 
         result = restic.cat.snapshot('latest')
 
@@ -102,7 +102,7 @@ class CatIndexTest(unittest.TestCase):
 {"id":"f374bd541231781ab084c5a6a49df21810e2dbebfaa79eb5137172842a01a177","type":"tree",
         "offset":217,"length":264,"uncompressed_length":375},
 {"id":"9138506698e27def6164ecdd55c3c58d1e7d44b61986ef903514059578e77a8b","type":"tree",
-        "offset":0,"length":217,"uncompressed_length":300}]}]}""".lstrip()
+        "offset":0,"length":217,"uncompressed_length":300}]}]}"""
 
         result = restic.cat.index(
             'bf07a7fbb825fc0aae7bf4a1177b2b31fcf8a3feeaf7092761e18c859ee52a9c')
@@ -155,7 +155,7 @@ class CatKeyTest(unittest.TestCase):
         mock_execute.return_value = """
 { "created": "2020-08-25T08:32:14.566238264+08:00",
 "username": "user1", "hostname": "server1", "kdf": "scrypt",
-"N": 32768, "r": 8, "p": 3, "salt": "SALT", "data": "DATA"}""".lstrip()
+"N": 32768, "r": 8, "p": 3, "salt": "SALT", "data": "DATA"}"""
 
         result = restic.cat.key('53ee3b37')
 
@@ -182,7 +182,7 @@ class CatMasterkeyTest(unittest.TestCase):
     def test_cat_masterkey(self, mock_execute):
         mock_execute.return_value = """{ "mac":
 { "k": "Pz4lpSpJ3/qbgNkv9g5m9g==", "r": "eSzdCoRqKgUMWSwJGPylCg==" },
-"encrypt": "BPlHYRVMNhu12MlJH5Zq91Lm1KH09UqVk0QRr2Jcblo="}""".lstrip()
+"encrypt": "BPlHYRVMNhu12MlJH5Zq91Lm1KH09UqVk0QRr2Jcblo="}"""
 
         result = restic.cat.masterkey()
 
@@ -209,7 +209,7 @@ class CatConfigTest(unittest.TestCase):
     def test_cat_config(self, mock_execute):
         mock_execute.return_value = """{ "version": 2,
 "id": "dc0268fe690023237565f1ca58c257350ea5b86ffabc3a067933c271a3c0998a",
-"chunker_polynomial": "2f7ca3c3c5dbad"}""".lstrip()
+"chunker_polynomial": "2f7ca3c3c5dbad"}"""
 
         result = restic.cat.config()
 
@@ -239,7 +239,7 @@ class CatLockTest(unittest.TestCase):
         mock_execute.return_value = """
 { "time": "2022-12-09T07:52:04.257867084Z", "exclusive": false,
 "hostname": "server1", "username": "user1", "pid": 30281,
-"uid": 501, "gid": 20}""".lstrip()
+"uid": 501, "gid": 20}"""
 
         result = restic.cat.lock(
             '5d70f436aa013f4f1d5af4a5e8149b479c813ab4ceea0bcf8b01f78eac84fd25')
