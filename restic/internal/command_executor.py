@@ -11,7 +11,6 @@ def execute(cmd, binary_mode=False):
     try:
         subprocess_args = {
             'capture_output': True,
-            'check': False,
             'text': True,
             'encoding': 'utf-8'
         }
@@ -19,7 +18,7 @@ def execute(cmd, binary_mode=False):
             subprocess_args.pop('text')
             subprocess_args.pop('encoding')
 
-        process = subprocess.run(cmd, **subprocess_args)
+        process = subprocess.run(cmd, check=False, **subprocess_args)
     except FileNotFoundError as e:
         raise restic.errors.NoResticBinaryEror(
             'Cannot find restic installed') from e
