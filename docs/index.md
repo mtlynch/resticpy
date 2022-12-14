@@ -117,7 +117,7 @@ Snapshot object
 
 ## cat.index
 
-Output a index object.
+Output an index object.
 
 ### Args
 
@@ -214,7 +214,7 @@ Lock object
 ### Example
 
 ```python
->>> restic.cat.lock('')
+>>> restic.cat.lock('bf07a7fbb825fc0aae7bf4a1177b2b31fcf8a3feeaf7092761e18c859ee52a9c')
 {'time': '2022-12-12T13:20:23.501823971Z', 'exclusive': false, 'hostname': 'server1', 'username': 'mbaur', 'pid': 35551, uid: 1000, gid: 1000}
 ```
 
