@@ -233,7 +233,8 @@ Initializes a new restic repository at the current repository location.
 ### Args
 
 - `copy-chunker-params`: Copy chunker parameters from the secondary repository
-- `repo2`: Secondary repository to copy chunker parameters from
+- `from_repo`: Secondary repository to copy chunker parameters from
+- `from_password_file`: Path to file containing password for secondary repository
 
 ### Returns
 
