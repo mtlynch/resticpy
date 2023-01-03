@@ -15,11 +15,11 @@ snapshot 670792c6 of [/tmp/tmp9k613t9a/mydata.txt] at 2021-03-29 00:56:31.183738
 snapshot 3671204c saved
 """.strip()
 
-        restic.copy(repo2='s3:https://dummyrepo.example.com/bucket',
-                    password_file2='/dummy/pass.txt')
+        restic.copy(from_repo='s3:https://dummyrepo.example.com/bucket',
+                    from_password_file='/dummy/pass.txt')
 
         mock_execute.assert_called_with([
-            'restic', '--json', 'copy', '--repo2',
-            's3:https://dummyrepo.example.com/bucket', '--password-file2',
+            'restic', '--json', 'copy', '--from-repo',
+            's3:https://dummyrepo.example.com/bucket', '--from-password-file',
             '/dummy/pass.txt'
         ])
