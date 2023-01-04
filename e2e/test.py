@@ -167,6 +167,7 @@ restic.password_file = PASSWORD_FILE.name
 
 logger.info(
     'repo copy result: %s',
-    restic.copy(repo2=secondary_repo, password_file2=PASSWORD4_FILE.name))
+    restic.copy(from_repo=secondary_repo,
+                from_password_file=PASSWORD4_FILE.name))
 
 logger.info('End-to-end test succeeded!')
