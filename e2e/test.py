@@ -160,14 +160,8 @@ restic.repository = secondary_repo
 restic.password_file = PASSWORD4_FILE.name
 
 logger.info(restic.init())
-
-# Go back to original repo
-restic.repository = primary_repo
-restic.password_file = PASSWORD_FILE.name
-
 logger.info(
     'repo copy result: %s',
-    restic.copy(from_repo=secondary_repo,
-                from_password_file=PASSWORD4_FILE.name))
+    restic.copy(from_repo=primary_repo, from_password_file=PASSWORD_FILE.name))
 
 logger.info('End-to-end test succeeded!')
