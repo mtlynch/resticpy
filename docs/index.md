@@ -87,8 +87,8 @@ no errors were found
 
 ### Args
 
-- `repo2`: Destination repository to copy to
-- `password_file2`: Path to file containing password for destination repository
+- `from_repo`: Source repository to copy from
+- `from_password_file`: Path to file containing password for source repository
 
 ### Returns
 
@@ -97,7 +97,9 @@ Log messages related to the copy.
 ### Example
 
 ```python
->>> restic.copy(repo2='/mediabackup2/', password_file2='~/pwd2.txt')
+>>> restic.repository = '/mediabackup2'
+>>> restic.password_file = '~/pwd2.txt'
+>>> restic.copy(from_repo='/mediabackup1/', from_password_file='~/pwd1.txt')
 snapshot 670792c6 of [/tmp/tmp9k613t9a/mydata.txt] at 2021-03-29 00:56:31.183738563 +0000 UTC)
   copy started, this may take a while...
 snapshot 3671204c saved
@@ -231,7 +233,8 @@ Initializes a new restic repository at the current repository location.
 ### Args
 
 - `copy-chunker-params`: Copy chunker parameters from the secondary repository
-- `repo2`: Secondary repository to copy chunker parameters from
+- `from_repo`: Secondary repository to copy chunker parameters from
+- `from_password_file`: Path to file containing password for secondary repository
 
 ### Returns
 

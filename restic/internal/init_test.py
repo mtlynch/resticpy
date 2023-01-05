@@ -24,10 +24,10 @@ class InitTest(unittest.TestCase):
 
         repository_id = restic.init(
             copy_chunker_params=True,
-            repo2='s3:https://some.backend.com/mybucket')
+            from_repo='s3:https://some.backend.com/mybucket')
 
         self.assertEqual('054ed643d8', repository_id)
         mock_execute.assert_called_with([
-            'restic', '--json', 'init', '--copy-chunker-params', '--repo2',
+            'restic', '--json', 'init', '--copy-chunker-params', '--from-repo',
             's3:https://some.backend.com/mybucket'
         ])
