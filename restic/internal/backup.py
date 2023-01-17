@@ -18,7 +18,7 @@ def run(restic_base_command,
         tags=None,
         dry_run=None,
         host=None,
-        no_scan=None):
+        scan=True):
     cmd = restic_base_command + ['backup'] + paths
 
     if exclude_patterns:
@@ -39,7 +39,7 @@ def run(restic_base_command,
     if host:
         cmd.extend(['--host', host])
 
-    if no_scan:
+    if not scan:
         cmd.extend(['--no-scan'])
 
     result_raw = command_executor.execute(cmd)

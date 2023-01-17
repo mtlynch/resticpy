@@ -80,10 +80,10 @@ class BackupTest(unittest.TestCase):
             ['restic', '--json', 'backup', '/data/music', '--host', 'myhost'])
 
     @mock.patch.object(backup.command_executor, 'execute')
-    def test_no_scan(self, mock_execute):
+    def test_scan(self, mock_execute):
         mock_execute.return_value = '{}'
 
-        restic.backup(['/data/music'], no_scan=True)
+        restic.backup(['/data/music'], scan=False)
 
         mock_execute.assert_called_with(
             ['restic', '--json', 'backup', '/data/music', '--no-scan'])

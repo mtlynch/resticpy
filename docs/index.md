@@ -21,7 +21,7 @@
 - `tags`: A list of tags for the new snapshot
 - `dry_run`: Set to `True` to perform just a dry run of the backup
 - `host`: Set the hostname for the snapshot manually
-- `no_scan`: Do not run scanner to estimate size of backup
+- `scan`: Wether to run the scanner to estimate size of backup (restic >= 0.15.0)
 
 ### Returns
 
