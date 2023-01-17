@@ -6,19 +6,14 @@ import restic.errors
 logger = logging.getLogger(__name__)
 
 
-def execute(cmd, binary_mode=False):
+def execute(cmd):
     logger.debug('Executing restic command: %s', str(cmd))
     try:
-        subprocess_args = {
-            'capture_output': True,
-            'text': True,
-            'encoding': 'utf-8'
-        }
-        if binary_mode:
-            subprocess_args.pop('text')
-            subprocess_args.pop('encoding')
-
-        process = subprocess.run(cmd, check=False, **subprocess_args)
+        process = subprocess.run(cmd,
+                                 capture_output=True,
+                                 text=True,
+                                 check=False,
+                                 encoding='utf-8')
     except FileNotFoundError as e:
         raise restic.errors.NoResticBinaryEror(
             'Cannot find restic installed') from e
@@ -29,6 +24,6 @@ def execute(cmd, binary_mode=False):
     if process.returncode != 0:
         raise restic.errors.ResticFailedError(
             f'Restic failed with exit code {process.returncode}: ' +
-            str(process.stderr))
+            process.stderr)
 
     return process.stdout
