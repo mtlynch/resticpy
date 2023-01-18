@@ -294,7 +294,7 @@ The repository ID of the new reposityory.
 
 ## key.list
 
-Lists keys associated with the given repository.
+Lists keys associated with the current repository.
 
 ### Args
 
@@ -314,6 +314,8 @@ List of repository keys.
 ---
 
 ## key.add
+
+Adds a new key to the current repository.
 
 ### Args
 
@@ -335,6 +337,8 @@ None
 ---
 
 ## key.remove
+
+Removes a new from the current repository.
 
 ### Args
 
