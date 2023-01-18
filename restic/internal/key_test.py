@@ -46,12 +46,22 @@ class KeyAddTest(unittest.TestCase):
 class KeyPasswdTest(unittest.TestCase):
 
     @mock.patch.object(key.command_executor, 'execute')
-    def test_key_passwd(self, mock_execute):
+    def test_key_passwd_with_implicit_key_id(self, mock_execute):
         restic.key.passwd(new_password_file='/path/to/new-password-file')
 
         mock_execute.assert_called_with([
             'restic', '--json', 'key', 'passwd', '--new-password-file',
             '/path/to/new-password-file'
+        ])
+
+    @mock.patch.object(key.command_executor, 'execute')
+    def test_key_passwd_with_explicit_key_id(self, mock_execute):
+        restic.key.passwd(key_id='f1fe5fc6',
+                          new_password_file='/path/to/new-password-file')
+
+        mock_execute.assert_called_with([
+            'restic', '--json', 'key', 'passwd', '--new-password-file',
+            '/path/to/new-password-file', 'f1fe5fc6'
         ])
 
 
