@@ -56,10 +56,11 @@ jobs:
       - run:
           name: Download restic
           command: |
-            wget https://github.com/restic/restic/releases/download/v0.14.0/restic_0.14.0_linux_amd64.bz2
-            bzip2 -d restic_0.14.0_linux_amd64.bz2
-            chmod +x restic_0.14.0_linux_amd64
-            sudo mv restic_0.14.0_linux_amd64 /usr/local/bin/restic
+            RESTIC_VERSION=0.15.0
+            wget "https://github.com/restic/restic/releases/download/v${RESTIC_VERSION}/restic_${RESTIC_VERSION}_linux_amd64.bz2"
+            bzip2 -d "restic_${RESTIC_VERSION}_linux_amd64.bz2"
+            chmod +x "restic_${RESTIC_VERSION}_linux_amd64"
+            sudo mv "restic_${RESTIC_VERSION}_linux_amd64" /usr/local/bin/restic
       - run:
           name: Install from setup.py and run end-to-end tests
           command: |
