@@ -21,6 +21,7 @@
 - `tags`: A list of tags for the new snapshot
 - `dry_run`: Set to `True` to perform just a dry run of the backup
 - `host`: Set the hostname for the snapshot manually
+- `scan`: Set to `False` to let restic skip the step of estimating the size of the backup (restic >= 0.15.0)
 
 ### Returns
 
@@ -293,7 +294,7 @@ The repository ID of the new reposityory.
 
 ## key.list
 
-Lists keys associated with the given repository.
+Lists keys associated with the current repository.
 
 ### Args
 
@@ -313,6 +314,8 @@ List of repository keys.
 ---
 
 ## key.add
+
+Adds a new key to the current repository.
 
 ### Args
 
@@ -334,6 +337,8 @@ None
 ---
 
 ## key.remove
+
+Removes a new from the current repository.
 
 ### Args
 
