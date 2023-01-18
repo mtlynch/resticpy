@@ -1,3 +1,4 @@
+import json
 import re
 
 from restic.internal import command_executor
@@ -22,5 +23,17 @@ def run(restic_base_command,
 
 
 def _parse_result(result):
+    try:
+        return json.loads(result)['id']
+    except json.decoder.JSONDecodeError:
+        return _parse_plaintext_result(result)
+
+
+def _parse_plaintext_result(result):
+    """Parse legacy plaintext result.
+
+    Prior to restic 0.15.0, restic returned a plaintext response even when the
+    caller specified --json.
+    """
     return re.match(r'created restic repository ([a-z0-9]+) at .+',
                     result).group(1)
