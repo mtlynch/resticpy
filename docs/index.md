@@ -53,6 +53,48 @@ A dictionary with a summary of the backup result.
 
 ---
 
+## cat.masterkey
+
+Output the masterkey.
+
+### Args
+
+None
+
+### Returns
+
+Masterkey
+
+### Example
+
+```python
+>>> restic.cat.masterkey()
+{'mac': {'k': 'qRgXl96b3FoSJjTbg58NPg==', 'r': 'WY+cB7gq4AK0dCoHiNFqAg=='}, 'encrypt': 'mepvE6JaAkUeZDcCTvj3JxO7uB27jL6Y8G7kGpHTjks='}
+```
+
+---
+
+## cat.config
+
+Output the repository config.
+
+### Args
+
+None
+
+### Returns
+
+Repository config
+
+### Example
+
+```python
+>>> restic.cat.config()
+{'version': 2, 'id': 'c08faebc561fbbf628227886135910cedb93af2a3b077e2f087b684e32f3980f', 'chunker_polynomial': '2324830f9df359'}
+```
+
+---
+
 ## check
 
 ### Args
