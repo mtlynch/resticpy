@@ -355,13 +355,16 @@ None
 
 ## key.passwd
 
+Changes a restic key
+
 ### Args
 
+- `key_id`: ID of the key to change
 - `new_password_file`: File from which to read the new password
 
 ### Returns
 
-None
+Plaintext output from restic.
 
 ### Example
 

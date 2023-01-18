@@ -33,10 +33,13 @@ class Key:
 
         return command_executor.execute(cmd)
 
-    def passwd(self, new_password_file=None):
+    def passwd(self, key_id=None, new_password_file=None):
         cmd = self.base_command() + ['key', 'passwd']
 
         if new_password_file:
             cmd.extend(['--new-password-file', new_password_file])
+
+        if key_id:
+            cmd.append(key_id)
 
         return command_executor.execute(cmd)
