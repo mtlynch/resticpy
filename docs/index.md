@@ -424,6 +424,7 @@ Retrieve a list of snapshots in the repo
 
 ### Args
 
+- `snapshot_id`: ID of the snapshot which should be listed
 - `group_by`: String for grouping snapshots by host, paths, tags
 
 ### Returns
