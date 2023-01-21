@@ -66,7 +66,7 @@ I personally use this library for my backups. I've published my backup script at
 
 ## Compatibility
 
-resticpy is tested against [restic 0.14.0](https://github.com/restic/restic/releases/tag/v0.14.0).
+resticpy is tested against [restic 0.15.0](https://github.com/restic/restic/releases/tag/v0.15.0).
 
 ## Acknowledgments
 
