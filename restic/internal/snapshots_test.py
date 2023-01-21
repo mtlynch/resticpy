@@ -25,6 +25,15 @@ class SnapshotsTest(unittest.TestCase):
             ['restic', '--json', 'snapshots', '--group-by', 'host'])
 
     @mock.patch.object(snapshots.command_executor, 'execute')
+    def test_snapshots_id(self, mock_execute):
+        mock_execute.return_value = '{}'
+
+        restic.snapshots(snapshot_id='latest')
+
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'snapshots', 'latest'])
+
+    @mock.patch.object(snapshots.command_executor, 'execute')
     def test_snapshots_parses_result_json(self, mock_execute):
         mock_execute.return_value = """
 [
