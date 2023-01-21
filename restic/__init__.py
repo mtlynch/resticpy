@@ -8,6 +8,7 @@ from restic.internal import generate as internal_generate
 from restic.internal import init as internal_init
 from restic.internal import key as internal_key
 from restic.internal import restore as internal_restore
+from restic.internal import rewrite as internal_rewrite
 from restic.internal import self_update as internal_self_update
 from restic.internal import snapshots as internal_snapshots
 from restic.internal import stats as internal_stats
@@ -55,6 +56,10 @@ def init(*args, **kwargs):
 
 def restore(*args, **kwargs):
     return internal_restore.run(_make_base_command(), *args, **kwargs)
+
+
+def rewrite(*args, **kwargs):
+    return internal_rewrite.run(_make_base_command(), *args, **kwargs)
 
 
 def self_update():

@@ -398,6 +398,29 @@ None
 
 ---
 
+## rewrite
+
+Rewrite a snapshot to remove information from the backup.
+
+### Args
+
+- `dry_run`: Set to `True` to perform just a dry run of the rewrite
+- `exclude`: A string for grouping snapshots
+- `exclude_file`: An int representing the last N snapshots to keep
+- `forget`: An int representing the last N hourly snapshots to keep
+
+### Returns
+
+None.
+
+### Example
+
+```python
+>>> restic.rewrite(exclude='/foo/do-not-backup.txt', forget=True)
+```
+
+---
+
 ## self_update
 
 Updates the restic binary in place.
