@@ -133,8 +133,8 @@ restic.password_file = PASSWORD_FILE.name
 repo_keys = restic.key.list()
 logger.info('after changing key, repo keys: %s', repo_keys)
 
-logger.info('removing second repo key: %s',
-            restic.key.remove(repo_keys[1]['id']))
+unused_key = [key for key in restic.key.list() if not key['current']][0]
+logger.info('removing unused repo key: %s', restic.key.remove(unused_key['id']))
 repo_keys = restic.key.list()
 REPO_KEYS_LEN_EXPECTED = 1
 REPO_KEYS_LEN_ACTUAL = len(repo_keys)
