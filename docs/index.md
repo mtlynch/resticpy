@@ -400,14 +400,15 @@ None
 
 ## rewrite
 
-Rewrite a snapshot to remove information from the backup.
+Rewrite a snapshot to remove information from the repo.
 
 ### Args
 
+- `snapshot_id`: ID of snapshot to rewrite
 - `dry_run`: Set to `True` to perform just a dry run of the rewrite
-- `exclude`: A string for grouping snapshots
-- `exclude_file`: An int representing the last N snapshots to keep
-- `forget`: An int representing the last N hourly snapshots to keep
+- `exclude`: A list of file patterns to remove from the snapshot(s)
+- `exclude_file`: A file containing file patterns to remove from the snapshot(s)
+- `forget`: Delete the previous snapshot after rewrite
 
 ### Returns
 
@@ -416,7 +417,7 @@ None.
 ### Example
 
 ```python
->>> restic.rewrite(exclude='/foo/do-not-backup.txt', forget=True)
+>>> restic.rewrite(exclude=['.ignore'], forget=True)
 ```
 
 ---

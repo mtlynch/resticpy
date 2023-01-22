@@ -147,7 +147,7 @@ def test_rewrite_snapshot():
     logger.info('repo snapshots (before rewrite): %s', json.dumps(snapshots))
     original_snapshot_id = snapshots[0]['id']
 
-    restic.rewrite(exclude=dummy_path2, forget=True)
+    restic.rewrite(exclude=[dummy_path2], forget=True)
 
     snapshots = restic.snapshots()
     logger.info('repo snapshots (after rewrite): %s', json.dumps(snapshots))

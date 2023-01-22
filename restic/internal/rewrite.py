@@ -10,7 +10,8 @@ def run(restic_base_command,
     cmd = restic_base_command + ['rewrite']
 
     if exclude:
-        cmd.extend(['--exclude', exclude])
+        for exclude_path in exclude:
+            cmd.extend(['--exclude', exclude_path])
 
     if exclude_file:
         cmd.extend(['--exclude-file', exclude_file])
