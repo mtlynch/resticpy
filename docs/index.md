@@ -398,6 +398,30 @@ None
 
 ---
 
+## rewrite
+
+Rewrite a snapshot to remove information from the repo.
+
+### Args
+
+- `snapshot_id`: ID of snapshot to rewrite
+- `dry_run`: Set to `True` to perform just a dry run of the rewrite
+- `exclude`: A list of file patterns to remove from the snapshot(s)
+- `exclude_file`: A file containing file patterns to remove from the snapshot(s)
+- `forget`: Delete the previous snapshot after rewrite
+
+### Returns
+
+None.
+
+### Example
+
+```python
+>>> restic.rewrite(exclude=['.ignore'], forget=True)
+```
+
+---
+
 ## self_update
 
 Updates the restic binary in place.
