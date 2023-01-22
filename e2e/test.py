@@ -143,13 +143,39 @@ def test_rewrite_snapshot():
                      backup_result['files_changed'])
         return False
 
-    snapshots = restic.snapshots(group_by='host')
+    snapshots = restic.snapshots()
     logger.info('repo snapshots (before rewrite): %s', json.dumps(snapshots))
+    original_snapshot_id = snapshots[0]['id']
 
     restic.rewrite(exclude=dummy_path2, forget=True)
 
-    snapshots = restic.snapshots(group_by='host')
+    snapshots = restic.snapshots()
     logger.info('repo snapshots (after rewrite): %s', json.dumps(snapshots))
+    if snapshots[0]['id'] == original_snapshot_id:
+        logger.error('expected snapshot ID %s to change after rewrite',
+                     original_snapshot_id)
+        return False
+    if snapshots[0]['original'] != original_snapshot_id:
+        logger.error(
+            'expected snapshot to refer to original snapshot ID (%s), got %s',
+            original_snapshot_id, snapshots[0]['original'])
+        return False
+
+    logger.info('Verifying preserved file still exists in repo')
+    find1_result = restic.find('data1.txt')
+    if len(find1_result) != 1 or 'matches' not in find1_result[0] or len(
+            find1_result[0]['matches']) != 1:
+        logger.error('Expected to find exactly 1 match, instead got result %s',
+                     find1_result)
+        return False
+
+    logger.info('Verifying excluded file no longer exists in repo')
+    find2_result = restic.find('data2.txt')
+    if len(find2_result) > 0:
+        logger.error(
+            ('Expected to not find file deleted in rewrite, instead got result '
+             '%s'), find2_result)
+        return False
 
     return True
 
