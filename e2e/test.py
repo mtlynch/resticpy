@@ -29,142 +29,320 @@ def configure_logging():
     root_logger.setLevel(logging.DEBUG)
 
 
-configure_logging()
+def print_version():
+    version_info = restic.version()
+    logger.info('Running end-to-end tests with restic version %s (%s/%s/go%s)',
+                version_info['restic_version'], version_info['architecture'],
+                version_info['platform_version'], version_info['go_version'])
 
-version_info = restic.version()
-logger.info('Running end-to-end tests with restic version %s (%s/%s/go%s)',
-            version_info['restic_version'], version_info['architecture'],
-            version_info['platform_version'], version_info['go_version'])
 
-PASSWORD = 'mysecretpass'
-PASSWORD_FILE = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
-PASSWORD_FILE.write(PASSWORD)
-PASSWORD_FILE.flush()
+def test_basic_backup_and_restore():
+    password = 'mysecretpass'
+    password_file = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
+    password_file.write(password)
+    password_file.flush()
 
-DUMMY_SOURCE_DIR = tempfile.mkdtemp()
-DUMMY_DATA_PATH = os.path.join(DUMMY_SOURCE_DIR, 'mydata.txt')
-with open(DUMMY_DATA_PATH, 'w', encoding='utf-8') as dummy_data_file:
-    dummy_data_file.write('some data to back up')
+    dummy_source_dir = tempfile.mkdtemp()
+    dummy_data_path = os.path.join(dummy_source_dir, 'mydata.txt')
+    with open(dummy_data_path, 'w', encoding='utf-8') as dummy_data_file:
+        dummy_data_file.write('some data to back up')
 
-primary_repo = tempfile.mkdtemp()
+    primary_repo = tempfile.mkdtemp()
 
-restic.binary_path = 'restic'
-restic.repository = primary_repo
-restic.password_file = PASSWORD_FILE.name
+    restic.repository = primary_repo
+    restic.password_file = password_file.name
 
-logger.info('Initializing repository')
-logger.info(restic.init())
+    logger.info('Initializing repository')
+    logger.info(restic.init())
 
-logger.info('Backing up %s', DUMMY_DATA_PATH)
-backup_result = restic.backup(paths=[DUMMY_DATA_PATH])
-logger.info('backup_result: %s', json.dumps(backup_result))
-if backup_result['files_new'] != 1:
-    logger.fatal('Expected 1 new file (got %d)', backup_result['files_new'])
-if backup_result['files_changed'] != 0:
-    logger.fatal('Expected 0 changed files (got %d)',
-                 backup_result['files_changed'])
+    logger.info('Backing up %s', dummy_data_path)
+    backup_result = restic.backup(paths=[dummy_data_path])
+    logger.info('backup_result: %s', json.dumps(backup_result))
+    if backup_result['files_new'] != 1:
+        logger.error('Expected 1 new file (got %d)', backup_result['files_new'])
+        return False
+    if backup_result['files_changed'] != 0:
+        logger.error('Expected 0 changed files (got %d)',
+                     backup_result['files_changed'])
+        return False
 
-logger.info('Finding files')
-find1_result = restic.find('mydata.txt')
-if len(find1_result) != 1 or 'matches' not in find1_result[0] or len(
-        find1_result[0]['matches']) != 1:
-    logger.fatal('Expected to find exactly 1 match, instead got result %s',
-                 find1_result)
-find2_result = restic.find('non-existent-file.txt')
-if len(find2_result) > 0:
-    logger.fatal('Expected to not find any matches, instead got result %s',
-                 find2_result)
+    logger.info('Finding files')
+    find1_result = restic.find('mydata.txt')
+    if len(find1_result) != 1 or 'matches' not in find1_result[0] or len(
+            find1_result[0]['matches']) != 1:
+        logger.error('Expected to find exactly 1 match, instead got result %s',
+                     find1_result)
+        return False
+    find2_result = restic.find('non-existent-file.txt')
+    if len(find2_result) > 0:
+        logger.error('Expected to not find any matches, instead got result %s',
+                     find2_result)
+        return False
 
-RESTORE_DIR = tempfile.mkdtemp()
-logger.info('Restoring to %s', RESTORE_DIR)
-logger.info(restic.restore(snapshot_id='latest', target_dir=RESTORE_DIR))
+    restore_dir = tempfile.mkdtemp()
+    logger.info('Restoring to %s', restore_dir)
+    logger.info(restic.restore(snapshot_id='latest', target_dir=restore_dir))
 
-RESTORED_DATA_PATH = os.path.join(RESTORE_DIR, DUMMY_DATA_PATH)
-if not os.path.exists(RESTORED_DATA_PATH):
-    logger.fatal('Expected to find %s', RESTORED_DATA_PATH)
-RESTORED_DATA_EXPECTED = 'some data to back up'
-with open(RESTORED_DATA_PATH, encoding='utf-8') as f:
-    RESTORED_DATA_ACTUAL = f.read()
-if RESTORED_DATA_EXPECTED != RESTORED_DATA_ACTUAL:
-    logger.fatal('Expected to restored file to contain %s (got %s)',
-                 RESTORED_DATA_EXPECTED, RESTORED_DATA_ACTUAL)
+    restored_data_path = os.path.join(restore_dir, dummy_data_path)
+    if not os.path.exists(restored_data_path):
+        logger.error('Expected to find %s', restored_data_path)
+        return False
+    restored_data_expected = 'some data to back up'
+    with open(restored_data_path, encoding='utf-8') as restored_file:
+        restored_data_actual = restored_file.read()
+    if restored_data_expected != restored_data_actual:
+        logger.error('Expected to restored file to contain %s (got %s)',
+                     restored_data_expected, restored_data_actual)
+        return False
 
-snapshots = restic.snapshots(group_by='host')
-logger.info('repo snapshots: %s', json.dumps(snapshots))
+    snapshots = restic.snapshots(group_by='host')
+    logger.info('repo snapshots: %s', json.dumps(snapshots))
 
-stats = restic.stats(mode='blobs-per-file')
-logger.info('repo stats: %s', stats)
-if stats['total_size'] != len(RESTORED_DATA_EXPECTED):
-    logger.fatal('Expected to total size of %d (got %d)',
-                 len(RESTORED_DATA_EXPECTED), stats['total_size'])
+    stats = restic.stats(mode='blobs-per-file')
+    logger.info('repo stats: %s', stats)
+    if stats['total_size'] != len(restored_data_expected):
+        logger.error('Expected to total size of %d (got %d)',
+                     len(restored_data_expected), stats['total_size'])
+        return False
 
-repo_keys = restic.key.list()
-logger.info('repo keys: %s', repo_keys)
-REPO_KEYS_LEN_EXPECTED = 1
-REPO_KEYS_LEN_ACTUAL = len(repo_keys)
-if REPO_KEYS_LEN_EXPECTED != REPO_KEYS_LEN_ACTUAL:
-    logger.fatal('Expected key count of %d (got %d)', REPO_KEYS_LEN_EXPECTED,
-                 REPO_KEYS_LEN_ACTUAL)
+    logger.info('check result: %s', restic.check(read_data=True))
+    return True
 
-PASSWORD2 = 'mysecretpass2'
-PASSWORD2_FILE = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
-PASSWORD2_FILE.write(PASSWORD2)
-PASSWORD2_FILE.flush()
-logger.info('adding a repo key: %s',
-            restic.key.add(new_password_file=PASSWORD2_FILE.name))
 
-repo_keys = restic.key.list()
-logger.info('after changing key, repo keys: %s', repo_keys)
-REPO_KEYS_LEN_EXPECTED = 2
-REPO_KEYS_LEN_ACTUAL = len(repo_keys)
-if REPO_KEYS_LEN_EXPECTED != REPO_KEYS_LEN_ACTUAL:
-    logger.fatal('Expected key count of %d (got %d)', REPO_KEYS_LEN_EXPECTED,
-                 REPO_KEYS_LEN_ACTUAL)
+def test_change_keys():
+    password = 'mysecretpass'
+    password_file = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
+    password_file.write(password)
+    password_file.flush()
 
-restic.password_file = PASSWORD2_FILE.name
-with tempfile.NamedTemporaryFile(mode='wt', encoding='utf-8') as PASSWORD3_FILE:
-    PASSWORD3 = 'mysecretpass3'
-    PASSWORD3_FILE.write(PASSWORD3)
-    PASSWORD3_FILE.flush()
-    logger.info('changing repo default key: %s',
-                restic.key.passwd(new_password_file=PASSWORD3_FILE.name))
+    dummy_source_dir = tempfile.mkdtemp()
+    dummy_data_path = os.path.join(dummy_source_dir, 'mydata.txt')
+    with open(dummy_data_path, 'w', encoding='utf-8') as dummy_data_file:
+        dummy_data_file.write('some data to back up')
 
-restic.password_file = PASSWORD_FILE.name
-repo_keys = restic.key.list()
-logger.info('after changing key, repo keys: %s', repo_keys)
+    primary_repo = tempfile.mkdtemp()
 
-unused_key = [key for key in restic.key.list() if not key['current']][0]
-logger.info('removing unused repo key: %s', restic.key.remove(unused_key['id']))
-repo_keys = restic.key.list()
-REPO_KEYS_LEN_EXPECTED = 1
-REPO_KEYS_LEN_ACTUAL = len(repo_keys)
-if REPO_KEYS_LEN_EXPECTED != REPO_KEYS_LEN_ACTUAL:
-    logger.fatal('Expected key count of %d (got %d)', REPO_KEYS_LEN_EXPECTED,
-                 REPO_KEYS_LEN_ACTUAL)
+    restic.repository = primary_repo
+    restic.password_file = password_file.name
 
-logger.info('repository config: %s', restic.cat.config())
-logger.info('repository masterkey: %s', restic.cat.masterkey())
+    logger.info('Initializing repository')
+    logger.info(restic.init())
 
-logger.info('pruning repo: %s', restic.forget(prune=True, keep_daily=5))
+    logger.info('Backing up %s', dummy_data_path)
+    backup_result = restic.backup(paths=[dummy_data_path])
+    logger.info('backup_result: %s', json.dumps(backup_result))
+    if backup_result['files_new'] != 1:
+        logger.error('Expected 1 new file (got %d)', backup_result['files_new'])
+        return False
+    if backup_result['files_changed'] != 0:
+        logger.error('Expected 0 changed files (got %d)',
+                     backup_result['files_changed'])
+        return False
 
-logger.info('check result: %s', restic.check(read_data=True))
+    repo_keys = restic.key.list()
+    logger.info('repo keys: %s', repo_keys)
+    repo_keys_len_expected = 1
+    repo_keys_len_actual = len(repo_keys)
+    if repo_keys_len_expected != repo_keys_len_actual:
+        logger.error('Expected key count of %d (got %d)',
+                     repo_keys_len_expected, repo_keys_len_actual)
+        return False
 
-# Initialiize a secondary repo
-logger.info('making secondary repository')
+    password2 = 'mysecretpass2'
+    password2_file = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
+    password2_file.write(password2)
+    password2_file.flush()
+    logger.info('adding a repo key: %s',
+                restic.key.add(new_password_file=password2_file.name))
 
-PASSWORD4 = 'mysecretpass4'
-PASSWORD4_FILE = tempfile.NamedTemporaryFile(mode='wt', encoding='utf-8')
-PASSWORD4_FILE.write(PASSWORD4)
-PASSWORD4_FILE.flush()
+    repo_keys = restic.key.list()
+    logger.info('after changing key, repo keys: %s', repo_keys)
+    repo_keys_len_expected = 2
+    repo_keys_len_actual = len(repo_keys)
+    if repo_keys_len_expected != repo_keys_len_actual:
+        logger.error('Expected key count of %d (got %d)',
+                     repo_keys_len_expected, repo_keys_len_actual)
+        return False
 
-secondary_repo = tempfile.mkdtemp()
+    restic.password_file = password2_file.name
+    with tempfile.NamedTemporaryFile(mode='wt',
+                                     encoding='utf-8') as password3_file:
+        password3 = 'mysecretpass3'
+        password3_file.write(password3)
+        password3_file.flush()
+        logger.info('changing repo default key: %s',
+                    restic.key.passwd(new_password_file=password3_file.name))
 
-restic.repository = secondary_repo
-restic.password_file = PASSWORD4_FILE.name
+    restic.password_file = password_file.name
+    repo_keys = restic.key.list()
+    logger.info('after changing key, repo keys: %s', repo_keys)
 
-logger.info(restic.init())
-logger.info(
-    'repo copy result: %s',
-    restic.copy(from_repo=primary_repo, from_password_file=PASSWORD_FILE.name))
+    unused_key = [key for key in restic.key.list() if not key['current']][0]
+    logger.info('removing unused repo key: %s',
+                restic.key.remove(unused_key['id']))
+    repo_keys = restic.key.list()
+    repo_keys_len_expected = 1
+    repo_keys_len_actual = len(repo_keys)
+    if repo_keys_len_expected != repo_keys_len_actual:
+        logger.error('Expected key count of %d (got %d)',
+                     repo_keys_len_expected, repo_keys_len_actual)
+        return False
 
-logger.info('End-to-end test succeeded!')
+    return True
+
+
+def test_print_config():
+    password = 'mysecretpass'
+    password_file = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
+    password_file.write(password)
+    password_file.flush()
+
+    dummy_source_dir = tempfile.mkdtemp()
+    dummy_data_path = os.path.join(dummy_source_dir, 'mydata.txt')
+    with open(dummy_data_path, 'w', encoding='utf-8') as dummy_data_file:
+        dummy_data_file.write('some data to back up')
+
+    primary_repo = tempfile.mkdtemp()
+
+    restic.repository = primary_repo
+    restic.password_file = password_file.name
+
+    logger.info('Initializing repository')
+    logger.info(restic.init())
+
+    logger.info('Backing up %s', dummy_data_path)
+    backup_result = restic.backup(paths=[dummy_data_path])
+    logger.info('backup_result: %s', json.dumps(backup_result))
+    if backup_result['files_new'] != 1:
+        logger.error('Expected 1 new file (got %d)', backup_result['files_new'])
+        return False
+    if backup_result['files_changed'] != 0:
+        logger.error('Expected 0 changed files (got %d)',
+                     backup_result['files_changed'])
+        return False
+
+    logger.info('repository config: %s', restic.cat.config())
+    logger.info('repository masterkey: %s', restic.cat.masterkey())
+
+    return True
+
+
+def test_prune():
+    password = 'mysecretpass'
+    password_file = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
+    password_file.write(password)
+    password_file.flush()
+
+    dummy_source_dir = tempfile.mkdtemp()
+    dummy_data_path = os.path.join(dummy_source_dir, 'mydata.txt')
+    with open(dummy_data_path, 'w', encoding='utf-8') as dummy_data_file:
+        dummy_data_file.write('some data to back up')
+
+    primary_repo = tempfile.mkdtemp()
+
+    restic.repository = primary_repo
+    restic.password_file = password_file.name
+
+    logger.info('Initializing repository')
+    logger.info(restic.init())
+
+    logger.info('Backing up %s', dummy_data_path)
+    backup_result = restic.backup(paths=[dummy_data_path])
+    logger.info('backup_result: %s', json.dumps(backup_result))
+    if backup_result['files_new'] != 1:
+        logger.error('Expected 1 new file (got %d)', backup_result['files_new'])
+        return False
+    if backup_result['files_changed'] != 0:
+        logger.error('Expected 0 changed files (got %d)',
+                     backup_result['files_changed'])
+        return False
+
+    logger.info('pruning repo: %s', restic.forget(prune=True, keep_daily=5))
+
+    return True
+
+
+def test_copy_repo():
+    password = 'mysecretpass'
+    password_file = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
+    password_file.write(password)
+    password_file.flush()
+
+    dummy_source_dir = tempfile.mkdtemp()
+    dummy_data_path = os.path.join(dummy_source_dir, 'mydata.txt')
+    with open(dummy_data_path, 'w', encoding='utf-8') as dummy_data_file:
+        dummy_data_file.write('some data to back up')
+
+    primary_repo = tempfile.mkdtemp()
+
+    restic.repository = primary_repo
+    restic.password_file = password_file.name
+
+    logger.info('Initializing repository')
+    logger.info(restic.init())
+
+    logger.info('Backing up %s', dummy_data_path)
+    backup_result = restic.backup(paths=[dummy_data_path])
+    logger.info('backup_result: %s', json.dumps(backup_result))
+    if backup_result['files_new'] != 1:
+        logger.error('Expected 1 new file (got %d)', backup_result['files_new'])
+        return False
+    if backup_result['files_changed'] != 0:
+        logger.error('Expected 0 changed files (got %d)',
+                     backup_result['files_changed'])
+        return False
+
+    # Initialiize a secondary repo
+    logger.info('making secondary repository')
+
+    password4 = 'mysecretpass4'
+    password4_file = tempfile.NamedTemporaryFile(mode='wt', encoding='utf-8')
+    password4_file.write(password4)
+    password4_file.flush()
+
+    secondary_repo = tempfile.mkdtemp()
+
+    restic.repository = secondary_repo
+    restic.password_file = password4_file.name
+
+    logger.info(restic.init())
+    logger.info(
+        'repo copy result: %s',
+        restic.copy(from_repo=primary_repo,
+                    from_password_file=password_file.name))
+
+    return True
+
+
+def main():
+    configure_logging()
+
+    restic.binary_path = 'restic'
+    print_version()
+
+    tests = [
+        test_basic_backup_and_restore,
+        test_change_keys,
+        test_print_config,
+        test_prune,
+        test_copy_repo,
+    ]
+    successes = 0
+    for testcase in tests:
+        logger.info('*' * 80)
+        logger.info('Starting end-to-end test: %s', testcase.__name__)
+        logger.info('*' * 80)
+        try:
+            if testcase():
+                successes += 1
+        # pylint: disable=broad-except
+        except Exception as e:
+            logger.error('%s failed: %s', testcase.__name__, e)
+    failures = len(tests) - successes
+    logger.info('%d/%d end-to-end tests succeeded', successes, len(tests))
+    if failures:
+        logger.fatal('%d end-to-end tests failed', failures)
+
+
+if __name__ == '__main__':
+    main()
