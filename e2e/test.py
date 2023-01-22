@@ -109,6 +109,51 @@ def test_basic_backup_and_restore():
     return True
 
 
+def test_rewrite_snapshot():
+    password = 'mysecretpass'
+    password_file = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
+    password_file.write(password)
+    password_file.flush()
+
+    dummy_source_dir = tempfile.mkdtemp()
+    dummy_path1 = os.path.join(dummy_source_dir, 'data1.txt')
+    with open(dummy_path1, 'w', encoding='utf-8') as dummy_data_file:
+        dummy_data_file.write('some data to back up')
+    dummy_path2 = os.path.join(dummy_source_dir, 'data2.txt')
+    with open(dummy_path2, 'w', encoding='utf-8') as dummy_data_file:
+        dummy_data_file.write('another file I have')
+
+    primary_repo = tempfile.mkdtemp()
+
+    restic.repository = primary_repo
+    restic.password_file = password_file.name
+
+    logger.info('Initializing repository')
+    logger.info(restic.init())
+
+    paths = [dummy_path1, dummy_path2]
+    logger.info('Backing up %s', paths)
+    backup_result = restic.backup(paths=paths)
+    logger.info('backup_result: %s', json.dumps(backup_result))
+    if backup_result['files_new'] != 2:
+        logger.error('Expected 2 new file (got %d)', backup_result['files_new'])
+        return False
+    if backup_result['files_changed'] != 0:
+        logger.error('Expected 0 changed files (got %d)',
+                     backup_result['files_changed'])
+        return False
+
+    snapshots = restic.snapshots(group_by='host')
+    logger.info('repo snapshots (before rewrite): %s', json.dumps(snapshots))
+
+    restic.rewrite(exclude=dummy_path2, forget=True)
+
+    snapshots = restic.snapshots(group_by='host')
+    logger.info('repo snapshots (after rewrite): %s', json.dumps(snapshots))
+
+    return True
+
+
 def test_change_keys():
     password = 'mysecretpass'
     password_file = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
