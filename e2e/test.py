@@ -367,6 +367,7 @@ def main():
 
     tests = [
         test_basic_backup_and_restore,
+        test_rewrite_snapshot,
         test_change_keys,
         test_print_config,
         test_prune,
