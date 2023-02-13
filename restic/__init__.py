@@ -24,6 +24,7 @@ binary_path = 'restic'
 # pylint: disable=C0103
 repository = None
 password_file = None
+cache = True
 
 
 def backup(*args, **kwargs):
@@ -93,6 +94,9 @@ def _make_base_command():
 
     if password_file:
         base_command.extend(['--password-file', password_file])
+
+    if not cache:
+        base_command.extend(['--no-cache'])
 
     return base_command
 
