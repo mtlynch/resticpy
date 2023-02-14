@@ -11,13 +11,13 @@ class ResticTest(unittest.TestCase):
         self.original_binary = restic.binary_path
         self.original_repository = restic.repository
         self.original_password_file = restic.password_file
-        self.cache = restic.cache
+        self.use_cache = restic.use_cache
 
     def tearDown(self):
         restic.binary_path = self.original_binary
         restic.repository = self.original_repository
         restic.password_file = self.original_password_file
-        restic.cache = self.cache
+        restic.use_cache = self.use_cache
 
     @mock.patch.object(generate.command_executor, 'execute')
     def test_can_change_restic_binary_path(self, mock_execute):
@@ -54,7 +54,7 @@ class ResticTest(unittest.TestCase):
             'created restic repository 054ed643d8 at /media/backup1')
 
         restic.repository = '/dummy/repo/path'
-        restic.cache = False
+        restic.use_cache = False
         restic.init()
 
         mock_execute.assert_called_with([
