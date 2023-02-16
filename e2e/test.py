@@ -262,7 +262,7 @@ def test_change_keys():
     return True
 
 
-def test_print_config():
+def test_print_config_and_objects():
     password = 'mysecretpass'
     password_file = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
     password_file.write(password)
@@ -294,6 +294,13 @@ def test_print_config():
 
     logger.info('repository config: %s', restic.cat.config())
     logger.info('repository masterkey: %s', restic.cat.masterkey())
+
+    logger.info('repository blobs: %s', restic.list.blobs())
+    logger.info('repository packs: %s', restic.list.packs())
+    logger.info('repository index: %s', restic.list.index())
+    logger.info('repository snapshots: %s', restic.list.snapshots())
+    logger.info('repository keys: %s', restic.list.keys())
+    logger.info('repository locks: %s', restic.list.locks())
 
     return True
 
@@ -395,7 +402,7 @@ def main():
         test_basic_backup_and_restore,
         test_rewrite_snapshot,
         test_change_keys,
-        test_print_config,
+        test_print_config_and_objects,
         test_prune,
         test_copy_repo,
     ]

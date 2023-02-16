@@ -7,6 +7,7 @@ from restic.internal import forget as internal_forget
 from restic.internal import generate as internal_generate
 from restic.internal import init as internal_init
 from restic.internal import key as internal_key
+from restic.internal import list as internal_list
 from restic.internal import restore as internal_restore
 from restic.internal import rewrite as internal_rewrite
 from restic.internal import self_update as internal_self_update
@@ -99,3 +100,4 @@ def _make_base_command():
 
 cat = internal_cat.Cat(_make_base_command)
 key = internal_key.Key(_make_base_command)
+list = internal_list.List(_make_base_command)  # pylint: disable=W0622

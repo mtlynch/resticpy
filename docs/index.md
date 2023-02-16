@@ -376,6 +376,120 @@ None
 
 ---
 
+## list.blobs
+
+### Args
+
+None
+
+### Returns
+
+Repository blob IDs
+
+### Example
+
+```python
+>>> restic.list.blobs()
+[{'type': 'tree', 'id': '13dac650c32c82a0398240a492c8e7cc302fb98fe362c69de9e54e2ee7bd735f'}, {'type': 'data', 'id': '35a2e68071d6fdff634efbffc1187dbdc2bb73b10af68e5fc2c21730ece81a03'}, ...
+```
+
+---
+
+## list.packs
+
+### Args
+
+None
+
+### Returns
+
+Repository packs
+
+### Example
+
+```python
+>>> restic.list.packs()
+['be8d4219ca1218f065d78e23097e45fff9b4a7f4a253c92a8d5f850219ef9a88', '9991d2bb849b6ddcdab062d73a2614013fe9881935d7779a93a15897fc62e671', 'd23260202084e0cffe32ded97d9e8d87b89c6a776ac1633b912d0e431cc6dadd']
+```
+
+---
+
+## list.index
+
+### Args
+
+None
+
+### Returns
+
+Repository index
+
+### Example
+
+```python
+>>> restic.list.index()
+['a1bc5dbe3d5c7fc4fe918ada092718fe29d803b5a79f1e5a7ff2d9a3ab819834', '22a65b9089ecaf1954e76764bd6a34841760d5ceb422e1ea245f1b0cd413d7dc']
+```
+
+---
+
+## list.snapshots
+
+### Args
+
+None
+
+### Returns
+
+Repository snapshots
+
+### Example
+
+```python
+>>> restic.list.snapshots()
+['ed98216353c95c3c5b9d51c25b6e9387b3078eec7dcc277609928c414df9d39e', 'ff021bd28394240f48961ef5f60eacd2fb4285d9b326cc9d5a7652f7b0c14e91']
+```
+
+---
+
+## list.keys
+
+### Args
+
+None
+
+### Returns
+
+Repository keys
+
+### Example
+
+```python
+>>> restic.list.keys()
+['cc88d77c168f823ec143ee24a1350e71a4f5af64ac9042bcbadb3c9ab4f78776']
+```
+
+---
+
+## list.locks
+
+### Args
+
+None
+
+### Returns
+
+Repository locks
+
+### Example
+
+```python
+>>> restic.list.locks()
+['f2f5930f75a274531d9ff2d9548381ece1a4c42625bc04e1de61e78fbe24b09e', 'db7fb954be6c0d97f0d2a34d173678c35dbdabb1c61a9c28fdfc41e56627d17a']
+```
+
+---
+
 ## restore
 
 Restores a snapshot from the repository to the specified path.
