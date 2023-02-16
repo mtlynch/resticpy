@@ -100,6 +100,7 @@ Repository config
 ### Args
 
 - `read_data`: Boolean indicating whether to read all data blobs in the repo
+- `read_data_subset`: Read a subset of data packs, specified as 'n/t' for specific part, or either 'x%' or 'x.y%' or a size in bytes with suffixes k/K, m/M, g/G, t/T for a random subset
 
 ### Returns
 
