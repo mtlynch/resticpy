@@ -378,6 +378,8 @@ None
 
 ## list.blobs
 
+List all blobs in the restic repository.
+
 ### Args
 
 None
@@ -396,6 +398,8 @@ Repository blob IDs
 ---
 
 ## list.packs
+
+List all packs in the restic repository.
 
 ### Args
 
@@ -416,6 +420,8 @@ Repository packs
 
 ## list.index
 
+List all index in the restic repository.
+
 ### Args
 
 None
@@ -434,6 +440,8 @@ Repository index
 ---
 
 ## list.snapshots
+
+List all snapshots in the restic repository.
 
 ### Args
 
@@ -454,6 +462,8 @@ Repository snapshots
 
 ## list.keys
 
+List all keys in the restic repository.
+
 ### Args
 
 None
@@ -472,6 +482,8 @@ Repository keys
 ---
 
 ## list.locks
+
+List all locks in the restic repository.
 
 ### Args
 
