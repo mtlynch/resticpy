@@ -376,111 +376,6 @@ None
 
 ---
 
-## list.blobs
-
-List all blobs in the restic repository.
-
-### Args
-
-None
-
-### Returns
-
-Repository blob IDs
-
-### Example
-
-```python
->>> restic.list.blobs()
-[{'type': 'tree', 'id': '13dac650c32c82a0398240a492c8e7cc302fb98fe362c69de9e54e2ee7bd735f'}, {'type': 'data', 'id': '35a2e68071d6fdff634efbffc1187dbdc2bb73b10af68e5fc2c21730ece81a03'}, ...
-```
-
----
-
-## list.packs
-
-List all packs in the restic repository.
-
-### Args
-
-None
-
-### Returns
-
-Repository packs
-
-### Example
-
-```python
->>> restic.list.packs()
-['be8d4219ca1218f065d78e23097e45fff9b4a7f4a253c92a8d5f850219ef9a88', '9991d2bb849b6ddcdab062d73a2614013fe9881935d7779a93a15897fc62e671', 'd23260202084e0cffe32ded97d9e8d87b89c6a776ac1633b912d0e431cc6dadd']
-```
-
----
-
-## list.index
-
-List all index in the restic repository.
-
-### Args
-
-None
-
-### Returns
-
-Repository index
-
-### Example
-
-```python
->>> restic.list.index()
-['a1bc5dbe3d5c7fc4fe918ada092718fe29d803b5a79f1e5a7ff2d9a3ab819834', '22a65b9089ecaf1954e76764bd6a34841760d5ceb422e1ea245f1b0cd413d7dc']
-```
-
----
-
-## list.snapshots
-
-List all snapshots in the restic repository.
-
-### Args
-
-None
-
-### Returns
-
-Repository snapshots
-
-### Example
-
-```python
->>> restic.list.snapshots()
-['ed98216353c95c3c5b9d51c25b6e9387b3078eec7dcc277609928c414df9d39e', 'ff021bd28394240f48961ef5f60eacd2fb4285d9b326cc9d5a7652f7b0c14e91']
-```
-
----
-
-## list.keys
-
-List all keys in the restic repository.
-
-### Args
-
-None
-
-### Returns
-
-Repository keys
-
-### Example
-
-```python
->>> restic.list.keys()
-['cc88d77c168f823ec143ee24a1350e71a4f5af64ac9042bcbadb3c9ab4f78776']
-```
-
----
-
 ## list.locks
 
 List all locks in the restic repository.
@@ -491,7 +386,7 @@ None
 
 ### Returns
 
-Repository locks
+A list of string identifiers for repository locks
 
 ### Example
 
