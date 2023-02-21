@@ -8,6 +8,7 @@
 | `restic.binary_path`   | `'restic'`    | Specifies the location of your restic binary if it's not in the user's default path. (e.g., `/path/to/restic.exe`) |
 | `restic.repository`    | `None`        | Specifies the path or URL of your restic backup repository.                                                        |
 | `restic.password_file` | `None`        | Specifies the path to the file containing your restic repository password.                                         |
+| `restic.use_cache`     | `True`        | Specifies if a local cache should be used.                                                                         |
 
 ---
 
@@ -100,6 +101,7 @@ Repository config
 ### Args
 
 - `read_data`: Boolean indicating whether to read all data blobs in the repo
+- `read_data_subset`: Read a subset of data packs, specified as 'n/t' for specific part, or either 'x%' or 'x.y%' or a size in bytes with suffixes k/K, m/M, g/G, t/T for a random subset
 
 ### Returns
 
