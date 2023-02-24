@@ -378,6 +378,27 @@ None
 
 ---
 
+## list.locks
+
+List all locks in the restic repository.
+
+### Args
+
+None
+
+### Returns
+
+A list of string identifiers for repository locks
+
+### Example
+
+```python
+>>> restic.list.locks()
+['f2f5930f75a274531d9ff2d9548381ece1a4c42625bc04e1de61e78fbe24b09e', 'db7fb954be6c0d97f0d2a34d173678c35dbdabb1c61a9c28fdfc41e56627d17a']
+```
+
+---
+
 ## restore
 
 Restores a snapshot from the repository to the specified path.
