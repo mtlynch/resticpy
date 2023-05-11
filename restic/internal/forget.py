@@ -14,6 +14,7 @@ def run(restic_base_command,
         keep_monthly=None,
         keep_yearly=None,
         keep_within=None,
+        tag=None,
         prune=False):
     cmd = restic_base_command + ['forget']
 
@@ -43,6 +44,9 @@ def run(restic_base_command,
 
     if keep_within:
         cmd.extend(['--keep-within', str(keep_within)])
+
+    if tag:
+        cmd.extend(['--tag', str(tag)])
 
     if prune:
         cmd.extend(['--prune'])
