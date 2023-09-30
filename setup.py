@@ -10,7 +10,7 @@ setuptools.setup(
         os.path.join(os.path.abspath(os.path.dirname(__file__)),
                      'README.md')).read(),
     long_description_content_type="text/markdown",
-    version='1.0.2',
+    version='1.0.3',
     description='Restic backup Python wrapper',
     project_urls={
         "repository": "https://github.com/mtlynch/resticpy",
