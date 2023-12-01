@@ -68,6 +68,28 @@ I personally use this library for my backups. I've published my backup script at
 
 resticpy is tested against [restic 0.16.0](https://github.com/restic/restic/releases/tag/v0.16.0).
 
+## resticpy's scope and future
+
+resticpy is maintained by [Michael Lynch](https://mtlynch.io) as a hobby project.
+
+resticpy is **not** meant to achieve feature parity with restic. It is meant to cover a small subset of the most useful features of restic.
+
+Due to time limitations, I keep resticpy's scope limited to only the features that fit into my workflows.
+
+### Feature requests
+
+I don't fulfill feature requests for resticpy. You are welcome to file a feature request for a third-party contributor to take on.
+
+### Pull requests
+
+I accept pull requests when they are:
+
+- Documented
+- Tested
+- Small
+
+I don't accept pull requests for features that look like they'll be a large maintenance burden.
+
 ## Acknowledgments
 
 This project is forked from [jstzwj/PyRestic](https://github.com/jstzwj/PyRestic).
