@@ -7,6 +7,8 @@ from restic.internal import command_executor
 def run(restic_base_command,
         dry_run=None,
         group_by=None,
+        tags=None,
+        host=None,
         keep_last=None,
         keep_hourly=None,
         keep_daily=None,
@@ -22,6 +24,13 @@ def run(restic_base_command,
 
     if group_by:
         cmd.extend(['--group-by', group_by])
+
+    if tags:
+        for tag in tags:
+            cmd.extend(['--tag', tag])
+
+    if host:
+        cmd.extend(['--host', host])
 
     if keep_last:
         cmd.extend(['--keep-last', str(keep_last)])
