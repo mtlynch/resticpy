@@ -517,6 +517,8 @@ Retrieve stats about the current restic repository.
 ### Args
 
 - `mode`: Type of stats to retrieve. Can be one of `restore-size`, `files-by-contents`, `blobs-per-file` or `raw-data`
+- `tags`: A list of tags indicating which snapshots to consider (can be specified multiple times)
+- `host`: A string for the hostname indicating which snapshots to consider
 
 ### Returns
 
