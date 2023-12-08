@@ -45,13 +45,27 @@ class ForgetTest(unittest.TestCase):
         mock_execute.assert_called_with(
             ['restic', '--json', 'forget', '--tag', 'musician1', '--prune'])
 
+    # From restic documentation: https://restic.readthedocs.io/en/latest/060_forget.html#removing-snapshots-according-to-a-policy
+    # > This command removes all but the last snapshot of all snapshots that have either the foo or bar tag set:
+    # > 'restic forget --tag foo --tag bar --keep-last 1'
     @mock.patch.object(forget.command_executor, 'execute')
-    def test_forget_with_multiple_tags(self, mock_execute):
+    def test_forget_with_multiple_tags_with_or_relation(self, mock_execute):
         mock_execute.return_value = '{}'
         restic.forget(prune=True, tags=['musician1', 'musician2'])
         mock_execute.assert_called_with([
             'restic', '--json', 'forget', '--tag', 'musician1', '--tag',
             'musician2', '--prune'
+        ])
+
+    # From restic documentation: https://restic.readthedocs.io/en/latest/060_forget.html#removing-snapshots-according-to-a-policy
+    # > This command removes all but the last snapshot of all snapshots that have both the tag foo and bar set:
+    # > 'restic forget --tag foo,bar --keep-last 1'
+    @mock.patch.object(forget.command_executor, 'execute')
+    def test_forget_with_multiple_tags_with_and_relation(self, mock_execute):
+        mock_execute.return_value = '{}'
+        restic.forget(prune=True, tags=['musician1,musician2'])
+        mock_execute.assert_called_with([
+            'restic', '--json', 'forget', '--tag', 'musician1,musician2', '--prune'
         ])
 
     @mock.patch.object(forget.command_executor, 'execute')
