@@ -196,6 +196,8 @@ A list of dictionaries representing the files that matched the search pattern in
 
 - `dry_run`: Set to `True` to perform just a dry run of the backup
 - `group_by`: A string for grouping snapshots
+- `tags`: A list of tags indicating which snapshots to consider (can be specified multiple times)
+- `host`: A string for the hostname indicating which snapshots to consider
 - `keep_last`: An int representing the last N snapshots to keep
 - `keep_hourly`: An int representing the last N hourly snapshots to keep
 - `keep_daily`: An int representing the last N daily snapshots to keep
