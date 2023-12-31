@@ -97,6 +97,8 @@ def test_basic_backup_and_restore():
 
     snapshots = restic.snapshots()
     logger.info('repo snapshots: %s', json.dumps(snapshots))
+    snapshot_count = len(restic.snapshots())
+    logger.info('%d snapshots counted', snapshot_count)
     if len(snapshots) != 1:
         logger.error('Expected snapshots to return a single object')
         return False
@@ -121,6 +123,8 @@ def test_basic_backup_and_restore():
 
     snapshots = restic.snapshots()
     logger.info('repo snapshots: %s', json.dumps(snapshots))
+    snapshot_count = len(restic.snapshots())
+    logger.info('%d snapshots counted', snapshot_count)
     if len(snapshots) != 1:
         logger.error('Expected snapshots to return a single object')
         return False
