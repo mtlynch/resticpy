@@ -98,10 +98,10 @@ def test_basic_backup_and_restore():
     snapshots = restic.snapshots(group_by='host')
     logger.info('repo snapshots: %s', json.dumps(snapshots))
     if len(snapshots) != 1:
-        logger.error("Expected snapshots to return a single object")
+        logger.error('Expected snapshots to return a single object')
         return False
     if len(snapshots[0]['snapshots']) != 1:
-        logger.error("Expected snapshots key to contain a single object")
+        logger.error('Expected snapshots key to contain a single object')
         return False
 
     logger.info('Overwriting contents of %s with new data', dummy_data_path)
@@ -122,10 +122,10 @@ def test_basic_backup_and_restore():
     snapshots = restic.snapshots(group_by='host')
     logger.info('repo snapshots: %s', json.dumps(snapshots))
     if len(snapshots) != 1:
-        logger.error("Expected snapshots to return a single object")
+        logger.error('Expected snapshots to return a single object')
         return False
     if len(snapshots[0]['snapshots']) != 2:
-        logger.error("Expected snapshots key to contain two snapshots")
+        logger.error('Expected snapshots key to contain two snapshots')
         return False
 
     stats = restic.stats(mode='blobs-per-file')
