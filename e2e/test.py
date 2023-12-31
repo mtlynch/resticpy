@@ -95,7 +95,7 @@ def test_basic_backup_and_restore():
                      restored_data_expected, restored_data_actual)
         return False
 
-    snapshots = restic.snapshots()
+    snapshots = restic.snapshots(group_by='host')
     logger.info('repo snapshots: %s', json.dumps(snapshots))
     snapshot_count = len(restic.snapshots())
     logger.info('%d snapshots counted', snapshot_count)
@@ -121,7 +121,7 @@ def test_basic_backup_and_restore():
                      backup_result['files_changed'])
         return False
 
-    snapshots = restic.snapshots()
+    snapshots = restic.snapshots(group_by='host')
     logger.info('repo snapshots: %s', json.dumps(snapshots))
     snapshot_count = len(restic.snapshots())
     logger.info('%d snapshots counted', snapshot_count)
