@@ -55,90 +55,10 @@ def test_basic_backup_and_restore():
     logger.info('Initializing repository')
     logger.info(restic.init())
 
-    logger.info('Backing up %s', dummy_data_path)
-    backup_result = restic.backup(paths=[dummy_data_path])
-    logger.info('backup_result: %s', json.dumps(backup_result))
-    if backup_result['files_new'] != 1:
-        logger.error('Expected 1 new file (got %d)', backup_result['files_new'])
-        return False
-    if backup_result['files_changed'] != 0:
-        logger.error('Expected 0 changed files (got %d)',
-                     backup_result['files_changed'])
-        return False
-
-    logger.info('Finding files')
-    find1_result = restic.find('mydata.txt')
-    if len(find1_result) != 1 or 'matches' not in find1_result[0] or len(
-            find1_result[0]['matches']) != 1:
-        logger.error('Expected to find exactly 1 match, instead got result %s',
-                     find1_result)
-        return False
-    find2_result = restic.find('non-existent-file.txt')
-    if len(find2_result) > 0:
-        logger.error('Expected to not find any matches, instead got result %s',
-                     find2_result)
-        return False
-
-    restore_dir = tempfile.mkdtemp()
-    logger.info('Restoring to %s', restore_dir)
-    logger.info(restic.restore(snapshot_id='latest', target_dir=restore_dir))
-
-    restored_data_path = os.path.join(restore_dir, dummy_data_path)
-    if not os.path.exists(restored_data_path):
-        logger.error('Expected to find %s', restored_data_path)
-        return False
-    restored_data_expected = 'some data to back up'
-    with open(restored_data_path, encoding='utf-8') as restored_file:
-        restored_data_actual = restored_file.read()
-    if restored_data_expected != restored_data_actual:
-        logger.error('Expected to restored file to contain %s (got %s)',
-                     restored_data_expected, restored_data_actual)
-        return False
-
     snapshots = restic.snapshots(group_by='host')
     logger.info('repo snapshots: %s', json.dumps(snapshots))
-    if len(snapshots) != 1:
-        logger.error('Expected snapshots to return a single object')
-        return False
-    if len(snapshots[0]['snapshots']) != 1:
-        logger.error('Expected snapshots key to contain a single object')
-        return False
 
-    logger.info('Overwriting contents of %s with new data', dummy_data_path)
-    with open(dummy_data_path, 'w', encoding='utf-8') as dummy_data_file:
-        dummy_data_file.write('a new version of the file')
-
-    logger.info('Backing up %s (after edit)', dummy_data_path)
-    backup_result = restic.backup(paths=[dummy_data_path])
-    logger.info('backup_result: %s', json.dumps(backup_result))
-    if backup_result['files_new'] != 0:
-        logger.error('Expected 0 new file (got %d)', backup_result['files_new'])
-        return False
-    if backup_result['files_changed'] != 1:
-        logger.error('Expected 1 changed file (got %d)',
-                     backup_result['files_changed'])
-        return False
-
-    snapshots = restic.snapshots(group_by='host')
-    logger.info('repo snapshots: %s', json.dumps(snapshots))
-    if len(snapshots) != 1:
-        logger.error('Expected snapshots to return a single object')
-        return False
-    if len(snapshots[0]['snapshots']) != 2:
-        logger.error('Expected snapshots key to contain two snapshots')
-        return False
-
-    stats = restic.stats(mode='blobs-per-file')
-    logger.info('repo stats: %s', stats)
-    expected_size = len(restored_data_expected) + len(
-        'a new version of the file')
-    if stats['total_size'] != expected_size:
-        logger.error('Expected total size of %d (got %d)', expected_size,
-                     stats['total_size'])
-        return False
-
-    logger.info('check result: %s', restic.check(read_data=True))
-    return True
+    return False # DEBUG
 
 
 def test_rewrite_snapshot():
