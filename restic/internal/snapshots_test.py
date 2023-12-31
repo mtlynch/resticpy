@@ -9,26 +9,26 @@ class SnapshotsTest(unittest.TestCase):
 
     @mock.patch.object(snapshots.command_executor, 'execute')
     def test_snapshots_simple(self, mock_execute):
-        mock_execute.return_value = '{}'
+        mock_execute.return_value = '[]'
 
-        restic.snapshots()
+        self.assertEqual([], restic.snapshots())
 
         mock_execute.assert_called_with(['restic', '--json', 'snapshots'])
 
     @mock.patch.object(snapshots.command_executor, 'execute')
     def test_snapshots_group_by_host(self, mock_execute):
-        mock_execute.return_value = '{}'
+        mock_execute.return_value = '[]'
 
-        restic.snapshots(group_by='host')
+        self.assertEqual([], restic.snapshots(group_by='host'))
 
         mock_execute.assert_called_with(
             ['restic', '--json', 'snapshots', '--group-by', 'host'])
 
     @mock.patch.object(snapshots.command_executor, 'execute')
     def test_snapshots_id(self, mock_execute):
-        mock_execute.return_value = '{}'
+        mock_execute.return_value = '[]'
 
-        restic.snapshots(snapshot_id='latest')
+        self.assertEqual([], restic.snapshots(snapshot_id='latest'))
 
         mock_execute.assert_called_with(
             ['restic', '--json', 'snapshots', 'latest'])
