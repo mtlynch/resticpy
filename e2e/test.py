@@ -119,7 +119,7 @@ def test_basic_backup_and_restore():
                      backup_result['files_changed'])
         return False
 
-    snapshots = restic.snapshots(group_by='host')
+    snapshots = restic.snapshots()
     logger.info('repo snapshots: %s', json.dumps(snapshots))
     if len(snapshots) != 1:
         logger.error('Expected snapshots to return a single object')
