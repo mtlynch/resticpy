@@ -7,6 +7,9 @@ from restic.internal import snapshots
 
 class SnapshotsTest(unittest.TestCase):
 
+    def setUp(self):
+        self.maxDiff = None
+
     @mock.patch.object(snapshots.command_executor, 'execute')
     def test_snapshots_simple(self, mock_execute):
         mock_execute.return_value = '{}'
@@ -88,5 +91,103 @@ class SnapshotsTest(unittest.TestCase):
                     'bbe7f04941ed969ee940bb41dc04196027fcfb83dbdfea93c16afb2cb9f6dd81',
                 'short_id':
                     'bbe7f049'
+            }]
+        }], restic.snapshots())
+
+    @mock.patch.object(snapshots.command_executor, 'execute')
+    def test_snapshots_parses_multiple_snapshots_json(self, mock_execute):
+        mock_execute.return_value = """
+[
+    {
+        "group_key": {
+            "hostname": "3099758ccbd9",
+            "paths": null,
+            "tags": null
+        },
+        "snapshots": [
+            {
+                "time": "2023-12-31T20:39:22.449822393Z",
+                "tree": "d4aed49b16b1fcd2ebcfbc8cfd7c53bcff2397b8673b6764dd6411223775d6b2",
+                "paths": [
+                    "/tmp/tmpuvf9pfam/mydata.txt"
+                ],
+                "hostname": "3099758ccbd9",
+                "username": "circleci",
+                "uid": 1001,
+                "gid": 1002,
+                "program_version": "restic 0.16.2",
+                "id": "7540e94d8117078bb26b0e4a85dd353a41665e084d3771f04e5f72f6b0f24a6f",
+                "short_id": "7540e94d"
+            },
+            {
+                "time": "2023-12-31T20:39:25.811155387Z",
+                "parent": "7540e94d8117078bb26b0e4a85dd353a41665e084d3771f04e5f72f6b0f24a6f",
+                "tree": "a39c45c1b202985f766a177a663a5e4f37acd5bfa9bd324fb4eaf62a3c3e0dea",
+                "paths": [
+                    "/tmp/tmpuvf9pfam/mydata.txt"
+                ],
+                "hostname": "3099758ccbd9",
+                "username": "circleci",
+                "uid": 1001,
+                "gid": 1002,
+                "program_version": "restic 0.16.2",
+                "id": "57d3496886edf2cb0e808838734dc108fb1d929ae80cafdb68597e75702aecbb",
+                "short_id": "57d34968"
+            }
+        ]
+    }
+]
+""".strip()
+
+        # Ignore complaint about too long of a line.
+        # pylint: disable=C0301
+        self.assertEqual([{
+            'group_key': {
+                'hostname': '3099758ccbd9',
+                'paths': None,
+                'tags': None
+            },
+            'snapshots': [{
+                'time':
+                    '2023-12-31T20:39:22.449822393Z',
+                'tree':
+                    'd4aed49b16b1fcd2ebcfbc8cfd7c53bcff2397b8673b6764dd6411223775d6b2',
+                'paths': ['/tmp/tmpuvf9pfam/mydata.txt'],
+                'hostname':
+                    '3099758ccbd9',
+                'username':
+                    'circleci',
+                'uid':
+                    1001,
+                'gid':
+                    1002,
+                'program_version':
+                    'restic 0.16.2',
+                'id':
+                    '7540e94d8117078bb26b0e4a85dd353a41665e084d3771f04e5f72f6b0f24a6f',
+                'short_id':
+                    '7540e94d'
+            }, {
+                'time':
+                    '2023-12-31T20:39:25.811155387Z',
+                'tree':
+                    'a39c45c1b202985f766a177a663a5e4f37acd5bfa9bd324fb4eaf62a3c3e0dea',
+                'paths': ['/tmp/tmpuvf9pfam/mydata.txt'],
+                'hostname':
+                    '3099758ccbd9',
+                'username':
+                    'circleci',
+                'uid':
+                    1001,
+                'gid':
+                    1002,
+                'parent':
+                    '7540e94d8117078bb26b0e4a85dd353a41665e084d3771f04e5f72f6b0f24a6f',
+                'program_version':
+                    'restic 0.16.2',
+                'id':
+                    '57d3496886edf2cb0e808838734dc108fb1d929ae80cafdb68597e75702aecbb',
+                'short_id':
+                    '57d34968'
             }]
         }], restic.snapshots())
