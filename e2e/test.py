@@ -97,6 +97,36 @@ def test_basic_backup_and_restore():
 
     snapshots = restic.snapshots(group_by='host')
     logger.info('repo snapshots: %s', json.dumps(snapshots))
+    if len(snapshots) != 1:
+        logger.error("Expected snapshots to return a single object")
+        return False
+    if len(snapshots[0]['snapshots']) != 1:
+        logger.error("Expected snapshots key to contain a single object")
+        return False
+
+    logger.info('Overwriting contents of %s with new data', dummy_data_path)
+    with open(dummy_data_path, 'w', encoding='utf-8') as dummy_data_file:
+        dummy_data_file.write('a new version of the file')
+
+    logger.info('Backing up %s (after edit)', dummy_data_path)
+    backup_result = restic.backup(paths=[dummy_data_path])
+    logger.info('backup_result: %s', json.dumps(backup_result))
+    if backup_result['files_new'] != 0:
+        logger.error('Expected 0 new file (got %d)', backup_result['files_new'])
+        return False
+    if backup_result['files_changed'] != 1:
+        logger.error('Expected 1 changed file (got %d)',
+                     backup_result['files_changed'])
+        return False
+
+    snapshots = restic.snapshots(group_by='host')
+    logger.info('repo snapshots: %s', json.dumps(snapshots))
+    if len(snapshots) != 1:
+        logger.error("Expected snapshots to return a single object")
+        return False
+    if len(snapshots[0]['snapshots']) != 2:
+        logger.error("Expected snapshots key to contain two snapshots")
+        return False
 
     stats = restic.stats(mode='blobs-per-file')
     logger.info('repo stats: %s', stats)
