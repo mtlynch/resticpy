@@ -82,9 +82,9 @@ jobs:
             virtualenv --python python3 ./venv
             . venv/bin/activate
             pip install \
-              setuptools==54.2.0 \
-              wheel==0.36.2 \
-              twine==3.4.1
+              setuptools==69.0.3 \
+              wheel==0.42.0 \
+              twine==4.0.2
             python setup.py sdist bdist_wheel
             twine check dist/*
       - persist_to_workspace:
