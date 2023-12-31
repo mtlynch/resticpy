@@ -130,10 +130,11 @@ def test_basic_backup_and_restore():
 
     stats = restic.stats(mode='blobs-per-file')
     logger.info('repo stats: %s', stats)
-    expected_size = len(restored_data_expected) + len('a new version of the file')
+    expected_size = len(restored_data_expected) + len(
+        'a new version of the file')
     if stats['total_size'] != expected_size:
-        logger.error('Expected total size of %d (got %d)',
-                     expected_size, stats['total_size'])
+        logger.error('Expected total size of %d (got %d)', expected_size,
+                     stats['total_size'])
         return False
 
     logger.info('check result: %s', restic.check(read_data=True))
