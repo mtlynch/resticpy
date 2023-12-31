@@ -553,12 +553,12 @@ None
 ### Example
 
 ```python
->>> restic.binary_path = 'c:/restic/restic_0.16.0_windows_amd64.exe'
+>>> restic.binary_path = 'c:/restic/restic_0.16.2_windows_amd64.exe'
 >>> restic.version()
 {
     'architecture': 'amd64',
     'go_version': '1.20.6',
     'platform_version': 'windows',
-    'restic_version': '0.16.0'
+    'restic_version': '0.16.2'
 }
 ```
