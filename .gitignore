@@ -133,3 +133,5 @@ node_modules
 package-lock.json
 
 repos_test/
+
+.direnv
