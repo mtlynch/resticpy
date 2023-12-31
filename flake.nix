@@ -1,8 +1,8 @@
 {
   description = "Create Nix development environment";
 
-  # Python 3.7.13 release
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/ed0fab06cc1ca9799e6dda30529c963b95c4dc2a";
+  # Python 3.12.1 release
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/fd04bea4cbf76f86f244b9e2549fca066db8ddff";
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
@@ -24,7 +24,7 @@
     flake-utils.lib.eachDefaultSystem (system:
     let
       pkgs = nixpkgs.legacyPackages.${system};
-      python = pkgs.python3;
+      python = pkgs.python312;
 
       pythonEnv = (
           # Render requirements.txt into a Python withPackages environment.
