@@ -13,7 +13,7 @@ jobs:
           command: ./dev-scripts/check-style
   build:
     docker:
-      - image: cimg/python:3.7.13
+      - image: cimg/python:3.12.1
     steps:
       - checkout
       - run:
@@ -30,7 +30,7 @@ jobs:
             - .coverage
   coverage:
     docker:
-      - image: cimg/python:3.7.13
+      - image: cimg/python:3.12.1
     steps:
       - checkout
       - attach_workspace:
@@ -47,7 +47,7 @@ jobs:
           command: . venv/bin/activate && coveralls
   e2e:
     docker:
-      - image: cimg/python:3.7.13
+      - image: cimg/python:3.12.1
     steps:
       - checkout
       - run:
@@ -71,7 +71,7 @@ jobs:
             ./e2e/test.py
   prepare_pypi_package:
     docker:
-      - image: cimg/python:3.7.13
+      - image: cimg/python:3.12.1
     steps:
       - checkout
       - run:
@@ -94,7 +94,7 @@ jobs:
             - dist
   publish:
     docker:
-      - image: cimg/python:3.7.13
+      - image: cimg/python:3.12.1
     steps:
       - attach_workspace:
           at: .
