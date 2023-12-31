@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# Exit on first failure.
+set -e
+
+# Exit on unset variable.
+set -u
+
+# Echo commands before executing them, by default to stderr.
+set -x
+
+cd "$(mktemp --directory)"
+
+readonly RESTIC_VERSION='0.16.0'
+
+wget "https://github.com/restic/restic/releases/download/v${RESTIC_VERSION}/restic_${RESTIC_VERSION}_linux_amd64.bz2"
+
+bzip2 -d "restic_${RESTIC_VERSION}_linux_amd64.bz2"
+
+chmod +x "restic_${RESTIC_VERSION}_linux_amd64"
+
+sudo mv "restic_${RESTIC_VERSION}_linux_amd64" /usr/local/bin/restic
