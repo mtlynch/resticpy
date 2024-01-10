@@ -51,9 +51,7 @@ If you intend to use multiple instances of _restic_ you can provide the reposito
 import restic
 from restic import RepoCfg
 
-repocfg = RepoCfg(repository = '/tmp/backup1', password_file = 'password.txt')
-
-restic.init(repocfg)
+restic.init(repocfg = RepoCfg(repository = '/tmp/backup1', password_file = 'password.txt'))
 restic.backup(repocfg, paths=['some-file.txt'])
 ```
 
