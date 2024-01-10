@@ -38,12 +38,32 @@ class ResticTest(unittest.TestCase):
             ['restic', '--json', '--repo', '/dummy/repo/path', 'init'])
 
     @mock.patch.object(generate.command_executor, 'execute')
+    def test_can_set_repository_path_explicitly_with_config(self, mock_execute):
+        mock_execute.return_value = (
+            'created restic repository 054ed643d8 at /media/backup1')
+
+        restic.init(repocfg=restic.RepoCfg(repository='/dummy/repo/path'))
+
+        mock_execute.assert_called_with(
+            ['restic', '--json', '--repo', '/dummy/repo/path', 'init'])
+
+    @mock.patch.object(generate.command_executor, 'execute')
     def test_can_set_password_file(self, mock_execute):
         mock_execute.return_value = (
             'created restic repository 054ed643d8 at /media/backup1')
 
         restic.password_file = 'secret-pw.txt'
         restic.init()
+
+        mock_execute.assert_called_with(
+            ['restic', '--json', '--password-file', 'secret-pw.txt', 'init'])
+
+    @mock.patch.object(generate.command_executor, 'execute')
+    def test_can_set_password_file_explicitly_with_config(self, mock_execute):
+        mock_execute.return_value = (
+            'created restic repository 054ed643d8 at /media/backup1')
+
+        restic.init(repocfg=restic.RepoCfg(password_file='secret-pw.txt'))
 
         mock_execute.assert_called_with(
             ['restic', '--json', '--password-file', 'secret-pw.txt', 'init'])
@@ -56,6 +76,19 @@ class ResticTest(unittest.TestCase):
         restic.repository = '/dummy/repo/path'
         restic.use_cache = False
         restic.init()
+
+        mock_execute.assert_called_with([
+            'restic', '--json', '--repo', '/dummy/repo/path', '--no-cache',
+            'init'
+        ])
+
+    @mock.patch.object(generate.command_executor, 'execute')
+    def test_can_set_cache_explicitly_with_config(self, mock_execute):
+        mock_execute.return_value = (
+            'created restic repository 054ed643d8 at /media/backup1')
+
+        restic.init(repocfg=restic.RepoCfg(repository='/dummy/repo/path',
+                                           use_cache=False))
 
         mock_execute.assert_called_with([
             'restic', '--json', '--repo', '/dummy/repo/path', '--no-cache',

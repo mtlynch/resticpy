@@ -27,41 +27,69 @@ repository = None
 password_file = None
 use_cache = True
 
+PARAM_NAME = 'repocfg'
+
+
+class RepoCfg:
+
+    # pylint: disable=W0621
+    def __init__(self, repository=None, password_file=None, use_cache=True):
+        self.password_file = password_file
+        self.repository = repository
+        self.use_cache = use_cache
+
 
 def backup(*args, **kwargs):
-    return internal_backup.run(_make_base_command(), *args, **kwargs)
+    cfg = kwargs.get(PARAM_NAME)
+    return internal_backup.run(_make_base_command(cfg), *args,
+                               **_strip_cfg(**kwargs))
 
 
 def check(*args, **kwargs):
-    return internal_check.run(_make_base_command(), *args, **kwargs)
+    cfg = kwargs.get(PARAM_NAME)
+    return internal_check.run(_make_base_command(cfg), *args,
+                              **_strip_cfg(**kwargs))
 
 
 def copy(*args, **kwargs):
-    return internal_copy.run(_make_base_command(), *args, **kwargs)
+    cfg = kwargs.get(PARAM_NAME)
+    return internal_copy.run(_make_base_command(cfg), *args,
+                             **_strip_cfg(**kwargs))
 
 
 def find(*args, **kwargs):
-    return internal_find.run(_make_base_command(), *args, **kwargs)
+    cfg = kwargs.get(PARAM_NAME)
+    return internal_find.run(_make_base_command(cfg), *args,
+                             **_strip_cfg(**kwargs))
 
 
 def forget(*args, **kwargs):
-    return internal_forget.run(_make_base_command(), *args, **kwargs)
+    cfg = kwargs.get(PARAM_NAME)
+    return internal_forget.run(_make_base_command(cfg), *args,
+                               **_strip_cfg(**kwargs))
 
 
 def generate(*args, **kwargs):
-    return internal_generate.run(_make_base_command(), *args, **kwargs)
+    cfg = kwargs.get(PARAM_NAME)
+    return internal_generate.run(_make_base_command(cfg), *args,
+                                 **_strip_cfg(**kwargs))
 
 
 def init(*args, **kwargs):
-    return internal_init.run(_make_base_command(), *args, **kwargs)
+    cfg = kwargs.get(PARAM_NAME)
+    return internal_init.run(_make_base_command(cfg), *args,
+                             **_strip_cfg(**kwargs))
 
 
 def restore(*args, **kwargs):
-    return internal_restore.run(_make_base_command(), *args, **kwargs)
+    return internal_restore.run(_make_base_command(kwargs.get(PARAM_NAME)),
+                                *args, **_strip_cfg(**kwargs))
 
 
 def rewrite(*args, **kwargs):
-    return internal_rewrite.run(_make_base_command(), *args, **kwargs)
+    cfg = kwargs.get(PARAM_NAME)
+    return internal_rewrite.run(_make_base_command(cfg), *args,
+                                **_strip_cfg(**kwargs))
 
 
 def self_update():
@@ -69,34 +97,49 @@ def self_update():
 
 
 def snapshots(*args, **kwargs):
-    return internal_snapshots.run(_make_base_command(), *args, **kwargs)
+    cfg = kwargs.get(PARAM_NAME)
+    return internal_snapshots.run(_make_base_command(cfg), *args,
+                                  **_strip_cfg(**kwargs))
 
 
 def stats(*args, **kwargs):
-    return internal_stats.run(_make_base_command(), *args, **kwargs)
+    cfg = kwargs.get(PARAM_NAME)
+    return internal_stats.run(_make_base_command(cfg), *args,
+                              **_strip_cfg(**kwargs))
 
 
-def unlock():
-    return internal_unlock.run(_make_base_command())
+def unlock(**kwargs):
+    cfg = kwargs.get(PARAM_NAME)
+    return internal_unlock.run(_make_base_command(cfg))
 
 
 def version():
     return internal_version.run(_make_base_command())
 
 
-def _make_base_command():
+def _strip_cfg(**kwargs):
+    if PARAM_NAME in kwargs:
+        result = kwargs.copy()
+        result.pop(PARAM_NAME)
+        return result
+    return kwargs
+
+
+def _make_base_command(repocfg: RepoCfg = None):
     base_command = [binary_path]
 
     # Always add the JSON flag so we get back results in JSON.
     base_command.extend(['--json'])
 
-    if repository:
-        base_command.extend(['--repo', repository])
+    cfg = repocfg or RepoCfg(repository, password_file, use_cache)
 
-    if password_file:
-        base_command.extend(['--password-file', password_file])
+    if cfg.repository:
+        base_command.extend(['--repo', cfg.repository])
 
-    if not use_cache:
+    if cfg.password_file:
+        base_command.extend(['--password-file', cfg.password_file])
+
+    if not cfg.use_cache:
         base_command.extend(['--no-cache'])
 
     return base_command
