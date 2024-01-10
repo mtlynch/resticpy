@@ -45,6 +45,20 @@ restic.init()
 restic.backup(paths=['some-file.txt'])
 ```
 
+If you intend to use multiple instances of _restic_ you can provide the repository configurations as a parameter:
+
+```python
+import restic
+from restic import RepoCfg
+
+repocfg = RepoCfg(repository = '/tmp/backup1', password_file = 'password.txt')
+
+restic.init(repocfg)
+restic.backup(repocfg, paths=['some-file.txt'])
+```
+
+
+
 ### Restore a snapshot
 
 ```python
