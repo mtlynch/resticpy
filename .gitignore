@@ -135,3 +135,7 @@ package-lock.json
 repos_test/
 
 .direnv
+
+# idea
+.idea/
+
