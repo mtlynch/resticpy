@@ -35,3 +35,11 @@ class RestoreTest(unittest.TestCase):
             'restic', '--json', 'restore', 'dummy-snapshot-id', '--include',
             'include-path'
         ])
+
+    @mock.patch.object(restore.command_executor, 'execute')
+    def test_restore_specific_snapshot_id_and_exclude(self, mock_execute):
+        restic.restore(snapshot_id='dummy-snapshot-id', exclude='exclude-path')
+        mock_execute.assert_called_with([
+            'restic', '--json', 'restore', 'dummy-snapshot-id', '--exclude',
+            'exclude-path'
+        ])
