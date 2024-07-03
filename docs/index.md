@@ -476,6 +476,8 @@ Retrieve a list of snapshots in the repo
 - `snapshot_id`: ID of the snapshot which should be listed
 - `group_by`: String for grouping snapshots by host, paths, tags
 - `tags`: List of snapshot tags
+- `path`: String for filtering snapshots on (absolute) path
+- `host`: String for filtering snapshots on host
 
 ### Returns
 
