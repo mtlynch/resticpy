@@ -46,6 +46,24 @@ class SnapshotsTest(unittest.TestCase):
             ['restic', '--json', 'snapshots', '--tag', 'test,test2'])
 
     @mock.patch.object(snapshots.command_executor, 'execute')
+    def test_snapshots_path(self, mock_execute):
+        mock_execute.return_value = '[]'
+
+        self.assertEqual([], restic.snapshots(path='/tmp'))
+
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'snapshots', '--path', '/tmp'])
+
+    @mock.patch.object(snapshots.command_executor, 'execute')
+    def test_snapshots_host(self, mock_execute):
+        mock_execute.return_value = '[]'
+
+        self.assertEqual([], restic.snapshots(host='localhost'))
+
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'snapshots', '--host', 'localhost'])
+
+    @mock.patch.object(snapshots.command_executor, 'execute')
     def test_snapshots_parses_result_json(self, mock_execute):
         mock_execute.return_value = """
 [
