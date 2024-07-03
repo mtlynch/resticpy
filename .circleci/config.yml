@@ -79,7 +79,7 @@ jobs:
             pip install \
               setuptools==69.0.3 \
               wheel==0.42.0 \
-              twine==5.1.1
+              twine==4.0.2
             python setup.py sdist bdist_wheel
             twine check dist/*
       - persist_to_workspace:
