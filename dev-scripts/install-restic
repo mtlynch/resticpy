@@ -11,7 +11,7 @@ set -x
 
 cd "$(mktemp --directory)"
 
-readonly RESTIC_VERSION='0.16.2'
+readonly RESTIC_VERSION='0.17.0'
 
 wget "https://github.com/restic/restic/releases/download/v${RESTIC_VERSION}/restic_${RESTIC_VERSION}_linux_amd64.bz2"
 
