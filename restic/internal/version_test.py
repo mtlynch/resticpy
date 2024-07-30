@@ -21,3 +21,19 @@ class VersionTest(unittest.TestCase):
             }, restic.version())
 
         mock_execute.assert_called_with(['restic', '--json', 'version'])
+
+    @mock.patch.object(version.command_executor, 'execute')
+    def test_version_0_17_0(self, mock_execute):
+        mock_execute.return_value = (
+            '{"version":"0.17.0","go_version":"go1.22.5","go_os":"linux","go_arch":"amd64"}'
+        )
+
+        self.assertEqual(
+            {
+                'architecture': 'amd64',
+                'go_version': '1.22.5',
+                'platform_version': 'linux',
+                'restic_version': '0.17.0'
+            }, restic.version())
+
+        mock_execute.assert_called_with(['restic', '--json', 'version'])
