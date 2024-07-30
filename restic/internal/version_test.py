@@ -25,6 +25,7 @@ class VersionTest(unittest.TestCase):
     @mock.patch.object(version.command_executor, 'execute')
     def test_version_0_17_0(self, mock_execute):
         mock_execute.return_value = (
+            # pylint: disable-next=line-too-long
             '{"version":"0.17.0","go_version":"go1.22.5","go_os":"linux","go_arch":"amd64"}'
         )
 
