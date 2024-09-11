@@ -41,7 +41,10 @@ def run(restic_base_command,
 
     if not scan:
         cmd.extend(['--no-scan'])
-
+        
+    if ignore_inode:
+        cmd.extend(['--ignore-inode'])
+        
     result_raw = command_executor.execute(cmd)
     return _parse_result(result_raw)
 
