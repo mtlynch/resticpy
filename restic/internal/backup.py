@@ -17,6 +17,7 @@ def run(restic_base_command,
         exclude_files=None,
         tags=None,
         dry_run=None,
+        ignore_inode=False,
         host=None,
         scan=True):
     cmd = restic_base_command + ['backup'] + paths
