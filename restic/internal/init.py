@@ -21,7 +21,7 @@ def run(restic_base_command,
         cmd.extend(['--from-password-file', from_password_file])
 
     if repository_version:
-        cmd.extend(['--repository-version', repository_version])
+        cmd.extend(['--repository-version', str(repository_version)])
 
     return _parse_result(command_executor.execute(cmd))
 
