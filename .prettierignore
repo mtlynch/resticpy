@@ -1,3 +1,4 @@
 dist
 resticpy.egg-info
 venv
+.direnv

@@ -18,6 +18,7 @@
         "type": "github"
       }
     },
+<<<<<<< HEAD
     "nodejs-nixpkgs": {
       "locked": {
         "lastModified": 1694343207,
@@ -34,6 +35,8 @@
         "type": "github"
       }
     },
+=======
+>>>>>>> master
     "pyproject-nix": {
       "flake": false,
       "locked": {
@@ -69,7 +72,10 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
+<<<<<<< HEAD
         "nodejs-nixpkgs": "nodejs-nixpkgs",
+=======
+>>>>>>> master
         "pyproject-nix": "pyproject-nix",
         "python-nixpkgs": "python-nixpkgs"
       }
