@@ -51,10 +51,16 @@ class InitTest(unittest.TestCase):
 
     @mock.patch.object(init.command_executor, 'execute')
     def test_init_with_repository_version(self, mock_execute):
-        mock_execute.return_value = (
-            'created restic repository 054ed643d8 at /media/backup1')
+        mock_execute.return_value = """
+{"message_type":"initialized","id":"d0c84a66bffea61b4cbb88c39cea742127699b3f3af71127b68edcc142edff48","repository":"/tmp/tmp.lNaHYLGR7F"}
+""".strip()
 
-        repository_id = restic.init()
+        repository_id = restic.init(repository_version=1)
 
-        self.assertEqual('054ed643d8', repository_id)
-        mock_execute.assert_called_with(['restic', '--json', '--repository-version', '1', 'init'])
+        self.assertEqual(
+            'd0c84a66bffea61b4cbb88c39cea742127699b3f3af71127b68edcc142edff48',
+            repository_id)
+        mock_execute.assert_called_with([
+            'restic', '--json', 'init', '--repository-version', '1',
+            's3:https://some.backend.com/mybucket'
+        ])
