@@ -18,6 +18,25 @@
         "type": "github"
       }
     },
+<<<<<<< HEAD
+    "nodejs-nixpkgs": {
+      "locked": {
+        "lastModified": 1694343207,
+        "narHash": "sha256-jWi7OwFxU5Owi4k2JmiL1sa/OuBCQtpaAesuj5LXC8w=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "78058d810644f5ed276804ce7ea9e82d92bee293",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "78058d810644f5ed276804ce7ea9e82d92bee293",
+        "type": "github"
+      }
+    },
+=======
+>>>>>>> master
     "pyproject-nix": {
       "flake": false,
       "locked": {
@@ -53,6 +72,10 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
+<<<<<<< HEAD
+        "nodejs-nixpkgs": "nodejs-nixpkgs",
+=======
+>>>>>>> master
         "pyproject-nix": "pyproject-nix",
         "python-nixpkgs": "python-nixpkgs"
       }
