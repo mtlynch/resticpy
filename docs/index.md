@@ -282,7 +282,7 @@ Initializes a new restic repository at the current repository location.
 - `copy-chunker-params`: Copy chunker parameters from the secondary repository
 - `from_repo`: Secondary repository to copy chunker parameters from
 - `from_password_file`: Path to file containing password for secondary repository
-- `repository_version` repository format version to use
+- `repository_version`: repository format version to use
 
 ### Returns
 
