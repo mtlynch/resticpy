@@ -7,7 +7,8 @@ from restic.internal import command_executor
 def run(restic_base_command,
         copy_chunker_params=False,
         from_repo=None,
-        from_password_file=None):
+        from_password_file=None,
+        repository_version=None):
     cmd = restic_base_command + ['init']
 
     if copy_chunker_params:
@@ -18,6 +19,9 @@ def run(restic_base_command,
 
     if from_password_file:
         cmd.extend(['--from-password-file', from_password_file])
+
+    if repository_version:
+        cmd.extend(['--repository-version', str(repository_version)])
 
     return _parse_result(command_executor.execute(cmd))
 

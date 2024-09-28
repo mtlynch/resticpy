@@ -48,3 +48,17 @@ class InitTest(unittest.TestCase):
             'restic', '--json', 'init', '--copy-chunker-params', '--from-repo',
             's3:https://some.backend.com/mybucket'
         ])
+
+    @mock.patch.object(init.command_executor, 'execute')
+    def test_init_with_repository_version(self, mock_execute):
+        mock_execute.return_value = """
+{"message_type":"initialized","id":"d0c84a66bffea61b4cbb88c39cea742127699b3f3af71127b68edcc142edff48","repository":"/tmp/tmp.lNaHYLGR7F"}
+""".strip()
+
+        repository_id = restic.init(repository_version=1)
+
+        self.assertEqual(
+            'd0c84a66bffea61b4cbb88c39cea742127699b3f3af71127b68edcc142edff48',
+            repository_id)
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'init', '--repository-version', '1'])
