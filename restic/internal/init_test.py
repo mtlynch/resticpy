@@ -60,7 +60,5 @@ class InitTest(unittest.TestCase):
         self.assertEqual(
             'd0c84a66bffea61b4cbb88c39cea742127699b3f3af71127b68edcc142edff48',
             repository_id)
-        mock_execute.assert_called_with([
-            'restic', '--json', 'init', '--repository-version', '1',
-            's3:https://some.backend.com/mybucket'
-        ])
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'init', '--repository-version', '1'])
