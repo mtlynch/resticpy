@@ -12,7 +12,8 @@ def run(restic_base_command,
         cmd.extend(['--include', include])
 
     if exclude:
-        cmd.extend(['--exclude', exclude])
+        for exclude_path in exclude:
+            cmd.extend(['--exclude', exclude_path])
 
     if target_dir:
         cmd.extend(['--target', target_dir])
