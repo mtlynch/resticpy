@@ -1,5 +1,12 @@
-from restic.errors import Error
 from restic.internal import command_executor
+
+
+class Error(Exception):
+    pass
+
+
+class LegacySemanticsError(Error):
+    pass
 
 
 def run(restic_base_command,
@@ -14,7 +21,9 @@ def run(restic_base_command,
 
     if exclude:
         if isinstance(exclude, str):
-            raise Error('Exclude parameter must be a list, not a string')
+            raise LegacySemanticsError(
+                'As of resticpy 1.2.0, the `exclude` parameter must be a list '
+                'not a string')
         for exclude_path in exclude:
             cmd.extend(['--exclude', exclude_path])
 

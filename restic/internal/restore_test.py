@@ -2,7 +2,6 @@ import unittest
 from unittest import mock
 
 import restic
-from restic.errors import Error
 from restic.internal import restore
 
 
@@ -37,12 +36,20 @@ class RestoreTest(unittest.TestCase):
             'include-path'
         ])
 
-    @mock.patch.object(restore.command_executor, 'execute')
-    def test_restore_exclude_string_instead_of_list(self, mock_execute):
-        mock_execute.return_value = ''
-        with self.assertRaises(Error):
+    def test_restore_exclude_string_instead_of_list(self):
+        with self.assertRaises(restore.LegacySemanticsError):
             restic.restore(snapshot_id='dummy-snapshot-id',
                            exclude='exclude-path')
+
+    @mock.patch.object(restore.command_executor, 'execute')
+    def test_restore_specific_snapshot_id_and_exclude_single_paths(
+            self, mock_execute):
+        restic.restore(snapshot_id='dummy-snapshot-id',
+                       exclude=['exclude-path'])
+        mock_execute.assert_called_with([
+            'restic', '--json', 'restore', 'dummy-snapshot-id', '--exclude',
+            'exclude-path'
+        ])
 
     @mock.patch.object(restore.command_executor, 'execute')
     def test_restore_specific_snapshot_id_and_exclude_multiple_paths(
