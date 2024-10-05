@@ -1,4 +1,3 @@
-from restic.errors import Error
 from restic.internal import command_executor
 
 
@@ -13,10 +12,7 @@ def run(restic_base_command,
         cmd.extend(['--include', include])
 
     if exclude:
-        if isinstance(exclude, str):
-            raise Error('Exclude parameter must be a list, not a string')
-        for exclude_path in exclude:
-            cmd.extend(['--exclude', exclude_path])
+        cmd.extend(['--exclude', exclude])
 
     if target_dir:
         cmd.extend(['--target', target_dir])

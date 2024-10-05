@@ -410,7 +410,6 @@ Restores a snapshot from the repository to the specified path.
 
 - `snapshot_id`: ID of snapshot to restore (default: `latest`)
 - `include`: String specifying a pattern to include, exclude everything else
-- `exclude`: A list of file patterns to exclude from restore operation
 - `target_dir`: String specifying output directory to place restored data
 
 ### Returns
