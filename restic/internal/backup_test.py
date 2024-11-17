@@ -89,6 +89,16 @@ class BackupTest(unittest.TestCase):
             ['restic', '--json', 'backup', '/data/music', '--no-scan'])
 
     @mock.patch.object(backup.command_executor, 'execute')
+    def test_skip_if_unchanged(self, mock_execute):
+        mock_execute.return_value = '{}'
+
+        restic.backup(['/data/music'], skip_if_unchanged=True)
+
+        mock_execute.assert_called_with([
+            'restic', '--json', 'backup', '/data/music', '--skip-if-unchanged'
+        ])
+
+    @mock.patch.object(backup.command_executor, 'execute')
     def test_excludes_single_exclude_file(self, mock_execute):
         mock_execute.return_value = '{}'
 
