@@ -17,6 +17,7 @@
 ### Args
 
 - `paths`: A list of paths to files or directories to back up
+- `include_files`: A list of files containing include lists
 - `exclude_patterns`: A list of patterns of path exclusions
 - `exclude_files`: A list of files containing exclude lists
 - `tags`: A list of tags for the new snapshot

@@ -12,7 +12,8 @@ class UnexpectedResticResult(Error):
 
 
 def run(restic_base_command,
-        paths,
+        paths=None,
+        include_files=None,
         exclude_patterns=None,
         exclude_files=None,
         tags=None,
@@ -20,7 +21,18 @@ def run(restic_base_command,
         host=None,
         scan=True,
         skip_if_unchanged=False):
-    cmd = restic_base_command + ['backup'] + paths
+    cmd = restic_base_command + ['backup']
+
+    if paths is None and include_files is None:
+        raise ValueError('No input given as argument.' +
+                         'Please specify `paths` or `include_files`')
+
+    if paths:
+        cmd += paths
+
+    if include_files:
+        for include_file in include_files:
+            cmd.extend(['--files-from', include_file])
 
     if exclude_patterns:
         for exclude_pattern in exclude_patterns:

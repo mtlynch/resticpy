@@ -110,6 +110,38 @@ class BackupTest(unittest.TestCase):
         ])
 
     @mock.patch.object(backup.command_executor, 'execute')
+    def test_includes_no_includes(self, mock_execute):
+        mock_execute.return_value = '{}'
+        self.assertRaises(ValueError, restic.backup)
+
+    @mock.patch.object(backup.command_executor, 'execute')
+    def test_includes_single_include_file(self, mock_execute):
+        mock_execute.return_value = '{}'
+
+        restic.backup(include_files=['good-songs.txt'])
+
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'backup', '--files-from', 'good-songs.txt'])
+
+    @mock.patch.object(backup.command_executor, 'execute')
+    def test_includes_multiple_include_file(self, mock_execute):
+        mock_execute.return_value = '{}'
+
+        restic.backup(['/data/music'],
+                      include_files=['good-songs.txt', 'best-songs-ever.txt'])
+
+        mock_execute.assert_called_with([
+            'restic',
+            '--json',
+            'backup',
+            '/data/music',
+            '--files-from',
+            'good-songs.txt',
+            '--files-from',
+            'best-songs-ever.txt',
+        ])
+
+    @mock.patch.object(backup.command_executor, 'execute')
     def test_parses_result_json(self, mock_execute):
         mock_execute.return_value = """
 {"message_type":"status","percent_done":0,"total_files":1,"total_bytes":20}
