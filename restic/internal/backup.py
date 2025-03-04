@@ -30,17 +30,9 @@ def run(restic_base_command,
     if paths:
         cmd += paths
 
-    if include_files:
-        for include_file in include_files:
-            cmd.extend(['--files-from', include_file])
-
-    if exclude_patterns:
-        for exclude_pattern in exclude_patterns:
-            cmd.extend(['--exclude', exclude_pattern])
-
-    if exclude_files:
-        for exclude_file in exclude_files:
-            cmd.extend(['--exclude-file', exclude_file])
+    _extend_cmd_with_list(cmd, '--files-from', include_files)
+    _extend_cmd_with_list(cmd, '--exclude', exclude_patterns)
+    _extend_cmd_with_list(cmd, '--exclude-file', exclude_files)
 
     if tags:
         for tag in tags:
@@ -60,6 +52,13 @@ def run(restic_base_command,
 
     result_raw = command_executor.execute(cmd)
     return _parse_result(result_raw)
+
+
+def _extend_cmd_with_list(cmd, cli_option, arg_list):
+    if arg_list is None:
+        return
+    for item in arg_list:
+        cmd.extend([cli_option, item])
 
 
 def _parse_result(result):
