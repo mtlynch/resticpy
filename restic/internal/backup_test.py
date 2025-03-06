@@ -115,20 +115,20 @@ class BackupTest(unittest.TestCase):
         self.assertRaises(ValueError, restic.backup)
 
     @mock.patch.object(backup.command_executor, 'execute')
-    def test_includes_single_include_file(self, mock_execute):
+    def test_includes_single_files_from_file(self, mock_execute):
         mock_execute.return_value = '{}'
 
-        restic.backup(include_files=['good-songs.txt'])
+        restic.backup(files_from=['good-songs.txt'])
 
         mock_execute.assert_called_with(
             ['restic', '--json', 'backup', '--files-from', 'good-songs.txt'])
 
     @mock.patch.object(backup.command_executor, 'execute')
-    def test_includes_multiple_include_file(self, mock_execute):
+    def test_includes_multiple_files_from_file(self, mock_execute):
         mock_execute.return_value = '{}'
 
         restic.backup(['/data/music'],
-                      include_files=['good-songs.txt', 'best-songs-ever.txt'])
+                      files_from=['good-songs.txt', 'best-songs-ever.txt'])
 
         mock_execute.assert_called_with([
             'restic',
