@@ -31,7 +31,8 @@ class BackupTest(unittest.TestCase):
     def test_excludes_single_pattern(self, mock_execute):
         mock_execute.return_value = '{}'
 
-        restic.backup(paths=['/data/music'], exclude_patterns=['Justin Bieber*'])
+        restic.backup(paths=['/data/music'],
+                      exclude_patterns=['Justin Bieber*'])
 
         mock_execute.assert_called_with([
             'restic', '--json', 'backup', '/data/music', '--exclude',
