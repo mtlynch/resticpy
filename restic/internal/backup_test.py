@@ -113,7 +113,8 @@ class BackupTest(unittest.TestCase):
     @mock.patch.object(backup.command_executor, 'execute')
     def test_includes_no_includes(self, mock_execute):
         mock_execute.return_value = '{}'
-        self.assertRaises(ValueError, restic.backup())
+        with self.assertRaises(ValueError):
+            restic.backup()
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_includes_single_files_from_file(self, mock_execute):
