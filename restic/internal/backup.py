@@ -33,10 +33,7 @@ def run(restic_base_command,
     _extend_cmd_with_list(cmd, '--files-from', include_files)
     _extend_cmd_with_list(cmd, '--exclude', exclude_patterns)
     _extend_cmd_with_list(cmd, '--exclude-file', exclude_files)
-
-    if tags:
-        for tag in tags:
-            cmd.extend(['--tag', tag])
+    _extend_cmd_with_list(cmd, '--tag', tags)
 
     if dry_run:
         cmd.extend(['--dry-run'])
