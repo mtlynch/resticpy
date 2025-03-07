@@ -24,7 +24,7 @@ def run(restic_base_command,
     cmd = restic_base_command + ['backup']
 
     if paths is None and files_from is None:
-        raise ValueError('No input given as argument.' +
+        raise ValueError('No input given as argument. '
                          'Please specify `paths` or `include_files`')
 
     if paths:
