@@ -12,7 +12,8 @@ class UnexpectedResticResult(Error):
 
 
 def run(restic_base_command,
-        paths,
+        paths=None,
+        files_from=None,
         exclude_patterns=None,
         exclude_files=None,
         tags=None,
@@ -20,19 +21,19 @@ def run(restic_base_command,
         host=None,
         scan=True,
         skip_if_unchanged=False):
-    cmd = restic_base_command + ['backup'] + paths
+    cmd = restic_base_command + ['backup']
 
-    if exclude_patterns:
-        for exclude_pattern in exclude_patterns:
-            cmd.extend(['--exclude', exclude_pattern])
+    if paths is None and files_from is None:
+        raise ValueError('No input given as argument. '
+                         'Please specify `paths` or `files_from`')
 
-    if exclude_files:
-        for exclude_file in exclude_files:
-            cmd.extend(['--exclude-file', exclude_file])
+    if paths:
+        cmd += paths
 
-    if tags:
-        for tag in tags:
-            cmd.extend(['--tag', tag])
+    _extend_cmd_with_list(cmd, '--files-from', files_from)
+    _extend_cmd_with_list(cmd, '--exclude', exclude_patterns)
+    _extend_cmd_with_list(cmd, '--exclude-file', exclude_files)
+    _extend_cmd_with_list(cmd, '--tag', tags)
 
     if dry_run:
         cmd.extend(['--dry-run'])
@@ -48,6 +49,13 @@ def run(restic_base_command,
 
     result_raw = command_executor.execute(cmd)
     return _parse_result(result_raw)
+
+
+def _extend_cmd_with_list(cmd, cli_option, arg_list):
+    if arg_list is None:
+        return
+    for item in arg_list:
+        cmd.extend([cli_option, item])
 
 
 def _parse_result(result):
