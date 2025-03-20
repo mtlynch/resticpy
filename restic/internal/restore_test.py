@@ -11,13 +11,15 @@ class RestoreTest(unittest.TestCase):
     def test_restore_with_no_snapshot_id(self, mock_execute):
         restic.restore()
         mock_execute.assert_called_with(
-            ['restic', '--json', 'restore', 'latest'])
+            ['restic', '--json', 'restore', 'latest'],
+            on_stdout=None, on_stderr=None)
 
     @mock.patch.object(restore.command_executor, 'execute')
     def test_restore_specific_snapshot_id(self, mock_execute):
         restic.restore('dummy-snapshot-id')
         mock_execute.assert_called_with(
-            ['restic', '--json', 'restore', 'dummy-snapshot-id'])
+            ['restic', '--json', 'restore', 'dummy-snapshot-id'],
+            on_stdout=None, on_stderr=None)
 
     @mock.patch.object(restore.command_executor, 'execute')
     def test_restore_specific_snapshot_id_and_target(self, mock_execute):
@@ -26,7 +28,7 @@ class RestoreTest(unittest.TestCase):
         mock_execute.assert_called_with([
             'restic', '--json', 'restore', 'dummy-snapshot-id', '--target',
             '/tmp/restore'
-        ])
+        ], on_stdout=None, on_stderr=None)
 
     @mock.patch.object(restore.command_executor, 'execute')
     def test_restore_specific_snapshot_id_and_include(self, mock_execute):
@@ -34,7 +36,7 @@ class RestoreTest(unittest.TestCase):
         mock_execute.assert_called_with([
             'restic', '--json', 'restore', 'dummy-snapshot-id', '--include',
             'include-path'
-        ])
+        ], on_stdout=None, on_stderr=None)
 
     def test_restore_exclude_string_instead_of_list(self):
         with self.assertRaises(restore.LegacySemanticsError):
@@ -49,7 +51,7 @@ class RestoreTest(unittest.TestCase):
         mock_execute.assert_called_with([
             'restic', '--json', 'restore', 'dummy-snapshot-id', '--exclude',
             'exclude-path'
-        ])
+        ], on_stdout=None, on_stderr=None)
 
     @mock.patch.object(restore.command_executor, 'execute')
     def test_restore_specific_snapshot_id_and_exclude_multiple_paths(
@@ -59,4 +61,4 @@ class RestoreTest(unittest.TestCase):
         mock_execute.assert_called_with([
             'restic', '--json', 'restore', 'dummy-snapshot-id', '--exclude',
             'exclude-path', '--exclude', 'another-path'
-        ])
+        ], on_stdout=None, on_stderr=None)

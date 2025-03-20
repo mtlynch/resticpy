@@ -25,6 +25,8 @@
 - `host`: Set the hostname for the snapshot manually
 - `scan`: Set to `False` to let restic skip the step of estimating the size of the backup (restic >= 0.15.0)
 - `skip_if_unchanged`: Omit the creation of a new snapshot if nothing has changed compared to the parent snapshot
+- `on_stdout`: Callback which will be called with each line of output of restic to stdout
+- `on_stderr`: Callback which will be called with each line of output of restic to stderr
 
 ### Returns
 
@@ -414,6 +416,8 @@ Restores a snapshot from the repository to the specified path.
 - `include`: String specifying a pattern to include, exclude everything else
 - `exclude`: A list of file patterns to exclude from restore operation
 - `target_dir`: String specifying output directory to place restored data
+- `on_stdout`: Callback which will be called with each line of output of restic to stdout
+- `on_stderr`: Callback which will be called with each line of output of restic to stderr
 
 ### Returns
 

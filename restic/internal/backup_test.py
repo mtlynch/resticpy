@@ -14,7 +14,8 @@ class BackupTest(unittest.TestCase):
         restic.backup(paths=['/tmp/dummy-file.txt'])
 
         mock_execute.assert_called_with(
-            ['restic', '--json', 'backup', '/tmp/dummy-file.txt'])
+            ['restic', '--json', 'backup', '/tmp/dummy-file.txt'],
+            on_stdout=None, on_stderr=None)
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_backup_multiple_paths(self, mock_execute):
@@ -25,7 +26,7 @@ class BackupTest(unittest.TestCase):
         mock_execute.assert_called_with([
             'restic', '--json', 'backup', '/tmp/dummy-file-1.txt',
             '/tmp/dummy-file-2.txt'
-        ])
+        ], on_stdout=None, on_stderr=None)
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_excludes_single_pattern(self, mock_execute):
@@ -37,7 +38,7 @@ class BackupTest(unittest.TestCase):
         mock_execute.assert_called_with([
             'restic', '--json', 'backup', '/data/music', '--exclude',
             'Justin Bieber*'
-        ])
+        ], on_stdout=None, on_stderr=None)
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_excludes_multiple_patterns(self, mock_execute):
@@ -49,7 +50,7 @@ class BackupTest(unittest.TestCase):
         mock_execute.assert_called_with([
             'restic', '--json', 'backup', '/data/music', '--exclude',
             'Justin Bieber*', '--exclude', 'Selena Gomez*'
-        ])
+        ], on_stdout=None, on_stderr=None)
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_tags(self, mock_execute):
@@ -60,7 +61,7 @@ class BackupTest(unittest.TestCase):
         mock_execute.assert_called_with([
             'restic', '--json', 'backup', '/data/music', '--tag', 'musician1',
             '--tag', 'musician2'
-        ])
+        ], on_stdout=None, on_stderr=None)
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_dry_run(self, mock_execute):
@@ -69,7 +70,8 @@ class BackupTest(unittest.TestCase):
         restic.backup(paths=['/data/music'], dry_run=True)
 
         mock_execute.assert_called_with(
-            ['restic', '--json', 'backup', '/data/music', '--dry-run'])
+            ['restic', '--json', 'backup', '/data/music', '--dry-run'],
+            on_stdout=None, on_stderr=None)
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_host(self, mock_execute):
@@ -78,7 +80,8 @@ class BackupTest(unittest.TestCase):
         restic.backup(paths=['/data/music'], host='myhost')
 
         mock_execute.assert_called_with(
-            ['restic', '--json', 'backup', '/data/music', '--host', 'myhost'])
+            ['restic', '--json', 'backup', '/data/music', '--host', 'myhost'],
+            on_stdout=None, on_stderr=None)
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_scan(self, mock_execute):
@@ -87,7 +90,8 @@ class BackupTest(unittest.TestCase):
         restic.backup(paths=['/data/music'], scan=False)
 
         mock_execute.assert_called_with(
-            ['restic', '--json', 'backup', '/data/music', '--no-scan'])
+            ['restic', '--json', 'backup', '/data/music', '--no-scan'],
+            on_stdout=None, on_stderr=None)
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_skip_if_unchanged(self, mock_execute):
@@ -97,7 +101,7 @@ class BackupTest(unittest.TestCase):
 
         mock_execute.assert_called_with([
             'restic', '--json', 'backup', '/data/music', '--skip-if-unchanged'
-        ])
+        ], on_stdout=None, on_stderr=None)
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_excludes_single_exclude_file(self, mock_execute):
@@ -108,7 +112,7 @@ class BackupTest(unittest.TestCase):
         mock_execute.assert_called_with([
             'restic', '--json', 'backup', '/data/music', '--exclude-file',
             'bad-songs.txt'
-        ])
+        ], on_stdout=None, on_stderr=None)
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_includes_no_includes(self, mock_execute):
@@ -123,7 +127,8 @@ class BackupTest(unittest.TestCase):
         restic.backup(files_from=['good-songs.txt'])
 
         mock_execute.assert_called_with(
-            ['restic', '--json', 'backup', '--files-from', 'good-songs.txt'])
+            ['restic', '--json', 'backup', '--files-from', 'good-songs.txt'],
+            on_stdout=None, on_stderr=None)
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_includes_multiple_files_from_file(self, mock_execute):
@@ -141,7 +146,7 @@ class BackupTest(unittest.TestCase):
             'good-songs.txt',
             '--files-from',
             'best-songs-ever.txt',
-        ])
+        ], on_stdout=None, on_stderr=None)
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_parses_result_json(self, mock_execute):

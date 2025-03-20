@@ -1,3 +1,5 @@
+from typing import Callable, Optional
+
 from restic.internal import command_executor
 
 
@@ -13,7 +15,11 @@ def run(restic_base_command,
         snapshot_id='latest',
         include=None,
         exclude=None,
-        target_dir=None):
+        target_dir=None,
+        *,
+        on_stdout: Optional[Callable[[str], None]] = None,
+        on_stderr: Optional[Callable[[str], None]] = None,
+        ):
     cmd = restic_base_command + ['restore', snapshot_id]
 
     if include:
@@ -30,4 +36,6 @@ def run(restic_base_command,
     if target_dir:
         cmd.extend(['--target', target_dir])
 
-    return command_executor.execute(cmd)
+    return command_executor.execute(cmd,
+                                    on_stdout=on_stdout,
+                                    on_stderr=on_stderr)

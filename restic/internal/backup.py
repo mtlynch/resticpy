@@ -1,4 +1,5 @@
 import json
+from typing import Any, Callable, Optional
 
 from restic.internal import command_executor
 
@@ -16,11 +17,16 @@ def run(restic_base_command,
         files_from=None,
         exclude_patterns=None,
         exclude_files=None,
+        *,
         tags=None,
-        dry_run=None,
+        dry_run: bool=None,
         host=None,
-        scan=True,
-        skip_if_unchanged=False):
+        scan: bool=True,
+        skip_if_unchanged: bool=False,
+        on_stdout: Optional[Callable[[str], None]]=None,
+        on_stderr: Optional[Callable[[str], None]]=None,
+        )->Any:
+
     cmd = restic_base_command + ['backup']
 
     if paths is None and files_from is None:
@@ -47,7 +53,8 @@ def run(restic_base_command,
     if skip_if_unchanged:
         cmd.extend(['--skip-if-unchanged'])
 
-    result_raw = command_executor.execute(cmd)
+    result_raw = command_executor.execute(cmd, on_stdout=on_stdout,
+                                          on_stderr=on_stderr)
     return _parse_result(result_raw)
 
 
