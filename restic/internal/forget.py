@@ -16,6 +16,7 @@ def run(restic_base_command,
         keep_monthly=None,
         keep_yearly=None,
         keep_within=None,
+        snapshot_id=None,
         prune=False):
     cmd = restic_base_command + ['forget']
 
@@ -55,6 +56,11 @@ def run(restic_base_command,
 
     if prune:
         cmd.extend(['--prune'])
+
+    if snapshot_id:
+        # The -- tells restic to treat the subsequent param
+        # as a literal string even if it begins with "-".  
+        cmd.extend(['--', snapshot_id])
 
     return _parse_result(command_executor.execute(cmd))
 
