@@ -45,8 +45,9 @@ def run(restic_base_command,
         cmd.extend(['--prune'])
 
     if snapshot_id:
-        # The -- tells restic to treat the subsequent param
-        # as a literal string even if it begins with "-".
+        # The '--' tells restic to treat the subsequent arguments
+        # as literal strings even if they begin with '-'. And so
+        # we'll be ok if someone passes in a weird snapshot_id.
         cmd.extend(['--', snapshot_id])
 
     return _parse_result(command_executor.execute(cmd))
