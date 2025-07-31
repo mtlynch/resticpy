@@ -39,6 +39,7 @@ disable=
   too-many-branches,
   too-many-instance-attributes,
   too-many-locals,
+  too-many-public-methods,
   too-many-return-statements,
   too-many-statements,
   multiple-imports,     # We're using isort to lint imports
