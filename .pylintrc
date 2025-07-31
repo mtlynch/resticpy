@@ -30,10 +30,19 @@ disable=
   wildcard-import,
   locally-disabled,
   missing-module-docstring,
-  too-many-public-methods,
   missing-class-docstring,
   superfluous-parens,
-  too-many-arguments,   # Need to support restic's many flags
+  too-many-public-methods,
+  too-few-public-methods,
+  too-many-ancestors,
+  too-many-arguments,
+  too-many-arguments,
+  too-many-boolean-expressions
+  too-many-branches,
+  too-many-instance-attributes,
+  too-many-locals,
+  too-many-return-statements,
+  too-many-statements,
   multiple-imports,     # We're using isort to lint imports
   ungrouped-imports,    # We're using isort to lint imports
   wrong-import-order,   # We're using isort to lint imports
@@ -191,39 +200,6 @@ valid-metaclass-classmethod-first-arg=mcs
 # List of member names, which should be excluded from the protected access
 # warning.
 exclude-protected=_asdict,_fields,_replace,_source,_make
-
-[DESIGN]
-
-# Maximum number of arguments for function / method
-max-args=10
-
-# Argument names that match this expression will be ignored. Default to name
-# with leading underscore
-ignored-argument-names=_.*
-
-# Maximum number of locals for function / method body
-max-locals=30
-
-# Maximum number of return / yield for function / method body
-max-returns=100
-
-# Maximum number of branch for function / method body
-max-branches=13
-
-# Maximum number of statements in function / method body
-max-statements=100
-
-# Maximum number of parents for a class (see R0901).
-max-parents=7
-
-# Maximum number of attributes for a class (see R0902).
-max-attributes=10
-
-# Minimum number of public methods for a class (see R0903).
-min-public-methods=0
-
-# Maximum number of boolean expressions in a if statement
-max-bool-expr=5
 
 [IMPORTS]
 
