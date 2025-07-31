@@ -59,7 +59,7 @@ def run(restic_base_command,
 
     if snapshot_id:
         # The -- tells restic to treat the subsequent param
-        # as a literal string even if it begins with "-".  
+        # as a literal string even if it begins with "-".
         cmd.extend(['--', snapshot_id])
 
     return _parse_result(command_executor.execute(cmd))
