@@ -151,7 +151,7 @@ class ForgetTest(unittest.TestCase):
         restic.forget(prune=True, snapshot_id='123456')
         mock_execute.assert_called_with(
             ['restic', '--json', 'forget', '--prune', '--', '123456'])
-    
+
     @mock.patch.object(forget.command_executor, 'execute')
     def test_forget_specific_snapshot_and_keep_daily(self, mock_execute):
         mock_execute.return_value = '{}'
