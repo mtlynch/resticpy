@@ -32,10 +32,8 @@ disable=
   missing-module-docstring,
   missing-class-docstring,
   superfluous-parens,
-  too-many-public-methods,
   too-few-public-methods,
   too-many-ancestors,
-  too-many-arguments,
   too-many-arguments,
   too-many-boolean-expressions
   too-many-branches,
