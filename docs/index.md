@@ -207,6 +207,7 @@ A list of dictionaries representing the files that matched the search pattern in
 - `keep_monthly`: An int representing the last N monthly snapshots to keep
 - `keep_yearly`: An int representing the last N yearly snapshots to keep
 - `keep_within` A string representing a duration before which to prune relative to the latest snapshot
+- `snapshot_id` A specific snapshot to be forgotten
 - `prune`: A boolean representing whether to automatically run the 'prune' command if snapshots have been removed
 
 ### Returns

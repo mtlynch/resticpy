@@ -146,6 +146,20 @@ class ForgetTest(unittest.TestCase):
             ['restic', '--json', 'forget', '--keep-within', '60d', '--prune'])
 
     @mock.patch.object(forget.command_executor, 'execute')
+    def test_forget_specific_snapshot(self, mock_execute):
+        mock_execute.return_value = '{}'
+        restic.forget(prune=True, snapshot_id='123456')
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'forget', '--prune', '123456'])
+
+    @mock.patch.object(forget.command_executor, 'execute')
+    def test_forget_specific_snapshot_and_keep_daily(self, mock_execute):
+        mock_execute.return_value = '{}'
+        restic.forget(keep_daily=30, snapshot_id='123456')
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'forget', '--keep-daily', '30', '123456'])
+
+    @mock.patch.object(forget.command_executor, 'execute')
     def test_parses_result_json(self, mock_execute):
         # Ignore complaint about too long of a line.
         # pylint: disable=C0301
