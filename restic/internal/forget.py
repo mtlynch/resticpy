@@ -33,22 +33,32 @@ def run(restic_base_command,
     if host:
         cmd.extend(['--host', host])
 
-    _add_keep_option(cmd, '--keep-last', keep_last)
-    _add_keep_option(cmd, '--keep-hourly', keep_hourly)
-    _add_keep_option(cmd, '--keep-daily', keep_daily)
-    _add_keep_option(cmd, '--keep-weekly', keep_weekly)
-    _add_keep_option(cmd, '--keep-monthly', keep_monthly)
-    _add_keep_option(cmd, '--keep-yearly', keep_yearly)
-    _add_keep_option(cmd, '--keep-within', keep_within)
+    if keep_last:
+        cmd.extend(['--keep-last', str(keep_last)])
+
+    if keep_hourly:
+        cmd.extend(['--keep-hourly', str(keep_hourly)])
+
+    if keep_daily:
+        cmd.extend(['--keep-daily', str(keep_daily)])
+
+    if keep_weekly:
+        cmd.extend(['--keep-weekly', str(keep_weekly)])
+
+    if keep_monthly:
+        cmd.extend(['--keep-monthly', str(keep_monthly)])
+
+    if keep_yearly:
+        cmd.extend(['--keep-yearly', str(keep_yearly)])
+
+    if keep_within:
+        cmd.extend(['--keep-within', str(keep_within)])
 
     if prune:
         cmd.extend(['--prune'])
 
     if snapshot_id:
-        # The '--' tells restic to treat the subsequent arguments
-        # as literal strings even if they begin with '-'. And so
-        # we'll be ok if someone passes in a weird snapshot_id.
-        cmd.extend(['--', snapshot_id])
+        cmd.extend([snapshot_id])
 
     return _parse_result(command_executor.execute(cmd))
 
@@ -65,8 +75,3 @@ def _parse_result(result):
         raise restic.errors.UnexpectedResticResponse(
             'Unexpected result from restic. Expected JSON, got: ' +
             result_lines[0]) from e
-
-
-def _add_keep_option(cmd, option, value):
-    if value:
-        cmd.extend([option, str(value)])
