@@ -15,9 +15,8 @@ class BackupTest(unittest.TestCase):
 
         mock_execute.assert_called_with([
             'restic', '--json', 'backup', '/tmp/dummy-file.txt', '--group-by',
-            'hosts,tags'
+            'host,tags'
         ])
-
 
     @mock.patch.object(backup.command_executor, 'execute')
     def test_backup_single_path(self, mock_execute):
