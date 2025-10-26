@@ -24,7 +24,7 @@
 - `dry_run`: Set to `True` to perform just a dry run of the backup
 - `host`: Set the hostname for the snapshot manually
 - `scan`: Set to `False` to let restic skip the step of estimating the size of the backup (restic >= 0.15.0)
-- `group_by`: A string for grouping snapshots
+- `group_by`: A list of criteria with which to group backups. Each element must be one of ("host", "path", or "tags"). Disable grouping with an empty list
 - `skip_if_unchanged`: Omit the creation of a new snapshot if nothing has changed compared to the parent snapshot
 
 ### Returns
@@ -198,7 +198,7 @@ A list of dictionaries representing the files that matched the search pattern in
 ### Args
 
 - `dry_run`: Set to `True` to perform just a dry run of the backup
-- `group_by`: A string for grouping snapshots
+- `group_by`: A list of criteria with which to group backups. Each element must be one of ("host", "path", or "tags"). Disable grouping with an empty list
 - `tags`: A list of tags indicating which snapshots to consider (can be specified multiple times)
 - `host`: A string for the hostname indicating which snapshots to consider
 - `keep_last`: An int representing the last N snapshots to keep
@@ -480,7 +480,7 @@ Retrieve a list of snapshots in the repo
 ### Args
 
 - `snapshot_id`: ID of the snapshot which should be listed
-- `group_by`: String for grouping snapshots by host, paths, tags
+- `group_by`: A list of criteria with which to group backups. Each element must be one of ("host", "path", or "tags"). Disable grouping with an empty list
 - `tags`: List of snapshot tags
 - `path`: String for filtering snapshots on (absolute) path
 - `host`: String for filtering snapshots on host

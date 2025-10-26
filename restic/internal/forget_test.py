@@ -34,9 +34,16 @@ class ForgetTest(unittest.TestCase):
     @mock.patch.object(forget.command_executor, 'execute')
     def test_forget_with_group_by(self, mock_execute):
         mock_execute.return_value = '{}'
-        restic.forget(prune=True, group_by='host')
+        restic.forget(prune=True, group_by=['host'])
         mock_execute.assert_called_with(
             ['restic', '--json', 'forget', '--group-by', 'host', '--prune'])
+
+    @mock.patch.object(forget.command_executor, 'execute')
+    def test_forget_with_no_grouping(self, mock_execute):
+        mock_execute.return_value = '{}'
+        restic.forget(prune=True, group_by=[])
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'forget', '--group-by', '', '--prune'])
 
     @mock.patch.object(forget.command_executor, 'execute')
     def test_forget_with_single_tag(self, mock_execute):

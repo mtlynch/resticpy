@@ -11,11 +11,22 @@ class BackupTest(unittest.TestCase):
     def test_backup_single_path_group_by(self, mock_execute):
         mock_execute.return_value = '{}'
 
-        restic.backup(paths=['/tmp/dummy-file.txt'], group_by='host,tags')
+        restic.backup(paths=['/tmp/dummy-file.txt'], group_by=['host', 'tags'])
 
         mock_execute.assert_called_with([
             'restic', '--json', 'backup', '/tmp/dummy-file.txt', '--group-by',
             'host,tags'
+        ])
+
+    @mock.patch.object(backup.command_executor, 'execute')
+    def test_backup_single_path_no_grouping(self, mock_execute):
+        mock_execute.return_value = '{}'
+
+        restic.backup(paths=['/tmp/dummy-file.txt'], group_by=[])
+
+        mock_execute.assert_called_with([
+            'restic', '--json', 'backup', '/tmp/dummy-file.txt', '--group-by',
+            ''
         ])
 
     @mock.patch.object(backup.command_executor, 'execute')
