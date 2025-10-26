@@ -80,6 +80,14 @@ jobs:
               setuptools==69.0.3 \
               wheel==0.42.0 \
               twine==5.1.1
+
+            # Extract version from git tag
+            if [[ -n "${CIRCLE_TAG}" ]]; then
+              PACKAGE_VERSION="${CIRCLE_TAG}"
+              export PACKAGE_VERSION
+              echo "Building version: $PACKAGE_VERSION from tag: $CIRCLE_TAG"
+            fi
+
             python setup.py sdist bdist_wheel
             twine check dist/*
       - persist_to_workspace:
