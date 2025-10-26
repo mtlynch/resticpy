@@ -24,7 +24,7 @@
 - `dry_run`: Set to `True` to perform just a dry run of the backup
 - `host`: Set the hostname for the snapshot manually
 - `scan`: Set to `False` to let restic skip the step of estimating the size of the backup (restic >= 0.15.0)
-- `group_by`: A list of criteria with which to group backups. Each element must be one of ("host", "path", or "tags"). Disable grouping with an empty list.
+- `group_by`: A list of criteria with which to group backups. Each element must be one of ("host", "path", or "tags"). Disable grouping with an empty list
 - `skip_if_unchanged`: Omit the creation of a new snapshot if nothing has changed compared to the parent snapshot
 
 ### Returns
@@ -480,7 +480,7 @@ Retrieve a list of snapshots in the repo
 ### Args
 
 - `snapshot_id`: ID of the snapshot which should be listed
-- `group_by`: A list of criteria with which to group backups. Each element must be one of ("host", "path", or "tags"). Disable grouping with an empty list.
+- `group_by`: A list of criteria with which to group backups. Each element must be one of ("host", "path", or "tags"). Disable grouping with an empty list
 - `tags`: List of snapshot tags
 - `path`: String for filtering snapshots on (absolute) path
 - `host`: String for filtering snapshots on host
