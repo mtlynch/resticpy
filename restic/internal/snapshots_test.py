@@ -22,10 +22,19 @@ class SnapshotsTest(unittest.TestCase):
     def test_snapshots_group_by_host(self, mock_execute):
         mock_execute.return_value = '[]'
 
-        self.assertEqual([], restic.snapshots(group_by='host'))
+        self.assertEqual([], restic.snapshots(group_by=['host']))
 
         mock_execute.assert_called_with(
             ['restic', '--json', 'snapshots', '--group-by', 'host'])
+
+    @mock.patch.object(snapshots.command_executor, 'execute')
+    def test_snapshots_no_grouping(self, mock_execute):
+        mock_execute.return_value = '[]'
+
+        self.assertEqual([], restic.snapshots(group_by=[]))
+
+        mock_execute.assert_called_with(
+            ['restic', '--json', 'snapshots', '--group-by', ''])
 
     @mock.patch.object(snapshots.command_executor, 'execute')
     def test_snapshots_id(self, mock_execute):

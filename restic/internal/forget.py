@@ -23,8 +23,10 @@ def run(restic_base_command,
     if dry_run:
         cmd.extend(['--dry-run'])
 
-    if group_by:
-        cmd.extend(['--group-by', group_by])
+    # Explicitly check for None, as empty lists and None have different
+    # meanings.
+    if group_by is not None:
+        cmd.extend(['--group-by', ','.join(group_by)])
 
     if tags:
         for tag in tags:

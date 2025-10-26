@@ -45,8 +45,10 @@ def run(restic_base_command,
     if not scan:
         cmd.extend(['--no-scan'])
 
-    if group_by:
-        cmd.extend(['--group-by', group_by])
+    # Explicitly check for None, as empty lists and None have different
+    # meanings.
+    if group_by is not None:
+        cmd.extend(['--group-by', ','.join(group_by)])
 
     if skip_if_unchanged:
         cmd.extend(['--skip-if-unchanged'])
