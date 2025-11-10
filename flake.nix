@@ -10,8 +10,8 @@
     # 20.6.1 release
     nodejs-nixpkgs.url = "github:NixOS/nixpkgs/78058d810644f5ed276804ce7ea9e82d92bee293";
 
-    # 0.17.1 release
-    restic-nixpkgs.url = "github:NixOS/nixpkgs/d4f247e89f6e10120f911e2e2d2254a050d0f732";
+    # 0.18.1 release
+    restic-nixpkgs.url = "github:NixOS/nixpkgs/01b6809f7f9d1183a2b3e081f0a1e6f8f415cb09";
 
     pyproject-nix = {
       url = "github:nix-community/pyproject.nix";
