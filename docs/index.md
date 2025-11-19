@@ -103,7 +103,7 @@ Output the lock data for a lock-id.
 
 ### Args
 
-- `lock-id`: A single lock-id
+- `lock_id`: A single lock-id
 
 ### Returns
 
@@ -112,7 +112,7 @@ Lock data
 ### Example
 
 ```python
->>> restic.cat.lock(lock-id='444974b52718c2255fc908275e6549b307465f31c3147c75490887ae06a6b0a1')
+>>> restic.cat.lock(lock_id='444974b52718c2255fc908275e6549b307465f31c3147c75490887ae06a6b0a1')
 { "time": "2025-11-19T12:10:09.853558935Z", "exclusive": true, "hostname": "some-random-hostname", "username": "some-random-username", "pid": 1337 }
 ```
 
