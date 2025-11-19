@@ -16,5 +16,9 @@ class Cat:
         cmd = self.base_command() + ['cat', 'config']
         return self.run(cmd)
 
+    def lock(self, lock_id):
+        cmd = self.base_command() + ['cat', 'lock', lock_id, '--no-lock']  # pylint: disable=C0301
+        return self.run(cmd)
+
     def run(self, cmd):
         return json.loads(command_executor.execute(cmd))
