@@ -173,41 +173,17 @@ class ForgetTest(unittest.TestCase):
 [{"tags": null, "host": "ecb5551395ae", "paths": ["/tmp/tmp6ew1vzp2/mydata.txt"], "keep": [{"time": "2021-03-16T00:10:37.015657013Z", "tree": "4483c2c6c1386abb9f47497cf108bab19e09c42430d32cd640a4f6f97137841f", "paths": ["/tmp/tmp6ew1vzp2/mydata.txt"], "hostname": "ecb5551395ae", "username": "circleci", "uid": 3434, "gid": 3434, "id": "3f6de49c6461ffd42900a204655708a3e136a3814abe298c07f27e412e2b6a43", "short_id": "3f6de49c"}], "remove": null, "reasons": [{"snapshot": {"time": "2021-03-16T00:10:37.015657013Z", "tree": "4483c2c6c1386abb9f47497cf108bab19e09c42430d32cd640a4f6f97137841f", "paths": ["/tmp/tmp6ew1vzp2/mydata.txt"], "hostname": "ecb5551395ae", "username": "circleci", "uid": 3434, "gid": 3434}, "matches": ["daily snapshot"], "counters": {"daily": 4}}]}]
 """.strip()
         forget_result = restic.forget()
-        self.assertEqual([{
-            'tags':
-                None,
-            'host':
-                'ecb5551395ae',
-            'paths': ['/tmp/tmp6ew1vzp2/mydata.txt'],
-            'keep': [{
-                'time':
-                    '2021-03-16T00:10:37.015657013Z',
-                'tree':
-                    # pylint: disable-next=line-too-long
-                    '4483c2c6c1386abb9f47497cf108bab19e09c42430d32cd640a4f6f97137841f',
-                'paths': ['/tmp/tmp6ew1vzp2/mydata.txt'],
-                'hostname':
+        self.assertEqual(
+            [{
+                'tags':
+                    None,
+                'host':
                     'ecb5551395ae',
-                'username':
-                    'circleci',
-                'uid':
-                    3434,
-                'gid':
-                    3434,
-                'id':
-                    # pylint: disable-next=line-too-long
-                    '3f6de49c6461ffd42900a204655708a3e136a3814abe298c07f27e412e2b6a43',
-                'short_id':
-                    '3f6de49c'
-            }],
-            'remove':
-                None,
-            'reasons': [{
-                'snapshot': {
+                'paths': ['/tmp/tmp6ew1vzp2/mydata.txt'],
+                'keep': [{
                     'time':
                         '2021-03-16T00:10:37.015657013Z',
-                    'tree':
-                    # pylint: disable-next=line-too-long
+                    'tree':  # pylint: disable-next=line-too-long
                         '4483c2c6c1386abb9f47497cf108bab19e09c42430d32cd640a4f6f97137841f',
                     'paths': ['/tmp/tmp6ew1vzp2/mydata.txt'],
                     'hostname':
@@ -217,14 +193,37 @@ class ForgetTest(unittest.TestCase):
                     'uid':
                         3434,
                     'gid':
-                        3434
-                },
-                'matches': ['daily snapshot'],
-                'counters': {
-                    'daily': 4
-                }
-            }]
-        }], forget_result)
+                        3434,
+                    'id':  # pylint: disable-next=line-too-long
+                        '3f6de49c6461ffd42900a204655708a3e136a3814abe298c07f27e412e2b6a43',
+                    'short_id':
+                        '3f6de49c'
+                }],
+                'remove':
+                    None,
+                'reasons': [{
+                    'snapshot': {
+                        'time':
+                            '2021-03-16T00:10:37.015657013Z',
+                        'tree':  # pylint: disable-next=line-too-long
+                            '4483c2c6c1386abb9f47497cf108bab19e09c42430d32cd640a4f6f97137841f',
+                        'paths': ['/tmp/tmp6ew1vzp2/mydata.txt'],
+                        'hostname':
+                            'ecb5551395ae',
+                        'username':
+                            'circleci',
+                        'uid':
+                            3434,
+                        'gid':
+                            3434
+                    },
+                    'matches': ['daily snapshot'],
+                    'counters': {
+                        'daily': 4
+                    }
+                }]
+            }],
+            forget_result)
 
     @mock.patch.object(forget.command_executor, 'execute')
     def test_parses_result_json_and_ignores_text_afterwards(self, mock_execute):
@@ -251,41 +250,17 @@ unused size after prune: 0 B (0.00% of remaining size)
 done
 """.lstrip()
         forget_result = restic.forget()
-        self.assertEqual([{
-            'tags':
-                None,
-            'host':
-                'ecb5551395ae',
-            'paths': ['/tmp/tmp6ew1vzp2/mydata.txt'],
-            'keep': [{
-                'time':
-                    '2021-03-16T00:10:37.015657013Z',
-                'tree':
-                    # pylint: disable-next=line-too-long
-                    '4483c2c6c1386abb9f47497cf108bab19e09c42430d32cd640a4f6f97137841f',
-                'paths': ['/tmp/tmp6ew1vzp2/mydata.txt'],
-                'hostname':
+        self.assertEqual(
+            [{
+                'tags':
+                    None,
+                'host':
                     'ecb5551395ae',
-                'username':
-                    'circleci',
-                'uid':
-                    3434,
-                'gid':
-                    3434,
-                'id':
-                    # pylint: disable-next=line-too-long
-                    '3f6de49c6461ffd42900a204655708a3e136a3814abe298c07f27e412e2b6a43',
-                'short_id':
-                    '3f6de49c'
-            }],
-            'remove':
-                None,
-            'reasons': [{
-                'snapshot': {
+                'paths': ['/tmp/tmp6ew1vzp2/mydata.txt'],
+                'keep': [{
                     'time':
                         '2021-03-16T00:10:37.015657013Z',
-                    'tree':
-                        # pylint: disable-next=line-too-long
+                    'tree':  # pylint: disable-next=line-too-long
                         '4483c2c6c1386abb9f47497cf108bab19e09c42430d32cd640a4f6f97137841f',
                     'paths': ['/tmp/tmp6ew1vzp2/mydata.txt'],
                     'hostname':
@@ -295,14 +270,37 @@ done
                     'uid':
                         3434,
                     'gid':
-                        3434
-                },
-                'matches': ['daily snapshot'],
-                'counters': {
-                    'daily': 4
-                }
-            }]
-        }], forget_result)
+                        3434,
+                    'id':  # pylint: disable-next=line-too-long
+                        '3f6de49c6461ffd42900a204655708a3e136a3814abe298c07f27e412e2b6a43',
+                    'short_id':
+                        '3f6de49c'
+                }],
+                'remove':
+                    None,
+                'reasons': [{
+                    'snapshot': {
+                        'time':
+                            '2021-03-16T00:10:37.015657013Z',
+                        'tree':  # pylint: disable-next=line-too-long
+                            '4483c2c6c1386abb9f47497cf108bab19e09c42430d32cd640a4f6f97137841f',
+                        'paths': ['/tmp/tmp6ew1vzp2/mydata.txt'],
+                        'hostname':
+                            'ecb5551395ae',
+                        'username':
+                            'circleci',
+                        'uid':
+                            3434,
+                        'gid':
+                            3434
+                    },
+                    'matches': ['daily snapshot'],
+                    'counters': {
+                        'daily': 4
+                    }
+                }]
+            }],
+            forget_result)
 
     @mock.patch.object(forget.command_executor, 'execute')
     def test_forget_raises_exception_when_response_is_invalid_json(

@@ -103,34 +103,34 @@ class SnapshotsTest(unittest.TestCase):
 """.strip()
 
         # pylint: disable-next=line-too-long
-        self.assertEqual([{
-            'group_key': {
-                'hostname': 'ace809d23440',
-                'paths': None,
-                'tags': None
-            },
-            'snapshots': [{
-                'time':
-                    '2021-03-28T21:31:44.477122573Z',
-                'tree':
-                    # pylint: disable-next=line-too-long
-                    'f589421bafdae95f5be5eea6285074b7ddc54aa0ffd1ad606f74d1e6207d20a3',
-                'paths': ['/tmp/tmp6594jneh/mydata.txt'],
-                'hostname':
-                    'ace809d23440',
-                'username':
-                    'circleci',
-                'uid':
-                    3434,
-                'gid':
-                    3434,
-                'id':
-                    # pylint: disable-next=line-too-long
-                    'bbe7f04941ed969ee940bb41dc04196027fcfb83dbdfea93c16afb2cb9f6dd81',
-                'short_id':
-                    'bbe7f049'
-            }]
-        }], restic.snapshots())
+        self.assertEqual(
+            [{
+                'group_key': {
+                    'hostname': 'ace809d23440',
+                    'paths': None,
+                    'tags': None
+                },
+                'snapshots': [{
+                    'time':
+                        '2021-03-28T21:31:44.477122573Z',
+                    'tree':  # pylint: disable-next=line-too-long
+                        'f589421bafdae95f5be5eea6285074b7ddc54aa0ffd1ad606f74d1e6207d20a3',
+                    'paths': ['/tmp/tmp6594jneh/mydata.txt'],
+                    'hostname':
+                        'ace809d23440',
+                    'username':
+                        'circleci',
+                    'uid':
+                        3434,
+                    'gid':
+                        3434,
+                    'id':  # pylint: disable-next=line-too-long
+                        'bbe7f04941ed969ee940bb41dc04196027fcfb83dbdfea93c16afb2cb9f6dd81',
+                    'short_id':
+                        'bbe7f049'
+                }]
+            }],
+            restic.snapshots())
 
     @mock.patch.object(snapshots.command_executor, 'execute')
     def test_snapshots_parses_multiple_snapshots_json(self, mock_execute):
@@ -178,58 +178,58 @@ class SnapshotsTest(unittest.TestCase):
 ]
 """.strip()
 
-        self.assertEqual([{
-            'group_key': {
-                'hostname': '3099758ccbd9',
-                'paths': None,
-                'tags': None
-            },
-            'snapshots': [{
-                'time':
-                    '2023-12-31T20:39:22.449822393Z',
-                'tree':
-                    # pylint: disable-next=line-too-long
-                    'd4aed49b16b1fcd2ebcfbc8cfd7c53bcff2397b8673b6764dd6411223775d6b2',
-                'paths': ['/tmp/tmpuvf9pfam/mydata.txt'],
-                'hostname':
-                    '3099758ccbd9',
-                'username':
-                    'circleci',
-                'uid':
-                    1001,
-                'gid':
-                    1002,
-                'program_version':
-                    'restic 0.16.2',
-                'id':
-                    # pylint: disable-next=line-too-long
-                    '7540e94d8117078bb26b0e4a85dd353a41665e084d3771f04e5f72f6b0f24a6f',
-                'short_id':
-                    '7540e94d'
-            }, {
-                'time':
-                    '2023-12-31T20:39:25.811155387Z',
-                'tree':
-                    # pylint: disable-next=line-too-long
-                    'a39c45c1b202985f766a177a663a5e4f37acd5bfa9bd324fb4eaf62a3c3e0dea',
-                'paths': ['/tmp/tmpuvf9pfam/mydata.txt'],
-                'hostname':
-                    '3099758ccbd9',
-                'username':
-                    'circleci',
-                'uid':
-                    1001,
-                'gid':
-                    1002,
-                'parent':
-                    # pylint: disable-next=line-too-long
-                    '7540e94d8117078bb26b0e4a85dd353a41665e084d3771f04e5f72f6b0f24a6f',
-                'program_version':
-                    'restic 0.16.2',
-                'id':
-                    # pylint: disable-next=line-too-long
-                    '57d3496886edf2cb0e808838734dc108fb1d929ae80cafdb68597e75702aecbb',
-                'short_id':
-                    '57d34968'
-            }]
-        }], restic.snapshots())
+        self.assertEqual(
+            [{
+                'group_key': {
+                    'hostname': '3099758ccbd9',
+                    'paths': None,
+                    'tags': None
+                },
+                'snapshots': [
+                    {
+                        'time':
+                            '2023-12-31T20:39:22.449822393Z',
+                        'tree':  # pylint: disable-next=line-too-long
+                            'd4aed49b16b1fcd2ebcfbc8cfd7c53bcff2397b8673b6764dd6411223775d6b2',
+                        'paths': ['/tmp/tmpuvf9pfam/mydata.txt'],
+                        'hostname':
+                            '3099758ccbd9',
+                        'username':
+                            'circleci',
+                        'uid':
+                            1001,
+                        'gid':
+                            1002,
+                        'program_version':
+                            'restic 0.16.2',
+                        'id':  # pylint: disable-next=line-too-long
+                            '7540e94d8117078bb26b0e4a85dd353a41665e084d3771f04e5f72f6b0f24a6f',
+                        'short_id':
+                            '7540e94d'
+                    },
+                    {
+                        'time':
+                            '2023-12-31T20:39:25.811155387Z',
+                        'tree':  # pylint: disable-next=line-too-long
+                            'a39c45c1b202985f766a177a663a5e4f37acd5bfa9bd324fb4eaf62a3c3e0dea',
+                        'paths': ['/tmp/tmpuvf9pfam/mydata.txt'],
+                        'hostname':
+                            '3099758ccbd9',
+                        'username':
+                            'circleci',
+                        'uid':
+                            1001,
+                        'gid':
+                            1002,
+                        'parent':  # pylint: disable-next=line-too-long
+                            '7540e94d8117078bb26b0e4a85dd353a41665e084d3771f04e5f72f6b0f24a6f',
+                        'program_version':
+                            'restic 0.16.2',
+                        'id':  # pylint: disable-next=line-too-long
+                            '57d3496886edf2cb0e808838734dc108fb1d929ae80cafdb68597e75702aecbb',
+                        'short_id':
+                            '57d34968'
+                    }
+                ]
+            }],
+            restic.snapshots())
