@@ -42,7 +42,6 @@ jobs:
           command: |
             uv venv
             . venv/bin/activate
-            uv pip install --requirement dev_requirements.txt
             uv pip install coveralls==3.0.1
       - run:
           name: upload coverage information
