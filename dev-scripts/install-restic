@@ -19,4 +19,4 @@ bzip2 -d "restic_${RESTIC_VERSION}_linux_amd64.bz2"
 
 chmod +x "restic_${RESTIC_VERSION}_linux_amd64"
 
-sudo mv "restic_${RESTIC_VERSION}_linux_amd64" /usr/local/bin/restic
+mv "restic_${RESTIC_VERSION}_linux_amd64" /usr/local/bin/restic
