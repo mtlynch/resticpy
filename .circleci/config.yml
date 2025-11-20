@@ -2,7 +2,7 @@ version: 2.1
 executors:
   python:
     docker:
-      - image: cimg/python:3.12.1
+      - image: ghcr.io/astral-sh/uv:python3.12-trixie-slim
 jobs:
   check_style:
     docker:
@@ -22,10 +22,10 @@ jobs:
       - run:
           name: Install requirements and run build script
           command: |
-            mkdir -p ./venv
-            virtualenv --python python3 ./venv
+            uv venv
             . venv/bin/activate
-            pip install --requirement dev_requirements.txt
+            uv pip install --requirement dev_requirements.txt
+
             ./dev-scripts/build
       - persist_to_workspace:
           root: ./
@@ -40,10 +40,10 @@ jobs:
       - run:
           name: install coveralls and upload coverage information
           command: |
-            mkdir -p ./venv
-            virtualenv --python python3 ./venv
+            uv venv
             . venv/bin/activate
-            pip install coveralls==3.0.1
+            uv pip install --requirement dev_requirements.txt
+            uv pip install coveralls==3.0.1
       - run:
           name: upload coverage information
           command: . venv/bin/activate && coveralls
@@ -60,10 +60,9 @@ jobs:
       - run:
           name: Install from setup.py and run end-to-end tests
           command: |
-            mkdir -p ./venv
-            virtualenv --python python3 ./venv
+            uv venv
             . venv/bin/activate
-            pip install .
+            uv pip install .
             ./e2e/test.py
   prepare_pypi_package:
     executor: python
@@ -73,10 +72,11 @@ jobs:
           name: Install requirements and run build script
           command: |
             set -x
-            mkdir -p ./venv
-            virtualenv --python python3 ./venv
+
+            uv venv
             . venv/bin/activate
-            pip install \
+
+            uv pip install \
               setuptools==69.0.3 \
               wheel==0.42.0 \
               twine==5.1.1

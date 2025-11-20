@@ -15,7 +15,7 @@ readonly SOURCE_DIR=restic
 readonly E2E_DIR=e2e
 
 # Location of virtualenv.
-readonly VIRTUALENV_DIR=venv
+readonly VIRTUALENV_DIR='.venv'
 
 # Delete pyc files from previous builds.
 find . \

@@ -8,7 +8,7 @@
 ## Set up a development environment
 
 ```bash
-uv venv venv --python python3.12 && \
+uv venv --python python3.12 && \
   . venv/bin/activate && \
   uv pip install --requirement dev_requirements.txt
 ```
