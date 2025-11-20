@@ -23,7 +23,7 @@ jobs:
           name: Install requirements and run build script
           command: |
             uv venv
-            . venv/bin/activate
+            . .venv/bin/activate
             uv pip install --requirement dev_requirements.txt
 
             ./dev-scripts/build
@@ -41,11 +41,11 @@ jobs:
           name: install coveralls and upload coverage information
           command: |
             uv venv
-            . venv/bin/activate
+            . .venv/bin/activate
             uv pip install coveralls==3.0.1
       - run:
           name: upload coverage information
-          command: . venv/bin/activate && coveralls
+          command: . .venv/bin/activate && coveralls
   e2e:
     executor: python
     steps:
@@ -60,7 +60,7 @@ jobs:
           name: Install from setup.py and run end-to-end tests
           command: |
             uv venv
-            . venv/bin/activate
+            . .venv/bin/activate
             uv pip install .
             ./e2e/test.py
   prepare_pypi_package:
@@ -73,7 +73,7 @@ jobs:
             set -x
 
             uv venv
-            . venv/bin/activate
+            . .venv/bin/activate
 
             uv pip install \
               setuptools==69.0.3 \
@@ -104,7 +104,7 @@ jobs:
           # Requires TWINE_USERNAME and TWINE_PASSWORD environment variables.
           command: |
             set -x
-            . venv/bin/activate
+            . .venv/bin/activate
             twine upload dist/*
 workflows:
   test:

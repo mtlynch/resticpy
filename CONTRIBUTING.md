@@ -9,7 +9,7 @@
 
 ```bash
 uv venv --python python3.12 && \
-  . venv/bin/activate && \
+  . .venv/bin/activate && \
   uv pip install --requirement dev_requirements.txt
 ```
 
