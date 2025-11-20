@@ -2,7 +2,7 @@ version: 2.1
 executors:
   python:
     docker:
-      - image: cimg/python:3.12.1
+      - image: ghcr.io/astral-sh/uv:python3.12-trixie-slim
 jobs:
   check_style:
     docker:
@@ -22,10 +22,10 @@ jobs:
       - run:
           name: Install requirements and run build script
           command: |
-            mkdir -p ./venv
-            virtualenv --python python3 ./venv
-            . venv/bin/activate
-            pip install --requirement dev_requirements.txt
+            uv venv
+            . .venv/bin/activate
+            uv pip install --requirement dev_requirements.txt
+
             ./dev-scripts/build
       - persist_to_workspace:
           root: ./
@@ -40,30 +40,28 @@ jobs:
       - run:
           name: install coveralls and upload coverage information
           command: |
-            mkdir -p ./venv
-            virtualenv --python python3 ./venv
-            . venv/bin/activate
-            pip install coveralls==3.0.1
+            uv venv
+            . .venv/bin/activate
+            uv pip install coveralls==3.0.1
       - run:
           name: upload coverage information
-          command: . venv/bin/activate && coveralls
+          command: . .venv/bin/activate && coveralls
   e2e:
     executor: python
     steps:
       - checkout
       - run:
-          name: Install bzip2
-          command: sudo apt-get install bzip2
+          name: Install dependencies
+          command: apt-get update && apt-get install -y bzip2 wget
       - run:
           name: Install restic
           command: ./dev-scripts/install-restic
       - run:
           name: Install from setup.py and run end-to-end tests
           command: |
-            mkdir -p ./venv
-            virtualenv --python python3 ./venv
-            . venv/bin/activate
-            pip install .
+            uv venv
+            . .venv/bin/activate
+            uv pip install .
             ./e2e/test.py
   prepare_pypi_package:
     executor: python
@@ -73,10 +71,11 @@ jobs:
           name: Install requirements and run build script
           command: |
             set -x
-            mkdir -p ./venv
-            virtualenv --python python3 ./venv
-            . venv/bin/activate
-            pip install \
+
+            uv venv
+            . .venv/bin/activate
+
+            uv pip install \
               setuptools==69.0.3 \
               wheel==0.42.0 \
               twine==5.1.1
@@ -105,7 +104,7 @@ jobs:
           # Requires TWINE_USERNAME and TWINE_PASSWORD environment variables.
           command: |
             set -x
-            . venv/bin/activate
+            . .venv/bin/activate
             twine upload dist/*
 workflows:
   test:
