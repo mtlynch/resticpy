@@ -34,22 +34,6 @@
         "type": "github"
       }
     },
-    "pyproject-nix": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1727951589,
-        "narHash": "sha256-/gPhr5thmc/Li2L+OoOyGe5Sef6j3Zzp44zRcbokysM=",
-        "owner": "nix-community",
-        "repo": "pyproject.nix",
-        "rev": "ed7903195e72b2fd00dfaa3be9e9bcab8f2957ad",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "pyproject.nix",
-        "type": "github"
-      }
-    },
     "python-nixpkgs": {
       "locked": {
         "lastModified": 1702508050,
@@ -86,9 +70,9 @@
       "inputs": {
         "flake-utils": "flake-utils",
         "nodejs-nixpkgs": "nodejs-nixpkgs",
-        "pyproject-nix": "pyproject-nix",
         "python-nixpkgs": "python-nixpkgs",
-        "restic-nixpkgs": "restic-nixpkgs"
+        "restic-nixpkgs": "restic-nixpkgs",
+        "uv-nixpkgs": "uv-nixpkgs"
       }
     },
     "systems": {
@@ -103,6 +87,22 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "uv-nixpkgs": {
+      "locked": {
+        "lastModified": 1763191728,
+        "narHash": "sha256-esRhOS0APE6k40Hs/jjReXg+rx+J5LkWw7cuWFKlwYA=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "1d4c88323ac36805d09657d13a5273aea1b34f0c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "1d4c88323ac36805d09657d13a5273aea1b34f0c",
         "type": "github"
       }
     }

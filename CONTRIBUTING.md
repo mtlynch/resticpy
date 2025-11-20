@@ -3,14 +3,14 @@
 ## Requirements
 
 - Python 3.7 or higher
-- python3-virtualenv
+- [uv](https://docs.astral.sh/uv/)
 
 ## Set up a development environment
 
 ```bash
-virtualenv -p python3 venv && \
+uv venv venv --python python3.12 && \
   . venv/bin/activate && \
-  pip install --requirement dev_requirements.txt
+  uv pip install --requirement dev_requirements.txt
 ```
 
 ## Enable Git hooks
