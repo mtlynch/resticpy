@@ -101,7 +101,8 @@ class SnapshotsTest(unittest.TestCase):
 ]
 """.strip()
 
-        # pylint: disable-next=line-too-long
+        # Ignore complaint about too long of a line.
+        # pylint: disable=C0301
         self.assertEqual([{
             'group_key': {
                 'hostname': 'ace809d23440',
@@ -174,7 +175,8 @@ class SnapshotsTest(unittest.TestCase):
 ]
 """.strip()
 
-        # pylint: disable-next=line-too-long
+        # Ignore complaint about too long of a line.
+        # pylint: disable=C0301
         self.assertEqual([{
             'group_key': {
                 'hostname': '3099758ccbd9',

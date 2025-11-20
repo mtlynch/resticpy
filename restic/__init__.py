@@ -17,12 +17,12 @@ from restic.internal import unlock as internal_unlock
 from restic.internal import version as internal_version
 
 # Ignore warnings about naming of globals.
-# pylint: disable-next-line=invalid-name
+# pylint: disable=C0103
 binary_path = 'restic'
 
 # Global flags
 # Ignore warnings about naming of globals.
-# pylint: disable-next-line=invalid-name
+# pylint: disable=C0103
 repository = None
 password_file = None
 use_cache = True
