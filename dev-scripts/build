@@ -35,8 +35,7 @@ coverage report
 yapf \
   --diff \
   --recursive \
-  ./ \
-  --exclude="${VIRTUALENV_DIR}/*"
+  ./
 
 # Check correct sorting for imports.
 isort \
