@@ -52,7 +52,7 @@ jobs:
       - checkout
       - run:
           name: Install bzip2
-          command: sudo apt-get install bzip2
+          command: apt-get update && apt-get install -y bzip2
       - run:
           name: Install restic
           command: ./dev-scripts/install-restic
