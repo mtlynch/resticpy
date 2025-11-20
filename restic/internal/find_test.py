@@ -18,6 +18,7 @@ class FindTest(unittest.TestCase):
 
     @mock.patch.object(snapshots.command_executor, 'execute')
     def test_find_matches_single_result_in_single_snapshot(self, mock_execute):
+        # pylint: disable-next=line-too-long
         mock_execute.return_value = '''
 [{"matches":[{"path":"/dummyfile","permissions":"-rw-r--r--","type":"file","mode":420,"mtime":"2022-01-01T10:00:00.000000000-07:00","atime":"2022-01-01T10:00:00.000000000-07:00","ctime":"2022-01-01T10:00:00.000000000-07:00","uid":10000,"gid":10000,"user":"user","group":"group","device_id":10000,"size":1024,"links":1}],"hits":1,"snapshot":"f589421bafdae95f5be5eea6285074b7ddc54aa0ffd1ad606f74d1e6207d20a3"}]
 '''.strip()
@@ -43,6 +44,7 @@ class FindTest(unittest.TestCase):
             'hits':
                 1,
             'snapshot':
+                # pylint: disable-next=line-too-long
                 'f589421bafdae95f5be5eea6285074b7ddc54aa0ffd1ad606f74d1e6207d20a3'
         }], restic.find('dummyfile'))
 
@@ -89,12 +91,14 @@ class FindTest(unittest.TestCase):
             'hits':
                 2,
             'snapshot':
+                # pylint: disable-next=line-too-long
                 'f589421bafdae95f5be5eea6285074b7ddc54aa0ffd1ad606f74d1e6207d20a3'
         }], restic.find('dummyfile'))
 
     @mock.patch.object(snapshots.command_executor, 'execute')
     def test_find_matches_multiple_results_in_multiple_snapshots(
             self, mock_execute):
+        # pylint: disable-next=line-too-long
         mock_execute.return_value = '''
 [{"matches":[{"path":"/dummyfile1","permissions":"-rw-r--r--","type":"file","mode":420,"mtime":"2022-01-01T10:00:00.000000000-07:00","atime":"2022-01-01T10:00:00.000000000-07:00","ctime":"2022-01-01T10:00:00.000000000-07:00","uid":10000,"gid":10000,"user":"user","group":"group","device_id":10000,"size":1024,"links":1}],"hits":1,"snapshot":"f589421bafdae95f5be5eea6285074b7ddc54aa0ffd1ad606f74d1e6207d20a3"},{"matches":[{"path":"/dummyfile2","permissions":"-rw-r--r--","type":"file","mode":420,"mtime":"2022-01-01T10:00:00.000000000-07:00","atime":"2022-01-01T10:00:00.000000000-07:00","ctime":"2022-01-01T10:00:00.000000000-07:00","uid":10000,"gid":10000,"user":"user","group":"group","device_id":10000,"size":1024,"links":1}],"hits":1,"snapshot":"g589421bafdae95f5be5eea6285074b7ddc54aa0ffd1ad606f74d1e6207d20a3"}]
 '''.strip()
@@ -120,6 +124,7 @@ class FindTest(unittest.TestCase):
             'hits':
                 1,
             'snapshot':
+                # pylint: disable-next=line-too-long
                 'f589421bafdae95f5be5eea6285074b7ddc54aa0ffd1ad606f74d1e6207d20a3'
         }, {
             'matches': [{
@@ -141,5 +146,6 @@ class FindTest(unittest.TestCase):
             'hits':
                 1,
             'snapshot':
+                # pylint: disable-next=line-too-long
                 'g589421bafdae95f5be5eea6285074b7ddc54aa0ffd1ad606f74d1e6207d20a3'
         }], restic.find('dummyfile'))

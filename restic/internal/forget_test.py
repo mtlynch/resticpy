@@ -183,6 +183,7 @@ class ForgetTest(unittest.TestCase):
                 'time':
                     '2021-03-16T00:10:37.015657013Z',
                 'tree':
+                    # pylint: disable-next=line-too-long
                     '4483c2c6c1386abb9f47497cf108bab19e09c42430d32cd640a4f6f97137841f',
                 'paths': ['/tmp/tmp6ew1vzp2/mydata.txt'],
                 'hostname':
@@ -194,6 +195,7 @@ class ForgetTest(unittest.TestCase):
                 'gid':
                     3434,
                 'id':
+                    # pylint: disable-next=line-too-long
                     '3f6de49c6461ffd42900a204655708a3e136a3814abe298c07f27e412e2b6a43',
                 'short_id':
                     '3f6de49c'
@@ -205,6 +207,7 @@ class ForgetTest(unittest.TestCase):
                     'time':
                         '2021-03-16T00:10:37.015657013Z',
                     'tree':
+                    # pylint: disable-next=line-too-long
                         '4483c2c6c1386abb9f47497cf108bab19e09c42430d32cd640a4f6f97137841f',
                     'paths': ['/tmp/tmp6ew1vzp2/mydata.txt'],
                     'hostname':
@@ -258,6 +261,7 @@ done
                 'time':
                     '2021-03-16T00:10:37.015657013Z',
                 'tree':
+                    # pylint: disable-next=line-too-long
                     '4483c2c6c1386abb9f47497cf108bab19e09c42430d32cd640a4f6f97137841f',
                 'paths': ['/tmp/tmp6ew1vzp2/mydata.txt'],
                 'hostname':
@@ -269,6 +273,7 @@ done
                 'gid':
                     3434,
                 'id':
+                    # pylint: disable-next=line-too-long
                     '3f6de49c6461ffd42900a204655708a3e136a3814abe298c07f27e412e2b6a43',
                 'short_id':
                     '3f6de49c'
@@ -280,6 +285,7 @@ done
                     'time':
                         '2021-03-16T00:10:37.015657013Z',
                     'tree':
+                        # pylint: disable-next=line-too-long
                         '4483c2c6c1386abb9f47497cf108bab19e09c42430d32cd640a4f6f97137841f',
                     'paths': ['/tmp/tmp6ew1vzp2/mydata.txt'],
                     'hostname':
