@@ -73,7 +73,10 @@ class CatLockTest(unittest.TestCase):
             '444974b52718c2255fc908275e6549b307465f31c3147c75490887ae06a6b0a1')
 
         mock_execute.assert_called_with([
-            'restic', '--json', 'cat', 'lock',
+            'restic',
+            '--json',
+            'cat',
+            'lock',
             '444974b52718c2255fc908275e6549b307465f31c3147c75490887ae06a6b0a1',
         ])
 
@@ -100,7 +103,10 @@ class CatLockNoLockTest(unittest.TestCase):
             no_lock=True)
 
         mock_execute.assert_called_with([
-            'restic', '--json', 'cat', 'lock',
+            'restic',
+            '--json',
+            'cat',
+            'lock',
             '444974b52718c2255fc908275e6549b307465f31c3147c75490887ae06a6b0a1',
             '--no-lock'
         ])
