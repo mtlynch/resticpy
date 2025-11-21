@@ -65,7 +65,8 @@ class CatLockTest(unittest.TestCase):
 
     @mock.patch.object(cat.command_executor, 'execute')
     def test_cat_lock(self, mock_execute):
-        mock_execute.return_value = """{ "time": "2025-11-19T12:10:09.853558935Z", "exclusive": true, "hostname": "some-random-hostname", "username": "some-random-username", "pid": 1337 }"""  # pylint: disable=C0301
+        # pylint: disable-next=line-too-long
+        mock_execute.return_value = """{ "time": "2025-11-19T12:10:09.853558935Z", "exclusive": true, "hostname": "some-random-hostname", "username": "some-random-username", "pid": 1337 }"""
 
         result = restic.cat.lock(
             lock_id=

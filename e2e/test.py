@@ -326,6 +326,7 @@ def test_print_config_and_objects():
 
     logger.info('repository config: %s', restic.cat.config())
     logger.info('repository masterkey: %s', restic.cat.masterkey())
+
     logger.info('repository locks: %s', restic.list.locks())
 
     return True

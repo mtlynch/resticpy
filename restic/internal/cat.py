@@ -16,8 +16,13 @@ class Cat:
         cmd = self.base_command() + ['cat', 'config']
         return self.run(cmd)
 
-    def lock(self, lock_id):
-        cmd = self.base_command() + ['cat', 'lock', lock_id, '--no-lock']  # pylint: disable=C0301
+    def lock(self, lock_id, no_lock=false):
+        if no_lock:
+          # pylint: disable-next=line-too-long
+          cmd = self.base_command() + ['cat', 'lock', lock_id, '--no-lock']
+        else
+          cmd = self.base_command() + ['cat', 'lock', lock_id]
+
         return self.run(cmd)
 
     def run(self, cmd):
