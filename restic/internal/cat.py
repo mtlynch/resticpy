@@ -16,12 +16,11 @@ class Cat:
         cmd = self.base_command() + ['cat', 'config']
         return self.run(cmd)
 
-    def lock(self, lock_id, no_lock=False):
+    def lock(self, lock_id, lock=True):
+        cmd = self.base_command() + ['cat', 'lock', lock_id]
+
         if no_lock:
-            # pylint: disable-next=line-too-long
-            cmd = self.base_command() + ['cat', 'lock', lock_id, '--no-lock']
-        else:
-            cmd = self.base_command() + ['cat', 'lock', lock_id]
+            cmd.extend('--no-lock')
 
         return self.run(cmd)
 

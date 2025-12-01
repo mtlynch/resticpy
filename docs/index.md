@@ -104,6 +104,7 @@ Output the lock data for a lock-id.
 ### Args
 
 - `lock_id`: A single lock-id
+- `lock`: Set to `True` to lock or to `False` to not lock the repository while executing the command. (Default: True)
 
 ### Returns
 
