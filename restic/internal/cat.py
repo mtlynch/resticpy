@@ -19,7 +19,7 @@ class Cat:
     def lock(self, lock_id, lock=True):
         cmd = self.base_command() + ['cat', 'lock', lock_id]
 
-        if no_lock:
+        if not lock:
             cmd.extend('--no-lock')
 
         return self.run(cmd)

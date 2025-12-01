@@ -100,7 +100,7 @@ class CatLockNoLockTest(unittest.TestCase):
         result = restic.cat.lock(
             lock_id=
             '444974b52718c2255fc908275e6549b307465f31c3147c75490887ae06a6b0a1',
-            no_lock=True)
+            lock=False)
 
         mock_execute.assert_called_with([
             'restic', '--json', 'cat', 'lock',
