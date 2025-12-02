@@ -22,7 +22,6 @@ if [[ ! -f ./node_modules/.bin/prettier ]]; then
   exit 1
 fi
 
-
 # Check code style with the Prettier libary.
 if ! ./node_modules/.bin/prettier --check . ; then
   echo "Try running ./dev-scripts/fix-markdown-style to fix formatting" >&2
