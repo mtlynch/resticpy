@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# Checks formatting for Python files.
+
+# Exit build script on first failure.
+set -e
+
+# Exit on unset variable.
+set -u
+
+# Change directory to repository root.
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+readonly SCRIPT_DIR
+cd "${SCRIPT_DIR}/.."
+
+# Check that source has correct formatting.
+echo "Checking Python formatting..."
+if ! yapf --diff --recursive ./ ; then
+  echo "Try running ./dev-scripts/fix-python-style to fix formatting" >&2
+  exit 1
+fi
+echo "OK"
+
+# Check correct sorting for imports.
+echo "Checking Python import style..."
+if ! isort . --diff --check-only ; then
+  echo "Try running ./dev-scripts/fix-python-style to fix formatting" >&2
+  exit 1
+fi
+echo "OK"
