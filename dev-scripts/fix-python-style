@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Checks formatting for Python files.
+# Fixes formatting for Python files.
 
 # Exit build script on first failure.
 set -e
