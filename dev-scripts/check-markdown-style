@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
 
-# Checks formatting for non-Python files.
+# Checks formatting for Markdown files.
 
 # Exit build script on first failure.
 set -e
-
-# Echo commands to stdout.
-set -x
 
 # Exit on unset variable.
 set -u
@@ -17,7 +14,16 @@ readonly SCRIPT_DIR
 cd "${SCRIPT_DIR}/.."
 
 # Check code style with the Prettier libary.
+if [[ ! -f ./node_modules/.bin/prettier ]]; then
+  echo "prettier is not installed" >&2
+  echo "" >&2
+  echo "Try running: " >&2
+  echo "  npm install" >&2
+  exit 1
+fi
+
+# Check code style with the Prettier libary.
 if ! ./node_modules/.bin/prettier --check . ; then
-  echo "Try running ./dev-scripts/fix-style to fix formatting" >&2
+  echo "Try running ./dev-scripts/fix-markdown-style to fix formatting" >&2
   exit 1
 fi

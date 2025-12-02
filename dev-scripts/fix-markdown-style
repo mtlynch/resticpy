@@ -5,9 +5,6 @@
 # Exit build script on first failure.
 set -e
 
-# Echo commands to stdout.
-set -x
-
 # Exit on unset variable.
 set -u
 
@@ -15,5 +12,14 @@ set -u
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 readonly SCRIPT_DIR
 cd "${SCRIPT_DIR}/.."
+
+# Check code style with the Prettier libary.
+if [[ ! -f ./node_modules/.bin/prettier ]]; then
+  echo "prettier is not installed" >&2
+  echo "" >&2
+  echo "Try running: " >&2
+  echo "  npm install" >&2
+  exit 1
+fi
 
 ./node_modules/.bin/prettier --write .
