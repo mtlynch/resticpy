@@ -31,14 +31,7 @@ coverage run \
   -m unittest discover --pattern "*_test.py"
 coverage report
 
-# Check that source has correct formatting.
-yapf \
-  --diff \
-  --recursive \
-  ./
-
-# Check correct sorting for imports.
-isort . --diff --check-only
+./dev-scripts/check-python-style
 
 # Run static analysis for Python bugs/cruft.
 pyflakes "${SOURCE_DIR}/" "${E2E_DIR}/"
