@@ -66,7 +66,7 @@ class CatLockTest(unittest.TestCase):
     @mock.patch.object(cat.command_executor, 'execute')
     def test_cat_lock(self, mock_execute):
         # pylint: disable-next=line-too-long
-        mock_execute.return_value = """{ "time": "2025-11-19T12:10:09.853558935Z", "exclusive": true, "hostname": "some-random-hostname", "username": "some-random-username", "pid": 1337 }"""
+        mock_execute.return_value = """{ "time": "2025-11-19T12:10:09.853558935Z", "exclusive": true, "hostname": "ecb5551395ae", "username": "demouser", "pid": 1337 }"""
 
         result = restic.cat.lock(
             lock_id=
@@ -84,8 +84,8 @@ class CatLockTest(unittest.TestCase):
             {
                 'time': '2025-11-19T12:10:09.853558935Z',
                 'exclusive': True,
-                'hostname': 'some-random-hostname',
-                'username': 'some-random-username',
+                'hostname': 'ecb5551395ae',
+                'username': 'demouser',
                 'pid': 1337,
             }, result)
 
@@ -95,7 +95,7 @@ class CatLockNoLockTest(unittest.TestCase):
     @mock.patch.object(cat.command_executor, 'execute')
     def test_cat_lock(self, mock_execute):
         # pylint: disable-next=line-too-long
-        mock_execute.return_value = """{ "time": "2025-11-19T12:10:09.853558935Z", "exclusive": true, "hostname": "some-random-hostname", "username": "some-random-username", "pid": 1337 }"""
+        mock_execute.return_value = """{ "time": "2025-11-19T12:10:09.853558935Z", "exclusive": true, "hostname": "ecb5551395ae", "username": "demouser", "pid": 1337 }"""
 
         result = restic.cat.lock(
             lock_id=
@@ -112,7 +112,7 @@ class CatLockNoLockTest(unittest.TestCase):
             {
                 'time': '2025-11-19T12:10:09.853558935Z',
                 'exclusive': True,
-                'hostname': 'some-random-hostname',
-                'username': 'some-random-username',
+                'hostname': 'ecb5551395ae',
+                'username': 'demouser',
                 'pid': 1337,
             }, result)
