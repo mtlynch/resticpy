@@ -4,7 +4,7 @@ executors:
     docker:
       - image: ghcr.io/astral-sh/uv:python3.12-trixie-slim
 jobs:
-  check_style:
+  check_markdown_style:
     docker:
       - image: cimg/node:18.12.1
     steps:
@@ -14,7 +14,7 @@ jobs:
           command: npm install
       - run:
           name: Check code style
-          command: ./dev-scripts/check-style
+          command: ./dev-scripts/check-markdown-style
   build:
     executor: python
     steps:
@@ -109,7 +109,7 @@ jobs:
 workflows:
   test:
     jobs:
-      - check_style:
+      - check_markdown_style:
           filters:
             tags:
               only: /.*/
@@ -136,7 +136,7 @@ workflows:
               only: /.*/
       - publish:
           requires:
-            - check_style
+            - check_markdown_style
             - build
             - e2e
             - prepare_pypi_package
