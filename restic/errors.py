@@ -2,7 +2,7 @@ class Error(Exception):
     pass
 
 
-class NoResticBinaryEror(Error):
+class NoResticBinaryError(Error):
     pass
 
 

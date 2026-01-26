@@ -21,7 +21,9 @@ def run(restic_base_command,
         host=None,
         scan=True,
         group_by=None,
-        skip_if_unchanged=False):
+        skip_if_unchanged=False,
+        timeout=None,
+        progress_callback=None):
     cmd = restic_base_command + ['backup']
 
     if paths is None and files_from is None:
@@ -53,7 +55,13 @@ def run(restic_base_command,
     if skip_if_unchanged:
         cmd.extend(['--skip-if-unchanged'])
 
-    result_raw = command_executor.execute(cmd)
+    if progress_callback is not None:
+        return command_executor.execute(cmd,
+                                        stream=True,
+                                        on_line=progress_callback,
+                                        timeout=timeout)
+
+    result_raw = command_executor.execute(cmd, timeout=timeout)
     return _parse_result(result_raw)
 
 

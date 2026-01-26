@@ -141,6 +141,73 @@ def test_basic_backup_and_restore():
     return True
 
 
+def test_backup_with_progress_logging():
+    """
+    Verify that backup progress can be streamed in real time via a callback.
+
+    This test ensures that:
+    - stdout/stderr output from restic is streamed while the process runs
+    - the progress callback is invoked at least once
+    - streaming does not interfere with normal backup completion
+    """
+
+    # Create a temporary password file for the repository
+    password = 'mysecretpass'
+    password_file = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
+    password_file.write(password)
+    password_file.flush()
+
+    # Create a temporary source directory with multiple files to ensure
+    # restic emits progress output during backup
+    dummy_source_dir = tempfile.mkdtemp()
+    for i in range(20):
+        with open(os.path.join(dummy_source_dir, f'data{i}.txt'),
+                  'w',
+                  encoding='utf-8') as file:
+            file.write(f'data {i}\n' * 1000)
+
+    # Create a temporary repository
+    primary_repo = tempfile.mkdtemp()
+
+    # Configure restic to use the new repository
+    restic.repository = primary_repo
+    restic.password_file = password_file.name
+
+    # Initialize the repository
+    logger.info('Initializing repository')
+    restic.init()
+
+    # Collect all progress lines passed to the callback
+    progress_lines = []
+
+    def on_progress(line):
+        # This callback should be called in real time as restic produces output
+        logger.debug('progress: %s', line)
+        progress_lines.append(line)
+
+    # Run backup with progress callback enabled
+    logger.info('Backing up with progress logging enabled')
+    backup_result = restic.backup(
+        paths=[dummy_source_dir],
+        progress_callback=on_progress,
+    )
+
+    logger.info('backup_result: %s', json.dumps(backup_result))
+
+    # Verify that at least some progress output was streamed
+    if not progress_lines:
+        logger.error('Expected progress callback to receive output lines')
+        return False
+
+    # Verify that files were actually backed up
+    backup_result_dict = json.loads(backup_result)
+    if backup_result_dict['files_new'] == 0:
+        logger.error('Expected at least one new file in backup result')
+        return False
+
+    return True
+
+
 def test_rewrite_snapshot():
     password = 'mysecretpass'
     password_file = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8')
@@ -427,6 +494,7 @@ def main():
 
     tests = [
         test_basic_backup_and_restore,
+        test_backup_with_progress_logging,
         test_rewrite_snapshot,
         test_change_keys,
         test_print_config_and_objects,
