@@ -19,7 +19,7 @@ from restic.internal import version as internal_version
 # Ignore warnings about naming of globals.
 # pylint: disable=invalid-name
 
-binary_path = 'restic'
+binary_path = "restic"
 
 # Global flags
 repository = None
@@ -87,16 +87,16 @@ def _make_base_command():
     base_command = [binary_path]
 
     # Always add the JSON flag so we get back results in JSON.
-    base_command.extend(['--json'])
+    base_command.extend(["--json"])
 
     if repository:
-        base_command.extend(['--repo', repository])
+        base_command.extend(["--repo", repository])
 
     if password_file:
-        base_command.extend(['--password-file', password_file])
+        base_command.extend(["--password-file", password_file])
 
     if not use_cache:
-        base_command.extend(['--no-cache'])
+        base_command.extend(["--no-cache"])
 
     return base_command
 

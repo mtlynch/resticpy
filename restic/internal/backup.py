@@ -11,47 +11,50 @@ class UnexpectedResticResult(Error):
     pass
 
 
-def run(restic_base_command,
-        paths=None,
-        files_from=None,
-        exclude_patterns=None,
-        exclude_files=None,
-        tags=None,
-        dry_run=None,
-        host=None,
-        scan=True,
-        group_by=None,
-        skip_if_unchanged=False):
-    cmd = restic_base_command + ['backup']
+def run(
+    restic_base_command,
+    paths=None,
+    files_from=None,
+    exclude_patterns=None,
+    exclude_files=None,
+    tags=None,
+    dry_run=None,
+    host=None,
+    scan=True,
+    group_by=None,
+    skip_if_unchanged=False,
+):
+    cmd = restic_base_command + ["backup"]
 
     if paths is None and files_from is None:
-        raise ValueError('No input given as argument. '
-                         'Please specify `paths` or `files_from`')
+        raise ValueError(
+            "No input given as argument. " "Please specify `paths` or `files_from`"
+        )
 
     if paths:
         cmd += paths
 
-    _extend_cmd_with_list(cmd, '--files-from', files_from)
-    _extend_cmd_with_list(cmd, '--exclude', exclude_patterns)
-    _extend_cmd_with_list(cmd, '--exclude-file', exclude_files)
-    _extend_cmd_with_list(cmd, '--tag', tags)
+    _extend_cmd_with_list(cmd, "--files-from", files_from)
+    _extend_cmd_with_list(cmd, "--exclude", exclude_patterns)
+    _extend_cmd_with_list(cmd, "--exclude-file", exclude_files)
+    _extend_cmd_with_list(cmd, "--tag", tags)
 
     if dry_run:
-        cmd.extend(['--dry-run'])
+        cmd.extend(["--dry-run"])
 
     if host:
-        cmd.extend(['--host', host])
+        cmd.extend(["--host", host])
 
     if not scan:
-        cmd.extend(['--no-scan'])
+        cmd.extend(["--no-scan"])
 
     # Explicitly check for None, as empty lists and None have different
     # meanings.
     if group_by is not None:
-        cmd.extend(['--group-by', ','.join(group_by)])
+        cmd.extend(["--group-by", ",".join(group_by)])
 
     if skip_if_unchanged:
-        cmd.extend(['--skip-if-unchanged'])
+        cmd.extend(["--skip-if-unchanged"])
 
     result_raw = command_executor.execute(cmd)
     return _parse_result(result_raw)
@@ -66,10 +69,10 @@ def _extend_cmd_with_list(cmd, cli_option, arg_list):
 
 def _parse_result(result):
     # On Windows, terminal markers appear at the beginning of each line.
-    terminal_markers = '\x1b[2K'
+    terminal_markers = "\x1b[2K"
     lines = [
         line.strip().strip(terminal_markers)
-        for line in result.split('\n')
+        for line in result.split("\n")
         if line.strip()
     ]
 
@@ -77,4 +80,5 @@ def _parse_result(result):
         return json.loads(lines[-1])
     except json.decoder.JSONDecodeError as e:
         raise UnexpectedResticResult(
-            'Expected valid JSON response from restic, got ' + result) from e
+            "Expected valid JSON response from restic, got " + result
+        ) from e

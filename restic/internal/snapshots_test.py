@@ -10,69 +10,73 @@ class SnapshotsTest(unittest.TestCase):
     def setUp(self):
         self.maxDiff = None
 
-    @mock.patch.object(snapshots.command_executor, 'execute')
+    @mock.patch.object(snapshots.command_executor, "execute")
     def test_snapshots_simple(self, mock_execute):
-        mock_execute.return_value = '[]'
+        mock_execute.return_value = "[]"
 
         self.assertEqual([], restic.snapshots())
 
-        mock_execute.assert_called_with(['restic', '--json', 'snapshots'])
+        mock_execute.assert_called_with(["restic", "--json", "snapshots"])
 
-    @mock.patch.object(snapshots.command_executor, 'execute')
+    @mock.patch.object(snapshots.command_executor, "execute")
     def test_snapshots_group_by_host(self, mock_execute):
-        mock_execute.return_value = '[]'
+        mock_execute.return_value = "[]"
 
-        self.assertEqual([], restic.snapshots(group_by=['host']))
+        self.assertEqual([], restic.snapshots(group_by=["host"]))
 
         mock_execute.assert_called_with(
-            ['restic', '--json', 'snapshots', '--group-by', 'host'])
+            ["restic", "--json", "snapshots", "--group-by", "host"]
+        )
 
-    @mock.patch.object(snapshots.command_executor, 'execute')
+    @mock.patch.object(snapshots.command_executor, "execute")
     def test_snapshots_no_grouping(self, mock_execute):
-        mock_execute.return_value = '[]'
+        mock_execute.return_value = "[]"
 
         self.assertEqual([], restic.snapshots(group_by=[]))
 
         mock_execute.assert_called_with(
-            ['restic', '--json', 'snapshots', '--group-by', ''])
+            ["restic", "--json", "snapshots", "--group-by", ""]
+        )
 
-    @mock.patch.object(snapshots.command_executor, 'execute')
+    @mock.patch.object(snapshots.command_executor, "execute")
     def test_snapshots_id(self, mock_execute):
-        mock_execute.return_value = '[]'
+        mock_execute.return_value = "[]"
 
-        self.assertEqual([], restic.snapshots(snapshot_id='latest'))
+        self.assertEqual([], restic.snapshots(snapshot_id="latest"))
 
-        mock_execute.assert_called_with(
-            ['restic', '--json', 'snapshots', 'latest'])
+        mock_execute.assert_called_with(["restic", "--json", "snapshots", "latest"])
 
-    @mock.patch.object(snapshots.command_executor, 'execute')
+    @mock.patch.object(snapshots.command_executor, "execute")
     def test_snapshots_tags(self, mock_execute):
-        mock_execute.return_value = '[]'
+        mock_execute.return_value = "[]"
 
-        self.assertEqual([], restic.snapshots(tags=['test', 'test2']))
+        self.assertEqual([], restic.snapshots(tags=["test", "test2"]))
 
         mock_execute.assert_called_with(
-            ['restic', '--json', 'snapshots', '--tag', 'test,test2'])
+            ["restic", "--json", "snapshots", "--tag", "test,test2"]
+        )
 
-    @mock.patch.object(snapshots.command_executor, 'execute')
+    @mock.patch.object(snapshots.command_executor, "execute")
     def test_snapshots_path(self, mock_execute):
-        mock_execute.return_value = '[]'
+        mock_execute.return_value = "[]"
 
-        self.assertEqual([], restic.snapshots(path='/tmp'))
+        self.assertEqual([], restic.snapshots(path="/tmp"))
 
         mock_execute.assert_called_with(
-            ['restic', '--json', 'snapshots', '--path', '/tmp'])
+            ["restic", "--json", "snapshots", "--path", "/tmp"]
+        )
 
-    @mock.patch.object(snapshots.command_executor, 'execute')
+    @mock.patch.object(snapshots.command_executor, "execute")
     def test_snapshots_host(self, mock_execute):
-        mock_execute.return_value = '[]'
+        mock_execute.return_value = "[]"
 
-        self.assertEqual([], restic.snapshots(host='localhost'))
+        self.assertEqual([], restic.snapshots(host="localhost"))
 
         mock_execute.assert_called_with(
-            ['restic', '--json', 'snapshots', '--host', 'localhost'])
+            ["restic", "--json", "snapshots", "--host", "localhost"]
+        )
 
-    @mock.patch.object(snapshots.command_executor, 'execute')
+    @mock.patch.object(snapshots.command_executor, "execute")
     def test_snapshots_parses_result_json(self, mock_execute):
         # pylint: disable-next=line-too-long
         mock_execute.return_value = """
@@ -104,35 +108,32 @@ class SnapshotsTest(unittest.TestCase):
 
         # pylint: disable-next=line-too-long
         self.assertEqual(
-            [{
-                'group_key': {
-                    'hostname': 'ace809d23440',
-                    'paths': None,
-                    'tags': None
-                },
-                'snapshots': [{
-                    'time':
-                        '2021-03-28T21:31:44.477122573Z',
-                    'tree':  # pylint: disable-next=line-too-long
-                        'f589421bafdae95f5be5eea6285074b7ddc54aa0ffd1ad606f74d1e6207d20a3',
-                    'paths': ['/tmp/tmp6594jneh/mydata.txt'],
-                    'hostname':
-                        'ace809d23440',
-                    'username':
-                        'circleci',
-                    'uid':
-                        3434,
-                    'gid':
-                        3434,
-                    'id':  # pylint: disable-next=line-too-long
-                        'bbe7f04941ed969ee940bb41dc04196027fcfb83dbdfea93c16afb2cb9f6dd81',
-                    'short_id':
-                        'bbe7f049'
-                }]
-            }],
-            restic.snapshots())
+            [
+                {
+                    "group_key": {
+                        "hostname": "ace809d23440",
+                        "paths": None,
+                        "tags": None,
+                    },
+                    "snapshots": [
+                        {
+                            "time": "2021-03-28T21:31:44.477122573Z",
+                            "tree": "f589421bafdae95f5be5eea6285074b7ddc54aa0ffd1ad606f74d1e6207d20a3",  # pylint: disable-next=line-too-long
+                            "paths": ["/tmp/tmp6594jneh/mydata.txt"],
+                            "hostname": "ace809d23440",
+                            "username": "circleci",
+                            "uid": 3434,
+                            "gid": 3434,
+                            "id": "bbe7f04941ed969ee940bb41dc04196027fcfb83dbdfea93c16afb2cb9f6dd81",  # pylint: disable-next=line-too-long
+                            "short_id": "bbe7f049",
+                        }
+                    ],
+                }
+            ],
+            restic.snapshots(),
+        )
 
-    @mock.patch.object(snapshots.command_executor, 'execute')
+    @mock.patch.object(snapshots.command_executor, "execute")
     def test_snapshots_parses_multiple_snapshots_json(self, mock_execute):
         # pylint: disable-next=line-too-long
         mock_execute.return_value = """
@@ -179,57 +180,41 @@ class SnapshotsTest(unittest.TestCase):
 """.strip()
 
         self.assertEqual(
-            [{
-                'group_key': {
-                    'hostname': '3099758ccbd9',
-                    'paths': None,
-                    'tags': None
-                },
-                'snapshots': [
-                    {
-                        'time':
-                            '2023-12-31T20:39:22.449822393Z',
-                        'tree':  # pylint: disable-next=line-too-long
-                            'd4aed49b16b1fcd2ebcfbc8cfd7c53bcff2397b8673b6764dd6411223775d6b2',
-                        'paths': ['/tmp/tmpuvf9pfam/mydata.txt'],
-                        'hostname':
-                            '3099758ccbd9',
-                        'username':
-                            'circleci',
-                        'uid':
-                            1001,
-                        'gid':
-                            1002,
-                        'program_version':
-                            'restic 0.16.2',
-                        'id':  # pylint: disable-next=line-too-long
-                            '7540e94d8117078bb26b0e4a85dd353a41665e084d3771f04e5f72f6b0f24a6f',
-                        'short_id':
-                            '7540e94d'
+            [
+                {
+                    "group_key": {
+                        "hostname": "3099758ccbd9",
+                        "paths": None,
+                        "tags": None,
                     },
-                    {
-                        'time':
-                            '2023-12-31T20:39:25.811155387Z',
-                        'tree':  # pylint: disable-next=line-too-long
-                            'a39c45c1b202985f766a177a663a5e4f37acd5bfa9bd324fb4eaf62a3c3e0dea',
-                        'paths': ['/tmp/tmpuvf9pfam/mydata.txt'],
-                        'hostname':
-                            '3099758ccbd9',
-                        'username':
-                            'circleci',
-                        'uid':
-                            1001,
-                        'gid':
-                            1002,
-                        'parent':  # pylint: disable-next=line-too-long
-                            '7540e94d8117078bb26b0e4a85dd353a41665e084d3771f04e5f72f6b0f24a6f',
-                        'program_version':
-                            'restic 0.16.2',
-                        'id':  # pylint: disable-next=line-too-long
-                            '57d3496886edf2cb0e808838734dc108fb1d929ae80cafdb68597e75702aecbb',
-                        'short_id':
-                            '57d34968'
-                    }
-                ]
-            }],
-            restic.snapshots())
+                    "snapshots": [
+                        {
+                            "time": "2023-12-31T20:39:22.449822393Z",
+                            "tree": "d4aed49b16b1fcd2ebcfbc8cfd7c53bcff2397b8673b6764dd6411223775d6b2",  # pylint: disable-next=line-too-long
+                            "paths": ["/tmp/tmpuvf9pfam/mydata.txt"],
+                            "hostname": "3099758ccbd9",
+                            "username": "circleci",
+                            "uid": 1001,
+                            "gid": 1002,
+                            "program_version": "restic 0.16.2",
+                            "id": "7540e94d8117078bb26b0e4a85dd353a41665e084d3771f04e5f72f6b0f24a6f",  # pylint: disable-next=line-too-long
+                            "short_id": "7540e94d",
+                        },
+                        {
+                            "time": "2023-12-31T20:39:25.811155387Z",
+                            "tree": "a39c45c1b202985f766a177a663a5e4f37acd5bfa9bd324fb4eaf62a3c3e0dea",  # pylint: disable-next=line-too-long
+                            "paths": ["/tmp/tmpuvf9pfam/mydata.txt"],
+                            "hostname": "3099758ccbd9",
+                            "username": "circleci",
+                            "uid": 1001,
+                            "gid": 1002,
+                            "parent": "7540e94d8117078bb26b0e4a85dd353a41665e084d3771f04e5f72f6b0f24a6f",  # pylint: disable-next=line-too-long
+                            "program_version": "restic 0.16.2",
+                            "id": "57d3496886edf2cb0e808838734dc108fb1d929ae80cafdb68597e75702aecbb",  # pylint: disable-next=line-too-long
+                            "short_id": "57d34968",
+                        },
+                    ],
+                }
+            ],
+            restic.snapshots(),
+        )

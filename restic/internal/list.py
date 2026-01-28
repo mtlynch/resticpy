@@ -7,7 +7,7 @@ class List:
         self.base_command = restic_base_command
 
     def locks(self):
-        cmd = self.base_command() + ['list', 'locks']
+        cmd = self.base_command() + ["list", "locks"]
         return self.run(cmd)
 
     def run(self, cmd):
