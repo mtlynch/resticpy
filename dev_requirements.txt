@@ -2,4 +2,4 @@ coverage==5.5
 isort[requirements_deprecated_finder]==5.7.0
 pyflakes==3.0.1
 pylint==2.15.2
-yapf==0.43.0
+pyink==24.10.1

@@ -7,56 +7,80 @@ from restic.internal import restore
 
 class RestoreTest(unittest.TestCase):
 
-    @mock.patch.object(restore.command_executor, 'execute')
+    @mock.patch.object(restore.command_executor, "execute")
     def test_restore_with_no_snapshot_id(self, mock_execute):
         restic.restore()
-        mock_execute.assert_called_with(
-            ['restic', '--json', 'restore', 'latest'])
+        mock_execute.assert_called_with(["restic", "--json", "restore", "latest"])
 
-    @mock.patch.object(restore.command_executor, 'execute')
+    @mock.patch.object(restore.command_executor, "execute")
     def test_restore_specific_snapshot_id(self, mock_execute):
-        restic.restore('dummy-snapshot-id')
+        restic.restore("dummy-snapshot-id")
         mock_execute.assert_called_with(
-            ['restic', '--json', 'restore', 'dummy-snapshot-id'])
+            ["restic", "--json", "restore", "dummy-snapshot-id"]
+        )
 
-    @mock.patch.object(restore.command_executor, 'execute')
+    @mock.patch.object(restore.command_executor, "execute")
     def test_restore_specific_snapshot_id_and_target(self, mock_execute):
-        restic.restore(snapshot_id='dummy-snapshot-id',
-                       target_dir='/tmp/restore')
-        mock_execute.assert_called_with([
-            'restic', '--json', 'restore', 'dummy-snapshot-id', '--target',
-            '/tmp/restore'
-        ])
+        restic.restore(snapshot_id="dummy-snapshot-id", target_dir="/tmp/restore")
+        mock_execute.assert_called_with(
+            [
+                "restic",
+                "--json",
+                "restore",
+                "dummy-snapshot-id",
+                "--target",
+                "/tmp/restore",
+            ]
+        )
 
-    @mock.patch.object(restore.command_executor, 'execute')
+    @mock.patch.object(restore.command_executor, "execute")
     def test_restore_specific_snapshot_id_and_include(self, mock_execute):
-        restic.restore(snapshot_id='dummy-snapshot-id', include='include-path')
-        mock_execute.assert_called_with([
-            'restic', '--json', 'restore', 'dummy-snapshot-id', '--include',
-            'include-path'
-        ])
+        restic.restore(snapshot_id="dummy-snapshot-id", include="include-path")
+        mock_execute.assert_called_with(
+            [
+                "restic",
+                "--json",
+                "restore",
+                "dummy-snapshot-id",
+                "--include",
+                "include-path",
+            ]
+        )
 
     def test_restore_exclude_string_instead_of_list(self):
         with self.assertRaises(restore.LegacySemanticsError):
-            restic.restore(snapshot_id='dummy-snapshot-id',
-                           exclude='exclude-path')
+            restic.restore(snapshot_id="dummy-snapshot-id", exclude="exclude-path")
 
-    @mock.patch.object(restore.command_executor, 'execute')
-    def test_restore_specific_snapshot_id_and_exclude_single_paths(
-            self, mock_execute):
-        restic.restore(snapshot_id='dummy-snapshot-id',
-                       exclude=['exclude-path'])
-        mock_execute.assert_called_with([
-            'restic', '--json', 'restore', 'dummy-snapshot-id', '--exclude',
-            'exclude-path'
-        ])
+    @mock.patch.object(restore.command_executor, "execute")
+    def test_restore_specific_snapshot_id_and_exclude_single_paths(self, mock_execute):
+        restic.restore(snapshot_id="dummy-snapshot-id", exclude=["exclude-path"])
+        mock_execute.assert_called_with(
+            [
+                "restic",
+                "--json",
+                "restore",
+                "dummy-snapshot-id",
+                "--exclude",
+                "exclude-path",
+            ]
+        )
 
-    @mock.patch.object(restore.command_executor, 'execute')
+    @mock.patch.object(restore.command_executor, "execute")
     def test_restore_specific_snapshot_id_and_exclude_multiple_paths(
-            self, mock_execute):
-        restic.restore(snapshot_id='dummy-snapshot-id',
-                       exclude=['exclude-path', 'another-path'])
-        mock_execute.assert_called_with([
-            'restic', '--json', 'restore', 'dummy-snapshot-id', '--exclude',
-            'exclude-path', '--exclude', 'another-path'
-        ])
+        self, mock_execute
+    ):
+        restic.restore(
+            snapshot_id="dummy-snapshot-id", exclude=["exclude-path", "another-path"]
+        )
+        mock_execute.assert_called_with(
+            [
+                "restic",
+                "--json",
+                "restore",
+                "dummy-snapshot-id",
+                "--exclude",
+                "exclude-path",
+                "--exclude",
+                "another-path",
+            ]
+        )

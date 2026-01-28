@@ -26,6 +26,10 @@ If you're planning to contribute code, it's a good idea to enable the standard G
 - If you're making a small change, submit a PR to show your proposal.
 - If you're making a large change (over 100 LOC or three hours of dev time), [file an issue](https://github.com/mtlynch/picoshare/issues/new/choose) first to talk through the proposed change. This prevents you from wasting time on a change that has a low chance of being accepted.
 
+## Style
+
+- resticpy follows the [Google Python Style Guide](https://google.github.io/styleguide/pyguide.html).
+
 ## How to get your PR merged quickly
 
 - Read my guide, ["How to Make Your Code Reviewer Fall in Love with You,"](https://mtlynch.io/code-review-love/) to understand how to contribute effectively to an open source project.
