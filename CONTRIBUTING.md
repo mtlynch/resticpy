@@ -33,9 +33,9 @@ If you're planning to contribute code, it's a good idea to enable the standard G
 ## How to get your PR merged quickly
 
 - Read my guide, ["How to Make Your Code Reviewer Fall in Love with You,"](https://mtlynch.io/code-review-love/) to understand how to contribute effectively to an open source project.
-- Give a clear, one-line title to your PR.
-  - Good: `Fix dropped keystrokes on Firefox`
-  - Bad: `Fix issue`
+- Read ["How to Write Useful Commit Messages"](https://refactoringenglish.com/chapters/commit-messages/) to undestand how to write an effective PR title and description.
+  - The guide uses the term "commit message" to refer to whatever ends up in source history, which in this repo, is the PR title + description.
+  - I squash all commit messages when I merge PRs, so don't worry too much about commit-level messages.
 - If your PR is not ready for review, mark it as "draft."
 - Merge or [rebase](https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase) your changes with the latest `master` commit so that there are no merge conflicts.
 - Your PR must pass build checks in CI before it will be considered for merge.
