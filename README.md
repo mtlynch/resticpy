@@ -76,19 +76,7 @@ resticpy is **not** meant to achieve feature parity with restic. It is meant to 
 
 Due to time limitations, I keep resticpy's scope limited to only the features that fit into my workflows.
 
-### Feature requests
-
-I don't fulfill feature requests for resticpy. You are welcome to file a feature request for a third-party contributor to take on.
-
-### Pull requests
-
-I accept pull requests when they are:
-
-- Documented
-- Tested
-- Small
-
-I don't accept pull requests for features that look like they'll be a large maintenance burden.
+I no longer accept pull requests or bug reports for resticpy. If you are interested in forking resticpy into a more actively maintained project, find my email and let me know about it.
 
 ## Acknowledgments
 
